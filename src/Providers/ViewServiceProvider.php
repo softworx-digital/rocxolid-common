@@ -1,6 +1,6 @@
 <?php
 
-namespace Softworx\Rocxolid\Admin\Providers;
+namespace Softworx\Rocxolid\Common\Providers;
 
 use View;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
  * RocXolid views & composers service provider.
  *
  * @author softworx <hello@softworx.digital>
- * @package Softworx\RocXolid\Admin
+ * @package Softworx\RocXolid\Common
  * @version 1.0.0
  */
 class ViewServiceProvider extends IlluminateServiceProvider

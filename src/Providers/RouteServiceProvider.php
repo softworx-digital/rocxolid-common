@@ -4,6 +4,7 @@ namespace Softworx\Rocxolid\Common\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+use Softworx\RocXolid\Services\CrudRouterService;
 
 /**
  * RocXolid routes service provider.
@@ -79,17 +80,17 @@ class RouteServiceProvider extends IlluminateServiceProvider
             'prefix' => sprintf('%s/common', config('rocXolid.main.admin-path', 'rocXolid')),
             'as' => 'rocxolid.common.',
         ], function ($router) {
-            CrudRouter::create('web', Http\Controllers\Web\Controller::class);
-            CrudRouter::create('file', Http\Controllers\File\Controller::class);
-            CrudRouter::create('image', Http\Controllers\Image\Controller::class);
-            CrudRouter::create('country', Http\Controllers\Country\Controller::class);
-            CrudRouter::create('language', Http\Controllers\Language\Controller::class);
-            CrudRouter::create('locale', Http\Controllers\Locale\Controller::class);
-            CrudRouter::create('localization', Http\Controllers\Localization\Controller::class);
-            CrudRouter::create('name-day', Http\Controllers\NameDay\Controller::class);
-            CrudRouter::create('attribute-group', Http\Controllers\AttributeGroup\Controller::class);
-            CrudRouter::create('attribute', Http\Controllers\Attribute\Controller::class);
-            CrudRouter::create('attribute-value', Http\Controllers\AttributeValue\Controller::class);
+            CrudRouterService::create('web', Http\Controllers\Web\Controller::class);
+            CrudRouterService::create('file', Http\Controllers\File\Controller::class);
+            CrudRouterService::create('image', Http\Controllers\Image\Controller::class);
+            CrudRouterService::create('country', Http\Controllers\Country\Controller::class);
+            CrudRouterService::create('language', Http\Controllers\Language\Controller::class);
+            CrudRouterService::create('locale', Http\Controllers\Locale\Controller::class);
+            CrudRouterService::create('localization', Http\Controllers\Localization\Controller::class);
+            CrudRouterService::create('name-day', Http\Controllers\NameDay\Controller::class);
+            CrudRouterService::create('attribute-group', Http\Controllers\AttributeGroup\Controller::class);
+            CrudRouterService::create('attribute', Http\Controllers\Attribute\Controller::class);
+            CrudRouterService::create('attribute-value', Http\Controllers\AttributeValue\Controller::class);
 
             $router->group([
                 'namespace' => 'Softworx\RocXolid\Common\Http\Controllers\File',
