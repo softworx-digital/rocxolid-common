@@ -41,7 +41,7 @@ class ServiceProvider extends IlluminateServiceProvider
         // views files
         // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="views" (--force to overwrite)
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/softworx/rocxolid-common'),
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/softworx/rocXolid/common'),
         ], 'views');
 
         // migrations

@@ -38,22 +38,24 @@ class RouteServiceProvider extends IlluminateServiceProvider
     {
         $router->group([
             'module' => 'rocXolid-common',
-            'middleware' => [ 'web', 'auth.rocXolid' ],
+            'middleware' => [ 'web', 'rocXolid.auth' ],
             'namespace' => 'Softworx\RocXolid\Common\Http\Controllers',
             'prefix' => sprintf('%s/common', config('rocXolid.main.admin-path', 'rocXolid')),
-            'as' => 'rocxolid.common.',
+            'as' => 'rocXolid.common.',
         ], function ($router) {
             // package dashboard
-            $router->get('/', 'Controller@index')->name('dashboard');
+            // $router->get('/', 'Controller@index')->name('dashboard');
             // ...
 
             $router->group([
                 'namespace' => 'Attribute',
                 'prefix' => 'attribute',
+                'as' => 'attribute.',
             ], function ($router) {
-                $router->get('/attribute/set-values/{attribute}', 'Controller@setValues');
+                $router->get('/attribute/set-values/{attribute}', 'Controller@setValues')->name('setValues');
             });
 
+            /*
             $router->group([
                 'namespace' => 'Translation',
                 'prefix' => 'translation',
@@ -71,39 +73,42 @@ class RouteServiceProvider extends IlluminateServiceProvider
                     $router->post('delete/{group}/{key}', 'Controller@postDelete')->where('group', '.*');
                 });
             });
+            */
         });
 
         $router->group([
             'module' => 'rocXolid-common',
-            'middleware' => [ 'web', 'auth.rocXolid' ],
-            'namespace' => '',
+            'middleware' => [ 'web', 'rocXolid.auth' ],
+            'namespace' => 'Softworx\RocXolid\Common\Http\Controllers',
             'prefix' => sprintf('%s/common', config('rocXolid.main.admin-path', 'rocXolid')),
-            'as' => 'rocxolid.common.',
+            'as' => 'rocXolid.common.',
         ], function ($router) {
-            CrudRouterService::create('web', Http\Controllers\Web\Controller::class);
-            CrudRouterService::create('file', Http\Controllers\File\Controller::class);
-            CrudRouterService::create('image', Http\Controllers\Image\Controller::class);
-            CrudRouterService::create('country', Http\Controllers\Country\Controller::class);
-            CrudRouterService::create('language', Http\Controllers\Language\Controller::class);
-            CrudRouterService::create('locale', Http\Controllers\Locale\Controller::class);
-            CrudRouterService::create('localization', Http\Controllers\Localization\Controller::class);
-            CrudRouterService::create('name-day', Http\Controllers\NameDay\Controller::class);
-            CrudRouterService::create('attribute-group', Http\Controllers\AttributeGroup\Controller::class);
-            CrudRouterService::create('attribute', Http\Controllers\Attribute\Controller::class);
-            CrudRouterService::create('attribute-value', Http\Controllers\AttributeValue\Controller::class);
+            CrudRouterService::create('web', \Web\Controller::class);
+            CrudRouterService::create('file', \File\Controller::class);
+            CrudRouterService::create('image', \Image\Controller::class);
+            CrudRouterService::create('country', \Country\Controller::class);
+            CrudRouterService::create('language', \Language\Controller::class);
+            CrudRouterService::create('locale', \Locale\Controller::class);
+            CrudRouterService::create('localization', \Localization\Controller::class);
+            CrudRouterService::create('name-day', \NameDay\Controller::class);
+            CrudRouterService::create('attribute-group', \AttributeGroup\Controller::class);
+            CrudRouterService::create('attribute', \Attribute\Controller::class);
+            CrudRouterService::create('attribute-value', \AttributeValue\Controller::class);
 
             $router->group([
-                'namespace' => 'Softworx\RocXolid\Common\Http\Controllers\File',
+                'namespace' => 'File',
                 'prefix' => 'file',
+                'as' => 'file.',
             ], function ($router) {
-                $router->get('/file/{file}', 'Controller@get');
+                $router->get('/file/{file}', 'Controller@get')->name('get');
             });
 
             $router->group([
-                'namespace' => 'Softworx\RocXolid\Common\Http\Controllers\Image',
+                'namespace' => 'Image',
                 'prefix' => 'image',
+                'as' => 'image.',
             ], function ($router) {
-                $router->get('/image/{image}/{dimension?}', 'Controller@get');
+                $router->get('/image/{image}/{dimension?}', 'Controller@get')->name('get');
             });
         });
 

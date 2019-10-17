@@ -36,7 +36,7 @@ class ViewServiceProvider extends IlluminateServiceProvider
     private function load(): IlluminateServiceProvider
     {
         // customized views preference
-        $this->loadViewsFrom(resource_path('views/vendor/rocXolid/<PackageDirectory>'), 'rocXolid:common');
+        $this->loadViewsFrom(resource_path('views/vendor/rocXolid/common'), 'rocXolid:common');
         // pre-defined views fallback
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'rocXolid:common');
 
