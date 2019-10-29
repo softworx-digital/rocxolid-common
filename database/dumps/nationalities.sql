@@ -11,6 +11,6 @@
 LOCK TABLES `nationalities` WRITE;
 /*!40000 ALTER TABLE `nationalities` DISABLE KEYS */;
 INSERT INTO `nationalities` VALUES
-(1,'Slovenská',NULL,NULL,NULL,NULL,NULL,NULL);
+(1,'Slovenská',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `nationalities` ENABLE KEYS */;
 UNLOCK TABLES;
