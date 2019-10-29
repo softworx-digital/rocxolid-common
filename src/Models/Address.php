@@ -4,12 +4,11 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Softworx\RocXolid\Models\AbstractCrudModel;
-use Softworx\RocXolid\Common\Models\Region;
 use Softworx\RocXolid\Common\Models\Traits\HasCountry;
 use Softworx\RocXolid\Common\Models\Traits\HasRegion;
 use Softworx\RocXolid\Common\Models\Traits\HasDistrict;
 
-class City extends AbstractCrudModel
+class Address extends AbstractCrudModel
 {
     use SoftDeletes;
     use HasCountry;
@@ -23,6 +22,14 @@ class City extends AbstractCrudModel
     protected $fillable = [
         'name',
         'description',
+        'country',
+        'region',
+        'district',
+        'street',
+        'po_box',
+        'zip',
+        'latitude',
+        'longitude',
     ];
 
     protected $relationships = [

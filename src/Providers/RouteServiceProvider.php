@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Softworx\RocXolid\Services\CrudRouterService;
 
 /**
- * RocXolid routes service provider.
+ * rocXolid routes service provider.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
@@ -16,7 +16,7 @@ use Softworx\RocXolid\Services\CrudRouterService;
 class RouteServiceProvider extends IlluminateServiceProvider
 {
     /**
-     * Bootstrap RocXolid routing services.
+     * Bootstrap rocXolid routing services.
      *
      * @return \Illuminate\Support\ServiceProvider
      */

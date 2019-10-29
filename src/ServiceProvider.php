@@ -53,7 +53,7 @@ class ServiceProvider extends IlluminateServiceProvider
         // db dumps
         // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="dumps" (--force to overwrite)
         $this->publishes([
-            __DIR__.'/../database/dumps/' => database_path('dumps/common')
+            __DIR__.'/../database/dumps/' => database_path('dumps/rocXolid/common')
         ], 'dumps');
 
         return $this;

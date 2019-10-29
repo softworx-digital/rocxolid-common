@@ -17,10 +17,12 @@ class CreateCommonTables extends Migration
             ->images()
             ->countries()
             ->regions()
+            ->districts()
             ->cities()
             ->languages()
             ->locales()
             ->localizations()
+            ->nationalities()
             ->nameDays()
             ->countryLanguages()
             ->countryLocales()
@@ -43,10 +45,12 @@ class CreateCommonTables extends Migration
         Schema::dropIfExists('images');
         Schema::dropIfExists('countries');
         Schema::dropIfExists('regions');
+        Schema::dropIfExists('districts');
         Schema::dropIfExists('cities');
         Schema::dropIfExists('languages');
         Schema::dropIfExists('locales');
         Schema::dropIfExists('localizations');
+        Schema::dropIfExists('nationalities');
         Schema::dropIfExists('name_days');
         Schema::dropIfExists('country_has_languages');
         Schema::dropIfExists('country_has_locales');
@@ -61,7 +65,7 @@ class CreateCommonTables extends Migration
     protected function files()
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->morphs('model');
             $table->string('model_attribute');
             $table->unsignedInteger('model_attribute_position')->default(0);
@@ -86,7 +90,7 @@ class CreateCommonTables extends Migration
     protected function images()
     {
         Schema::create('images', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->morphs('model');
             $table->string('model_attribute');
             $table->unsignedInteger('model_attribute_position')->default(0);
@@ -112,7 +116,7 @@ class CreateCommonTables extends Migration
     protected function countries()
     {
         Schema::create('countries', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id')->index();
             $table->string('capital')->nullable();
 		    $table->string('citizenship')->nullable();
 		    $table->string('country_code', 3)->default('');
@@ -152,7 +156,7 @@ class CreateCommonTables extends Migration
     protected function regions()
     {
         Schema::create('regions', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->unsignedInteger('country_id');
 
             $table->string('name');
@@ -174,14 +178,41 @@ class CreateCommonTables extends Migration
         return $this->importDump('regions');
     }
 
+    protected function districts()
+    {
+        Schema::create('districts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('region_id');
+
+            $table->string('name');
+            $table->text('description')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+
+            $table->foreign('region_id')
+                ->references('id')
+                ->on('regions')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+        });
+
+        return $this->importDump('districts');
+    }
+
     protected function cities()
     {
         Schema::create('cities', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->unsignedInteger('country_id');
             $table->unsignedInteger('region_id')->nullable();
+            $table->unsignedInteger('district_id')->nullable();
 
             $table->string('name');
+            $table->string('zip')->nullable();
             $table->text('description')->nullable();
 
             $table->timestamps();
@@ -201,15 +232,74 @@ class CreateCommonTables extends Migration
                 ->on('regions')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
+
+            $table->foreign('district_id')
+                ->references('id')
+                ->on('districts')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
 
         return $this->importDump('cities');
     }
 
+    protected function addresses()
+    {
+        Schema::create('addresses', function (Blueprint $table) {
+            $table->increments('id');
+            $table->morphs('model');
+
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+
+            $table->unsignedInteger('country_id')->nullable();
+            $table->string('country')->nullable();
+
+            $table->unsignedInteger('region_id')->nullable();
+            $table->string('region')->nullable();
+
+            $table->unsignedInteger('district_id')->nullable();
+            $table->string('district')->nullable();
+            
+            $table->string('street')->nullable();
+            $table->string('po_box')->nullable();
+            $table->string('zip')->nullable();
+
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+
+            $table->boolean('is_default')->default(1);
+
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+
+            $table->foreign('country_id')
+                ->references('id')
+                ->on('countries')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('region_id')
+                ->references('id')
+                ->on('regions')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+
+            $table->foreign('district_id')
+                ->references('id')
+                ->on('districts')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+        });
+    }
+
     protected function languages()
     {
         Schema::create('languages', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->string('name');
             $table->boolean('is_admin_available')->default(0);
             $table->string('iso_639_1');
@@ -226,7 +316,7 @@ class CreateCommonTables extends Migration
     protected function locales()
     {
         Schema::create('locales', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->string('code');
             $table->string('name');
             $table->string('local_name');
@@ -240,14 +330,30 @@ class CreateCommonTables extends Migration
         return $this->importDump('locales');
     }
 
+    protected function nationalities()
+    {
+        Schema::create('nationalities', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+        });
+
+        return $this->importDump('nationalities');
+    }
+
     protected function nameDays()
     {
         Schema::create('name_days', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->unsignedInteger('country_id');
-            $table->unsignedInteger('day')->index();
-            $table->unsignedInteger('month')->index();
-            $table->unsignedInteger('day_month');
+            $table->unsignedTinyInteger('day')->index();
+            $table->unsignedTinyInteger('month')->index();
+            $table->unsignedTinyInteger('day_month');
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
@@ -316,14 +422,14 @@ class CreateCommonTables extends Migration
     protected function containerContainee()
     {
         Schema::create('container_has_containee', function (Blueprint $table) {
-            $table->bigIncrements('id')->unique()->index();
+            $table->increments('id')->unique()->index();
             $table->string('container_type');
             $table->unsignedInteger('container_id');
             $table->string('container_relation');
             $table->string('containee_type');
             $table->unsignedInteger('containee_id');
             $table->unsignedInteger('position');
-            $table->bigInteger('parent_id')->unsigned()->nullable();
+            $table->unsignedInteger('parent_id')->nullable();
             $table->boolean('is_owned')->default(0);
 
             $table->index(['container_id', 'container_type', 'container_relation'], 'c2c_crid_crtype_crrelation_index');
@@ -343,7 +449,7 @@ class CreateCommonTables extends Migration
     protected function attributes()
     {
         Schema::create('attribute_groups', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->string('model_type')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
@@ -356,7 +462,7 @@ class CreateCommonTables extends Migration
         });
 
         Schema::create('attributes', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->unsignedInteger('attribute_group_id');
             $table->unsignedInteger('attribute_group_position')->default(0);
             $table->enum('type', ['boolean', 'integer', 'decimal', 'string', 'text', 'enum']);
@@ -378,7 +484,7 @@ class CreateCommonTables extends Migration
         });
 
         Schema::create('attribute_values', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
             $table->unsignedInteger('attribute_id')->nullable();
             $table->unsignedInteger('attribute_position')->default(0);
             $table->string('name');
@@ -428,7 +534,7 @@ class CreateCommonTables extends Migration
     protected function webs()
     {
         Schema::create('webs', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
 
             $table->string('name');
             $table->string('title');
@@ -472,7 +578,7 @@ class CreateCommonTables extends Migration
     protected function localizations()
     {
         Schema::create('localizations', function (Blueprint $table) {
-            $table->increments('id')->unique()->index();
+            $table->increments('id');
 
             $table->string('name');
             $table->string('seo_url_slug')->unique()->index();
@@ -537,7 +643,7 @@ class CreateCommonTables extends Migration
 
     private function importDump($table, $package = 'common')
     {
-        $file = realpath(sprintf('%s/../dumps/%s/%s.sql', __DIR__, $package, $table));
+        $file = realpath(sprintf('%s/../dumps/rocXolid/%s/%s.sql', __DIR__, $package, $table));
 
         DB::unprepared(file_get_contents($file));
 

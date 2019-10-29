@@ -6,7 +6,7 @@ use View;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 /**
- * RocXolid views & composers service provider.
+ * rocXolid views & composers service provider.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
@@ -15,7 +15,7 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 class ViewServiceProvider extends IlluminateServiceProvider
 {
     /**
-     * Bootstrap RocXolid view services.
+     * Bootstrap rocXolid view services.
      *
      * @return \Illuminate\Support\ServiceProvider
      */
