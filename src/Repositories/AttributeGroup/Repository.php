@@ -18,8 +18,6 @@ use Softworx\RocXolid\Repositories\Columns\Type\Text,
  */
 class Repository extends AbstractCrudRepository
 {
-    protected static $translation_param = 'attribute-group';
-
     protected $filters = [
         'full_name' => [
             'type' => TextFilter::class,

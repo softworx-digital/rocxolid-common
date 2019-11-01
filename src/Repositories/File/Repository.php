@@ -32,8 +32,6 @@ use Softworx\RocXolid\Common\Models\File as FileModel;
  */
 class Repository extends AbstractCrudRepository
 {
-    protected static $translation_param = 'file';
-
     protected $columns = [];
 
     // @todo - tmp crudable model, inac nejaky fileable contract

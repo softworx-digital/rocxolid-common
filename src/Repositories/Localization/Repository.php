@@ -19,8 +19,6 @@ use Softworx\RocXolid\Common\Models\Locale;
  */
 class Repository extends AbstractCrudRepository
 {
-    protected static $translation_param = 'localization';
-
     protected $filters = [
         'name' => [
             'type' => TextFilter::class,

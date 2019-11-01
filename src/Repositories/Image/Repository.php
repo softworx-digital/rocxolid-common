@@ -34,8 +34,6 @@ use Softworx\RocXolid\Common\Models\Image;
  */
 class Repository extends AbstractCrudRepository
 {
-    protected static $translation_param = 'image';
-
     protected $columns = [];
 
     // @todo - tmp crudable model, inac nejaky imageable contract

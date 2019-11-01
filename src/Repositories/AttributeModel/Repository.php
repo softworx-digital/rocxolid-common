@@ -18,8 +18,6 @@ class Repository extends AbstractCrudRepository
 {
     protected $form_field_factory = AttributeFormFieldFactory::class;
 
-    protected static $translation_param = 'attribute-model';
-
     protected $filters = [];
 
     protected $columns = [];

@@ -14,8 +14,6 @@ use Softworx\RocXolid\Repositories\Columns\Type\ModelRelation;
  */
 class Repository extends AbstractCrudRepository
 {
-    protected static $translation_param = 'locale';
-
     protected $filters = [
         'name' => [
             'type' => TextFilter::class,
