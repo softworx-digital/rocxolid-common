@@ -1,4 +1,4 @@
-<div id="{{ $component->makeDomId('attribute-values') }}" class="row">
+<div id="{{ $component->getDomId('attribute-values') }}" class="row">
     <div class="col-xs-12 table-responsive">
         <table class="table table-striped">
             <thead>

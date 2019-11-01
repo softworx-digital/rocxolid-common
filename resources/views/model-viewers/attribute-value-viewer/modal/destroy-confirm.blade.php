@@ -1,7 +1,7 @@
-<div id="{{ $component->makeDomId('modal-destroy-confirm', $component->getModel()->id) }}" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="{{ $component->getDomId('modal-destroy-confirm', $component->getModel()->id) }}" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content ajax-overlay">
-        {{ Form::open([ 'id' => $component->makeDomId('destroy-confirmation'), 'url' => $component->getController()->getRoute('destroy', $component->getModel()) ]) }}
+        {{ Form::open([ 'id' => $component->getDomId('destroy-confirmation'), 'url' => $component->getController()->getRoute('destroy', $component->getModel()) ]) }}
             {{ Form::hidden('_method', 'DELETE') }}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
@@ -14,7 +14,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-chevron-left margin-right-10"></i>{{ $component->translate('button.close', false) }}</button>
-                <button type="button" class="btn btn-danger pull-right" data-ajax-submit-form="{{ $component->makeDomIdHash('destroy-confirmation') }}"><i class="fa fa-trash-o margin-right-10"></i>{{ $component->translate('button.delete', false) }}</button>
+                <button type="button" class="btn btn-danger pull-right" data-ajax-submit-form="{{ $component->getDomIdHash('destroy-confirmation') }}"><i class="fa fa-trash-o margin-right-10"></i>{{ $component->translate('button.delete', false) }}</button>
             </div>
         {{ Form::close() }}
         </div>
