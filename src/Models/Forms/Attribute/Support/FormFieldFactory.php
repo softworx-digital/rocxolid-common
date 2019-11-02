@@ -5,55 +5,50 @@ namespace Softworx\RocXolid\Common\Models\Forms\Attribute\Support;
 // doctrine
 use Doctrine\DBAL\Types\Type;
 // relations
-use Illuminate\Database\Eloquent\Relations\Relation,
-    Illuminate\Database\Eloquent\Relations\BelongsTo,
-    Illuminate\Database\Eloquent\Relations\BelongsToMany,
-    Illuminate\Database\Eloquent\Relations\HasMany,
-    Illuminate\Database\Eloquent\Relations\HasManyThrough,
-    Illuminate\Database\Eloquent\Relations\HasOne,
-    Illuminate\Database\Eloquent\Relations\HasOneOrMany,
-    Illuminate\Database\Eloquent\Relations\MorphMany,
-    Illuminate\Database\Eloquent\Relations\MorphOne,
-    Illuminate\Database\Eloquent\Relations\MorphTo,
-    Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 // rocXolid support
 use Softworx\RocXolid\Forms\Support\FormFieldFactory as RocXolidFormFieldFactory;
-// field types
-use Softworx\RocXolid\Forms\Fields\Type\BooleanRadio,
-    Softworx\RocXolid\Forms\Fields\Type\Button,
-    Softworx\RocXolid\Forms\Fields\Type\ButtonAnchor,
-    Softworx\RocXolid\Forms\Fields\Type\ButtonGroup,
-    Softworx\RocXolid\Forms\Fields\Type\ButtonSubmit,
-    Softworx\RocXolid\Forms\Fields\Type\ButtonToolbar,
-    Softworx\RocXolid\Forms\Fields\Type\Checkable,
-    Softworx\RocXolid\Forms\Fields\Type\Checkbox,
-    Softworx\RocXolid\Forms\Fields\Type\ChildForm,
-    Softworx\RocXolid\Forms\Fields\Type\CollectionCheckbox,
-    Softworx\RocXolid\Forms\Fields\Type\CollectionSelect,
-    Softworx\RocXolid\Forms\Fields\Type\Collection,
-    Softworx\RocXolid\Forms\Fields\Type\Colorpicker,
-    Softworx\RocXolid\Forms\Fields\Type\Datepicker,
-    Softworx\RocXolid\Forms\Fields\Type\Timepicker,
-    Softworx\RocXolid\Forms\Fields\Type\DateTimepicker,
-    Softworx\RocXolid\Forms\Fields\Type\Entity,
-    Softworx\RocXolid\Forms\Fields\Type\FormFieldGroup,
-    Softworx\RocXolid\Forms\Fields\Type\FormFieldGroupAddable,
-    Softworx\RocXolid\Forms\Fields\Type\Input,
-    Softworx\RocXolid\Forms\Fields\Type\Radio,
-    Softworx\RocXolid\Forms\Fields\Type\Repeated,
-    Softworx\RocXolid\Forms\Fields\Type\Select,
-    Softworx\RocXolid\Forms\Fields\Type\StaticField,
-    Softworx\RocXolid\Forms\Fields\Type\Switchery,
-    Softworx\RocXolid\Forms\Fields\Type\Textarea,
-    Softworx\RocXolid\Forms\Fields\Type\WysiwygTextarea;
-// contracts
-use Softworx\RocXolid\Contracts\EventDispatchable,
-    Softworx\RocXolid\Forms\Contracts\Form,
-    Softworx\RocXolid\Forms\Contracts\FormField,
-    Softworx\RocXolid\Forms\Contracts\FormFieldable,
-    Softworx\RocXolid\Forms\Contracts\FormFieldFactory as FormFieldFactoryContract;
-// common models
+// rocXolid field types
+use Softworx\RocXolid\Forms\Fields\Type\BooleanRadio;
+use Softworx\RocXolid\Forms\Fields\Type\Button;
+use Softworx\RocXolid\Forms\Fields\Type\ButtonAnchor;
+use Softworx\RocXolid\Forms\Fields\Type\ButtonGroup;
+use Softworx\RocXolid\Forms\Fields\Type\ButtonSubmit;
+use Softworx\RocXolid\Forms\Fields\Type\ButtonToolbar;
+use Softworx\RocXolid\Forms\Fields\Type\Checkbox;
+use Softworx\RocXolid\Forms\Fields\Type\CollectionCheckbox;
+use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
+use Softworx\RocXolid\Forms\Fields\Type\Colorpicker;
+use Softworx\RocXolid\Forms\Fields\Type\Datepicker;
+use Softworx\RocXolid\Forms\Fields\Type\Timepicker;
+use Softworx\RocXolid\Forms\Fields\Type\DateTimepicker;
+use Softworx\RocXolid\Forms\Fields\Type\FormFieldGroup;
+use Softworx\RocXolid\Forms\Fields\Type\FormFieldGroupAddable;
+use Softworx\RocXolid\Forms\Fields\Type\Input;
+use Softworx\RocXolid\Forms\Fields\Type\Radio;
+use Softworx\RocXolid\Forms\Fields\Type\Select;
+use Softworx\RocXolid\Forms\Fields\Type\Switchery;
+use Softworx\RocXolid\Forms\Fields\Type\Textarea;
+use Softworx\RocXolid\Forms\Fields\Type\WysiwygTextarea;
+// rocXolid contracts
+use Softworx\RocXolid\Contracts\EventDispatchable;
+use Softworx\RocXolid\Forms\Contracts\Form;
+use Softworx\RocXolid\Forms\Contracts\FormField;
+use Softworx\RocXolid\Forms\Contracts\FormFieldable;
+use Softworx\RocXolid\Forms\Contracts\FormFieldFactory as FormFieldFactoryContract;
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Attribute;
+
 /**
  *
  */
