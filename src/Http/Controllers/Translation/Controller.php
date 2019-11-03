@@ -16,6 +16,7 @@ class Controller extends \Barryvdh\TranslationManager\Controller
 
     public function userCan($method_group)
     {
+dd(__METHOD__);
         $permission = sprintf('\%s.%s', get_class($this), $method_group);
 
         if ($user = Auth::guard('rocXolid')->user())
