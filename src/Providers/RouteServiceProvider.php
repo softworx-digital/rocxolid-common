@@ -90,6 +90,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
             CrudRouterService::create('language', \Language\Controller::class);
             CrudRouterService::create('locale', \Locale\Controller::class);
             CrudRouterService::create('localization', \Localization\Controller::class);
+            CrudRouterService::create('nationality', \Nationality\Controller::class);
             CrudRouterService::create('name-day', \NameDay\Controller::class);
             CrudRouterService::create('attribute-group', \AttributeGroup\Controller::class);
             CrudRouterService::create('attribute', \Attribute\Controller::class);

@@ -3,25 +3,25 @@
 namespace Softworx\RocXolid\Common\Http\Controllers\Attribute;
 
 use App;
-use Symfony\Component\HttpFoundation\Response;
 // rocXolid fundamentals
-use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract,
-    Softworx\RocXolid\Http\Requests\CrudRequest,
-    Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel,
-    Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
+use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
+use Softworx\RocXolid\Http\Requests\CrudRequest;
+use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
+use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
 // rocXolid components
-use Softworx\RocXolid\Components\General\Message,
-    Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent,
-    Softworx\RocXolid\Components\Forms\CrudForm as CrudFormComponent;
+use Softworx\RocXolid\Components\General\Message;
+use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
+use Softworx\RocXolid\Components\Forms\CrudForm as CrudFormComponent;
 // common components
 use Softworx\RocXolid\Common\Components\ModelViewers\AttributeViewer;
 // common controllers
-use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController,
-    Softworx\RocXolid\Common\Http\Controllers\AttributeGroup\Controller as AttributeGroupController;
+use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
+use Softworx\RocXolid\Common\Http\Controllers\AttributeGroup\Controller as AttributeGroupController;
 // common repositories
 use Softworx\RocXolid\Common\Repositories\Attribute\Repository;
 // common models
 use Softworx\RocXolid\Common\Models\Attribute;
+
 /**
  *
  */
@@ -54,7 +54,7 @@ class Controller extends AbstractCrudController
             ->get();
     }
 
-    protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $attribute, $action)
+    protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $attribute, string $action)
     {
         if ($request->ajax() && $request->has('_section'))
         {

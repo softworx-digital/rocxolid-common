@@ -3,26 +3,17 @@
 namespace Softworx\RocXolid\Common\Http\Traits\Controllers;
 
 use App;
-use Illuminate\Support\Collection;
 // rocXolid fundamentals
-use Softworx\RocXolid\Http\Requests\CrudRequest,
-    Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm,
-    Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel,
-    Softworx\RocXolid\Repositories\Contracts\Repository;
-// rocXolid components
-use Softworx\RocXolid\Components\General\Message,
-    Softworx\RocXolid\Components\Contracts\Repositoryable as RepositoryableComponent,
-    Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
+use Softworx\RocXolid\Http\Requests\CrudRequest;
+use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
+use Softworx\RocXolid\Repositories\Contracts\Repository;
 // common components
 use Softworx\RocXolid\Common\Components\Forms\Attribute\CrudForm as AttributeCrudFormComponent;
 // common contracts
 use Softworx\RocXolid\Common\Models\Contracts\Attributable as AttributableModel;
 // common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AttributeModel\Controller as AttributeModelController;
-// common models
-use Softworx\RocXolid\Common\Models\AttributeGroup,
-    Softworx\RocXolid\Common\Models\Attribute,
-    Softworx\RocXolid\Common\Models\AttributeValue;
+
 /**
  *
  */
@@ -104,7 +95,7 @@ trait Attributable
         }
     }
 
-    protected function successAttributes(CrudRequest $request, Repository $repository, AbstractCrudForm $form, $action)
+    protected function successAttributes(CrudRequest $request, Repository $repository, AbstractCrudForm $form, string $action)
     {
         $attribute_model_controller = App::make(AttributeModelController::class);
         $attribute_model_repository = $attribute_model_controller->getRepository($attribute_model_controller->getRepositoryParam($request));

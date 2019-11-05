@@ -5,27 +5,28 @@ namespace Softworx\RocXolid\Common\Http\Controllers\AttributeValue;
 use App;
 use Symfony\Component\HttpFoundation\Response;
 // rocXolid fundamentals
-use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract,
-    Softworx\RocXolid\Http\Requests\CrudRequest,
-    Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel,
-    Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
+use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
+use Softworx\RocXolid\Http\Requests\CrudRequest;
+use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
+use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
 // rocXolid components
 use Softworx\RocXolid\Components\General\Message;
 use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
 use Softworx\RocXolid\Components\Forms\CrudForm as CrudFormComponent;
 // common components
-use Softworx\RocXolid\Common\Components\ModelViewers\AttributeGroupViewer,
-    Softworx\RocXolid\Common\Components\ModelViewers\AttributeViewer,
-    Softworx\RocXolid\Common\Components\ModelViewers\AttributeValueViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\AttributeGroupViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\AttributeViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\AttributeValueViewer;
 // common controllers
-use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController,
-    Softworx\RocXolid\Common\Http\Controllers\Attribute\Controller as AttributeController;
+use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
+use Softworx\RocXolid\Common\Http\Controllers\Attribute\Controller as AttributeController;
 // common repositories
 use Softworx\RocXolid\Common\Repositories\AttributeValue\Repository;
 // common models
-use Softworx\RocXolid\Common\Models\AttributeGroup,
-    Softworx\RocXolid\Common\Models\Attribute,
-    Softworx\RocXolid\Common\Models\AttributeValue;
+use Softworx\RocXolid\Common\Models\AttributeGroup;
+use Softworx\RocXolid\Common\Models\Attribute;
+use Softworx\RocXolid\Common\Models\AttributeValue;
+
 /**
  *
  */
@@ -63,7 +64,7 @@ class Controller extends AbstractCrudController
             ->setController($this);
     }
 
-    protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $attribute_value, $action)
+    protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $attribute_value, string $action)
     {
         if ($request->ajax() && $request->has('_section'))
         {

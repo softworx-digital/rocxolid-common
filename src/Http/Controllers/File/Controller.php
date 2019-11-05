@@ -2,20 +2,14 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\File;
 
-// @todo - upratat
 use App;
-use Illuminate\Support\Facades\Storage;
 use Softworx\RocXolid\Http\Requests\CrudRequest;
-// components
-use Softworx\RocXolid\Components\Forms\FormField,
-    Softworx\RocXolid\Components\General\Message,
-    Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent,
-    Softworx\RocXolid\Components\Forms\CrudForm as CrudFormComponent;
-// models
+use Softworx\RocXolid\Components\Forms\FormField;
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Models\File;
 use Softworx\RocXolid\Common\Repositories\File\Repository;
+
 /**
  *
  */
