@@ -38,7 +38,7 @@ class ViewServiceProvider extends IlluminateServiceProvider
         // customized views preference
         $this->loadViewsFrom(resource_path('views/vendor/rocXolid/common'), 'rocXolid:common');
         // pre-defined views fallback
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'rocXolid:common');
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'rocXolid:common');
 
         return $this;
     }
@@ -50,7 +50,9 @@ class ViewServiceProvider extends IlluminateServiceProvider
      */
     private function setComposers(): IlluminateServiceProvider
     {
-        View::composer('rocXolid:common::*', Composers\ViewComposer::class);
+        foreach (config('rocXolid.common.general.composers', []) as $view => $composer) {
+            View::composer($view, $composer);
+        }
 
         return $this;
     }

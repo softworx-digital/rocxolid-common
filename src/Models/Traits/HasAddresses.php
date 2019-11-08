@@ -16,8 +16,13 @@ trait HasAddresses
         return $this->morphMany(Address::class, 'model');
     }
 
-    public function address(): Address
+    public function address()
     {
-        return $this->morphMany(Address::class, 'model')->where('is_default', 1)->get();
+        return $this->morphOne(Address::class, 'model')->where('is_default', 1);
+    }
+
+    public function makeAddress()
+    {
+        return new Address();
     }
 }

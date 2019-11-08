@@ -87,7 +87,11 @@ class RouteServiceProvider extends IlluminateServiceProvider
             CrudRouterService::create('file', \File\Controller::class);
             CrudRouterService::create('image', \Image\Controller::class);
             CrudRouterService::create('country', \Country\Controller::class);
+            CrudRouterService::create('region', \Region\Controller::class);
+            CrudRouterService::create('district', \District\Controller::class);
+            CrudRouterService::create('city', \City\Controller::class);
             CrudRouterService::create('language', \Language\Controller::class);
+            CrudRouterService::create('address', \Address\Controller::class);
             CrudRouterService::create('locale', \Locale\Controller::class);
             CrudRouterService::create('localization', \Localization\Controller::class);
             CrudRouterService::create('nationality', \Nationality\Controller::class);

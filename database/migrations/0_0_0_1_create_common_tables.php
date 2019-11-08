@@ -19,6 +19,7 @@ class CreateCommonTables extends Migration
             ->regions()
             ->districts()
             ->cities()
+            ->addresses()
             ->languages()
             ->locales()
             ->localizations()
@@ -47,6 +48,7 @@ class CreateCommonTables extends Migration
         Schema::dropIfExists('regions');
         Schema::dropIfExists('districts');
         Schema::dropIfExists('cities');
+        Schema::dropIfExists('addresses');
         Schema::dropIfExists('languages');
         Schema::dropIfExists('locales');
         Schema::dropIfExists('localizations');
@@ -261,12 +263,13 @@ class CreateCommonTables extends Migration
             $table->unsignedInteger('district_id')->nullable();
             $table->string('district')->nullable();
             
-            $table->string('street')->nullable();
+            $table->unsignedInteger('city_id')->nullable();
+            $table->string('city')->nullable();
+
+            $table->string('street_name')->nullable();
+            $table->string('street_no')->nullable();
             $table->string('po_box')->nullable();
             $table->string('zip')->nullable();
-
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
 
             $table->boolean('is_default')->default(1);
 
@@ -279,7 +282,7 @@ class CreateCommonTables extends Migration
             $table->foreign('country_id')
                 ->references('id')
                 ->on('countries')
-                ->onDelete('cascade')
+                ->onDelete('set null')
                 ->onUpdate('cascade');
 
             $table->foreign('region_id')
@@ -291,6 +294,12 @@ class CreateCommonTables extends Migration
             $table->foreign('district_id')
                 ->references('id')
                 ->on('districts')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+
+            $table->foreign('city_id')
+                ->references('id')
+                ->on('cities')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
         });

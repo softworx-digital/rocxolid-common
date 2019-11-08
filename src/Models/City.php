@@ -27,4 +27,12 @@ class City extends AbstractCrudModel
 
     protected $relationships = [
     ];
+
+    public function getSelectOption()
+    {
+        return sprintf("%s (%s)",
+            $this->name,
+            $this->district()->exists() ? $this->district->getTitle() : '-'
+        );
+    }
 }
