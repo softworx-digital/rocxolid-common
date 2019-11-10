@@ -71,4 +71,14 @@ class Address extends AbstractCrudModel
 
         return $html ? nl2br($label) : $label;
     }
+
+    // @todo: type hints
+    protected function allowPermissionException($user, $method_group, $permission)
+    {
+        if (!$this->exists) {
+            return true;
+        }
+        
+        return !$this->exists || $this->parent->is($user);
+    }
 }

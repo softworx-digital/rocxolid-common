@@ -7,6 +7,6 @@
     </h2>
     <div class="text-center">
         <i class="fa fa-info-circle text-warning fa-2x text-vertical-align-middle margin-right-5"></i>
-        {{ $component->translate('text.unavailable') }}
+        {{ $component->translate('text.unfilled') }}
     </div>
 </div>
