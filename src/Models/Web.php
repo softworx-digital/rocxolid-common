@@ -37,7 +37,7 @@ class Web extends AbstractCrudModel
         'color',
         'is_label_with_name',
         'is_label_with_color',
-        //'is_label_with_flag',
+        'is_label_with_flag',
         'default_localization_id',
     ];
 

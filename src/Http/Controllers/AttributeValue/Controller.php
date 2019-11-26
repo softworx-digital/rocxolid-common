@@ -83,14 +83,14 @@ class Controller extends AbstractCrudController
             switch ($action)
             {
                 case 'create':
-                    $this->response->replace($attribute_group_model_viewer_component->makeDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments));
+                    $this->response->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments));
                     break;
             }
 
             return $this->response
                 ->append($form_component->getDomId('output'), (new Message())->fetch('crud.success', $assignments))
-                ->replace($attribute_model_viewer_component->makeDomId($request->_section), $attribute_model_viewer_component->fetch($template_name, $assignments))
-                ->modalClose($model_viewer_component->makeDomId(sprintf('modal-%s', $action)))
+                ->replace($attribute_model_viewer_component->getDomId($request->_section), $attribute_model_viewer_component->fetch($template_name, $assignments))
+                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
                 ->get();
         }
         else
@@ -112,9 +112,9 @@ class Controller extends AbstractCrudController
             $attribute_model_viewer_component = $this->getAttributeViewerComponent($attribute_value->attribute);
 
             return $this->response
-                ->replace($attribute_group_model_viewer_component->makeDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments))
-                ->replace($attribute_model_viewer_component->makeDomId('attribute-values'), $attribute_model_viewer_component->fetch('include.attribute-values', $assignments))
-                ->modalClose($model_viewer_component->makeDomId('modal-destroy-confirm', $attribute_value->id))
+                ->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments))
+                ->replace($attribute_model_viewer_component->getDomId('attribute-values'), $attribute_model_viewer_component->fetch('include.attribute-values', $assignments))
+                ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm', $attribute_value->id))
                 ->get();
         }
         else

@@ -73,8 +73,8 @@ class Controller extends AbstractCrudController
             $this->getModel()->parent->load($this->getModel()->model_attribute);
 
             return $this->response
-                ->replace($parent_form_field_component->makeDomId('images', $this->getModel()->model_attribute), $parent_form_field_component->fetch('include.images'))
-                ->modalClose($model_viewer_component->makeDomId('modal-update'))
+                ->replace($parent_form_field_component->getDomId('images', $this->getModel()->model_attribute), $parent_form_field_component->fetch('include.images'))
+                ->modalClose($model_viewer_component->getDomId('modal-update'))
                 ->get();
         }
         else

@@ -270,6 +270,7 @@ class CreateCommonTables extends Migration
             $table->string('street_no')->nullable();
             $table->string('po_box')->nullable();
             $table->string('zip')->nullable();
+            $table->string('apartment_no')->nullable();
 
             $table->boolean('is_default')->default(1);
 
@@ -303,6 +304,8 @@ class CreateCommonTables extends Migration
                 ->onDelete('set null')
                 ->onUpdate('cascade');
         });
+
+        return $this;
     }
 
     protected function languages()

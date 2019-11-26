@@ -72,8 +72,8 @@ class Controller extends AbstractCrudController
 
             return $this->response
                 ->append($form_component->getDomId('output'), (new Message())->fetch('crud.success', $assignments))
-                ->replace($attribute_group_model_viewer_component->makeDomId($request->_section), $attribute_group_model_viewer_component->fetch($template_name, $assignments))
-                ->modalClose($model_viewer_component->makeDomId(sprintf('modal-%s', $action)))
+                ->replace($attribute_group_model_viewer_component->getDomId($request->_section), $attribute_group_model_viewer_component->fetch($template_name, $assignments))
+                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
                 ->get();
         }
         else
@@ -94,8 +94,8 @@ class Controller extends AbstractCrudController
             $attribute_group_model_viewer_component = $attribute_group_controller->getModelViewerComponent($attribute->attributeGroup);
 
             return $this->response
-                ->replace($attribute_group_model_viewer_component->makeDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments))
-                ->modalClose($model_viewer_component->makeDomId('modal-destroy-confirm'))
+                ->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments))
+                ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm'))
                 ->get();
         }
         else

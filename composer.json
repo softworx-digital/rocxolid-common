@@ -1,6 +1,6 @@
 {
     "name": "softworx/rocxolid-common",
-    "description": "RocXolid library common data.",
+    "description": "RocXolid common data base and library.",
     "keywords": [
         "laravel",
         "common",

@@ -23,11 +23,12 @@ class Update extends RocXolidAbstractCrudForm
         'frontpageSettings',
         'user_group_id',
         'localizations',
+        'default_localization_id',
     ];
 
     protected function adjustFieldsDefinition($fields)
     {
-        $fields['user_group_id']['options']['show-null-option'] = true;
+        // $fields['user_group_id']['options']['show-null-option'] = true;
         //
         //$fields['invoice_country_id']['type'] = CollectionSelectAutocomplete::class;
         //$fields['invoice_country_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'invoice_country_id']);

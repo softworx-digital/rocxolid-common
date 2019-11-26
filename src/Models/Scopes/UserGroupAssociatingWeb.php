@@ -15,7 +15,7 @@ class UserGroupAssociatingWeb implements Scope
     {
         if ($user = Auth::guard('rocXolid')->user())
         {
-            $user->applyGroupFilters($builder, $model->web()->getQualifiedForeignKey());
+            $user->applyGroupFilters($builder, $model->web()->getQualifiedForeignKeyName());
         }
     }
 }

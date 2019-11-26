@@ -26,6 +26,7 @@ use Softworx\RocXolid\Forms\Fields\Type\ButtonGroup;
 use Softworx\RocXolid\Forms\Fields\Type\ButtonSubmit;
 use Softworx\RocXolid\Forms\Fields\Type\ButtonToolbar;
 use Softworx\RocXolid\Forms\Fields\Type\Checkbox;
+use Softworx\RocXolid\Forms\Fields\Type\CheckboxToggle;
 use Softworx\RocXolid\Forms\Fields\Type\CollectionCheckbox;
 use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
 use Softworx\RocXolid\Forms\Fields\Type\Colorpicker;
@@ -60,7 +61,7 @@ class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFact
      * @var array
      */
     protected static $fields_mapping = [
-        Type::BOOLEAN       => Switchery::class,
+        Type::BOOLEAN       => CheckboxToggle::class,
         Type::INTEGER       => Input::class,
         Type::DECIMAL       => Input::class,
         Type::STRING        => Input::class,

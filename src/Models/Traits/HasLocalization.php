@@ -2,11 +2,13 @@
 
 namespace Softworx\RocXolid\Common\Models\Traits;
 
+use Illuminate\Support\Arr;
 // rocXolid contracts
 use Softworx\RocXolid\Forms\Contracts\Form;
 use Softworx\RocXolid\Forms\Contracts\FormField;
 // common models
 use Softworx\RocXolid\Common\Models\Localization;
+
 /**
  *
  */
@@ -29,7 +31,7 @@ trait HasLocalization
 
             if (is_null($id) && ($input = $form->getInput()))
             {
-                $id = array_get($input, $param, null);
+                $id = Arr::get($input, $param, null);
             }
 
             if (is_null($id) && ($this->localization()->exists()))

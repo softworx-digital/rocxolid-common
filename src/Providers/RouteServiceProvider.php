@@ -40,7 +40,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
             'module' => 'rocXolid-common',
             'middleware' => [ 'web', 'rocXolid.auth' ],
             'namespace' => 'Softworx\RocXolid\Common\Http\Controllers',
-            'prefix' => sprintf('%s/common', config('rocXolid.main.admin-path', 'rocXolid')),
+            'prefix' => sprintf('%s/common', config('rocXolid.admin.general.routes.root', 'rocXolid')),
             'as' => 'rocXolid.common.',
         ], function ($router) {
             // package dashboard
@@ -80,7 +80,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
             'module' => 'rocXolid-common',
             'middleware' => [ 'web', 'rocXolid.auth' ],
             'namespace' => 'Softworx\RocXolid\Common\Http\Controllers',
-            'prefix' => sprintf('%s/common', config('rocXolid.main.admin-path', 'rocXolid')),
+            'prefix' => sprintf('%s/common', config('rocXolid.admin.general.routes.root', 'rocXolid')),
             'as' => 'rocXolid.common.',
         ], function ($router) {
             CrudRouterService::create('web', \Web\Controller::class);

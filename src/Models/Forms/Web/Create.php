@@ -4,8 +4,9 @@ namespace Softworx\RocXolid\Common\Models\Forms\Web;
 
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
 //
-use Softworx\RocXolid\Forms\Fields\Type\CollectionSelectAutocomplete,
-    Softworx\RocXolid\Forms\Fields\Type\CollectionRadioList;
+use Softworx\RocXolid\Forms\Fields\Type\CollectionSelectAutocomplete;
+use Softworx\RocXolid\Forms\Fields\Type\CollectionRadioList;
+
 /**
  *
  */
@@ -31,7 +32,7 @@ class Create extends RocXolidAbstractCrudForm
 
     protected function adjustFieldsDefinition($fields)
     {
-        $fields['user_group_id']['show-null-option'] = true;
+        // $fields['user_group_id']['show-null-option'] = true;
         //
         //$fields['invoice_country_id']['type'] = CollectionSelectAutocomplete::class;
         //$fields['invoice_country_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'invoice_country_id']);
