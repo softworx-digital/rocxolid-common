@@ -107,7 +107,7 @@ class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFact
             case 'enum':
                 $definition['options'] = [
                     'collection' => $attribute->attributeValues->pluck('name', 'id'),
-                    'show_null_option' => true,
+                    // 'show_null_option' => true,
                 ];
                 break;
         }

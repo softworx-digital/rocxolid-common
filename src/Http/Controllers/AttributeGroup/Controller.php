@@ -25,7 +25,7 @@ class Controller extends AbstractCrudController
 
     public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
     {
-        return (new AttributeGroupViewer())
+        return AttributeGroupViewer::build($this, $this)
             ->setModel($model)
             ->setController($this);
     }

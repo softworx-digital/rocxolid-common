@@ -10,7 +10,7 @@
         @else
             <div class="modal-body">
                 <p class="text-center"><i class="fa fa-hand-stop-o text-danger fa-5x"></i></p>
-                <p class="text-center"><big>{{ $component->translate('text.no-access', false) }}</big></p>
+                <p class="text-center"><span class="text-big">{{ $component->translate('text.no-access', false) }}</span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-chevron-left margin-right-10"></i>{{ $component->translate('button.close', false) }}</button>

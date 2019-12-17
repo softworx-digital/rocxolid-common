@@ -88,6 +88,9 @@ class Create extends RocXolidAbstractCrudForm
                 'label' => [
                     'title' => 'city',
                 ],
+                'attributes' => [
+                    'title' => 'select',
+                ],
                 'validation' => [
                     'rules' => [
                         'required',
@@ -106,7 +109,7 @@ class Create extends RocXolidAbstractCrudForm
                     'title' => 'region',
                 ],
                 'attributes' => [
-                    'placeholder' => 'select',
+                    'title' => 'select',
                 ],
                 'validation' => [
                     'rules' => [
@@ -126,7 +129,7 @@ class Create extends RocXolidAbstractCrudForm
                     'title' => 'district',
                 ],
                 'attributes' => [
-                    'placeholder' => 'select',
+                    'title' => 'select',
                 ],
                 'validation' => [
                     'rules' => [
@@ -146,7 +149,7 @@ class Create extends RocXolidAbstractCrudForm
                     'title' => 'country',
                 ],
                 'attributes' => [
-                    'placeholder' => 'select',
+                    'title' => 'select',
                 ],
                 'validation' => [
                     'rules' => [
@@ -165,14 +168,14 @@ class Create extends RocXolidAbstractCrudForm
         // city
         $city = City::find($this->getInputFieldValue('city_id'));
 
-        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id']);
+        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id', 'aaa' => 'bbb'], 'ggg');
         $fields['city_id']['options']['collection']['method'] = 'getSelectOption';
         $fields['city_id']['options']['attributes']['data-change-action'] = $this->getController()->getRoute('formReload', $this->getModel());
 
         if (!is_null($city)) {
-            $fields['region_id']['options']['attributes']['placeholder'] = null;
-            $fields['district_id']['options']['attributes']['placeholder'] = null;
-            $fields['country_id']['options']['attributes']['placeholder'] = null;
+            $fields['region_id']['options']['attributes']['title'] = null;
+            $fields['district_id']['options']['attributes']['title'] = null;
+            $fields['country_id']['options']['attributes']['title'] = null;
         }
 
         // region

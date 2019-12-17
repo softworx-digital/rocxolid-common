@@ -45,21 +45,21 @@ class Controller extends AbstractCrudController
 
     public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
     {
-        return (new AttributeValueViewer())
+        return AttributeValueViewer::build($this, $this)
             ->setModel($model)
             ->setController($this);
     }
 
     public function getAttributeViewerComponent(Attribute $attribute): CrudModelViewerComponent
     {
-        return (new AttributeViewer())
+        return AttributeViewer::build($this, $this)
             ->setModel($attribute)
             ->setController($this);
     }
 
     public function getAttributeGroupViewerComponent(AttributeGroup $attribute_group): CrudModelViewerComponent
     {
-        return (new AttributeGroupViewer())
+        return AttributeGroupViewer::build($this, $this)
             ->setModel($attribute_group)
             ->setController($this);
     }
@@ -70,7 +70,7 @@ class Controller extends AbstractCrudController
         {
             $assignments = [];
 
-            $form_component = (new CrudFormComponent())
+            $form_component = CrudFormComponent::build($this, $this)
                 ->setForm($form)
                 ->setRepository($this->getRepository());
 
@@ -88,7 +88,7 @@ class Controller extends AbstractCrudController
             }
 
             return $this->response
-                ->append($form_component->getDomId('output'), (new Message())->fetch('crud.success', $assignments))
+                ->notifySuccess($model_viewer_component->translate('text.updated'))
                 ->replace($attribute_model_viewer_component->getDomId($request->_section), $attribute_model_viewer_component->fetch($template_name, $assignments))
                 ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
                 ->get();

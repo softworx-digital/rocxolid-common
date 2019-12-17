@@ -184,6 +184,7 @@ class CreateCommonTables extends Migration
     {
         Schema::create('districts', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('country_id');
             $table->unsignedInteger('region_id');
 
             $table->string('name');
@@ -194,6 +195,12 @@ class CreateCommonTables extends Migration
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
+
+            $table->foreign('country_id')
+                ->references('id')
+                ->on('countries')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->foreign('region_id')
                 ->references('id')
@@ -262,7 +269,7 @@ class CreateCommonTables extends Migration
 
             $table->unsignedInteger('district_id')->nullable();
             $table->string('district')->nullable();
-            
+
             $table->unsignedInteger('city_id')->nullable();
             $table->string('city')->nullable();
 
