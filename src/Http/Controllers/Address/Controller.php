@@ -11,6 +11,8 @@ use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Models\Address;
 use Softworx\RocXolid\Common\Repositories\Address\Repository;
 use Softworx\RocXolid\Common\Components\ModelViewers\AddressViewer;
+// events
+use Softworx\RocXolid\Common\Events\Address\Changed as AddressChanged;
 
 class Controller extends AbstractCrudController
 {
@@ -37,6 +39,8 @@ class Controller extends AbstractCrudController
         if ($request->ajax())
         {
             $model_viewer_component = $model->getModelViewerComponent();
+
+            event(new AddressChanged($model, $this->response));
 
             return $this->response
                 ->notifySuccess($model_viewer_component->translate('text.updated'))

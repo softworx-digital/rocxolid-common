@@ -48,4 +48,9 @@ trait HasImage
     {
         return $this->morphOne(Image::class, 'model')->where(sprintf('%s.model_attribute', (new Image())->getTable()), 'image')->orderBy(sprintf('%s.model_attribute_position', (new Image())->getTable()));
     }
+
+    public function makeImage()
+    {
+        return new Image();
+    }
 }

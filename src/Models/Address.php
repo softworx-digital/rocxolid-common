@@ -32,6 +32,7 @@ class Address extends AbstractCrudModel
         'region_id',
         'district_id',
         'city_id',
+        'city_name',
         'street_name',
         'street_no',
         'po_box',
@@ -78,7 +79,7 @@ class Address extends AbstractCrudModel
         if (!$this->exists) {
             return true;
         }
-        
+
         return !$this->exists || $this->parent->is($user);
     }
 }

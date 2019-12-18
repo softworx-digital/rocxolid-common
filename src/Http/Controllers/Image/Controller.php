@@ -10,6 +10,8 @@ use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Models\Image;
 use Softworx\RocXolid\Common\Repositories\Image\Repository;
+use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
+use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
 
 /**
  *
@@ -19,6 +21,13 @@ class Controller extends AbstractCrudController
     protected static $model_class = Image::class;
 
     protected static $repository_class = Repository::class;
+
+    public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
+    {
+        return ImageViewer::build($this, $this)
+            ->setModel($model)
+            ->setController($this);
+    }
 
     public function get(CrudRequest $request, $id, $dimension = null)
     {

@@ -1,0 +1,1 @@
+<img src="{{ asset($component->getModel()->image->getPath($size)) }}" alt="{{ $component->getModel()->image->alt }}"/>

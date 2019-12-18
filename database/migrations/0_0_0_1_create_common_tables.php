@@ -262,16 +262,16 @@ class CreateCommonTables extends Migration
             $table->text('description')->nullable();
 
             $table->unsignedInteger('country_id')->nullable();
-            $table->string('country')->nullable();
+            $table->string('country_name')->nullable();
 
             $table->unsignedInteger('region_id')->nullable();
-            $table->string('region')->nullable();
+            $table->string('region_name')->nullable();
 
             $table->unsignedInteger('district_id')->nullable();
-            $table->string('district')->nullable();
+            $table->string('district_name')->nullable();
 
             $table->unsignedInteger('city_id')->nullable();
-            $table->string('city')->nullable();
+            $table->string('city_name')->nullable();
 
             $table->string('street_name')->nullable();
             $table->string('street_no')->nullable();

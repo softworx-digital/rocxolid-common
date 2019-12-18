@@ -28,4 +28,9 @@ class Image extends File
 
     protected $relationships = [
     ];
+
+    public function parent()
+    {
+        return $this->morphTo('model');
+    }
 }
