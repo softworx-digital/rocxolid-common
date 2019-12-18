@@ -10,7 +10,6 @@ use Softworx\RocXolid\Http\Requests\CrudRequest;
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
 // rocXolid components
-use Softworx\RocXolid\Components\General\Message;
 use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
 use Softworx\RocXolid\Components\Forms\CrudForm as CrudFormComponent;
 // common components
