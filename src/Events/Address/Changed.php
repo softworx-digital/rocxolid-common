@@ -2,7 +2,7 @@
 
 namespace Softworx\RocXolid\Common\Events\Address;
 
-use Softworx\RocXolid\Communication\Contracts\AjaxResponse;
+use Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse;
 use Softworx\RocXolid\Common\Models\Address;
 
 class Changed
@@ -36,7 +36,7 @@ class Changed
     /**
      * Retrieve the response.
      *
-     * @return \Softworx\RocXolid\Communication\Contracts\AjaxResponse
+     * @return \Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse
      */
     public function getResponse(): AjaxResponse
     {
