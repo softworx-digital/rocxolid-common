@@ -13,8 +13,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-chevron-left margin-right-10"></i>{{ $component->translate('button.close', false) }}</button>
-                <button type="submit" class="btn btn-danger pull-right"><i class="fa fa-trash-o margin-right-10"></i>{{ $component->translate('button.delete', false) }}</button>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-chevron-left margin-right-10"></i>{{ $component->translate('button.close') }}</button>
+                <button type="submit" class="btn btn-danger pull-right"><i class="fa fa-trash-o margin-right-10"></i>{{ $component->translate('button.delete') }}</button>
             </div>
         {{ Form::close() }}
         </div>
