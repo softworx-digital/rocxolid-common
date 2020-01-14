@@ -2,33 +2,34 @@
 
 namespace Softworx\RocXolid\Common\Repositories\Image;
 
-use Illuminate\Http\UploadedFile,
-    Illuminate\Support\Str,
-    Illuminate\Support\Facades\File,
-    Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 // third party
 use Intervention\Image\Exception\NotReadableException;
 // rocXolid fundamentals
 use Softworx\RocXolid\Repositories\AbstractCrudRepository;
 // relations
-use Illuminate\Database\Eloquent\Relations\Relation,
-    Illuminate\Database\Eloquent\Relations\BelongsTo,
-    Illuminate\Database\Eloquent\Relations\BelongsToMany,
-    Illuminate\Database\Eloquent\Relations\HasMany,
-    Illuminate\Database\Eloquent\Relations\HasManyThrough,
-    Illuminate\Database\Eloquent\Relations\HasOne,
-    Illuminate\Database\Eloquent\Relations\HasOneOrMany,
-    Illuminate\Database\Eloquent\Relations\MorphMany,
-    Illuminate\Database\Eloquent\Relations\MorphOne,
-    Illuminate\Database\Eloquent\Relations\MorphTo,
-    Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 // contracts
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 // column types
-use Softworx\RocXolid\Repositories\Columns\Type\Text,
-    Softworx\RocXolid\Repositories\Columns\Type\ModelRelation;
+use Softworx\RocXolid\Repositories\Columns\Type\Text;
+use Softworx\RocXolid\Repositories\Columns\Type\ModelRelation;
 // common models
 use Softworx\RocXolid\Common\Models\Image;
+
 /**
  *
  */
@@ -44,8 +45,7 @@ class Repository extends AbstractCrudRepository
         $path = $uploaded_file->storeAs(sprintf('images/%s/%s', $model->getUploadPath(), $model_attribute), sprintf('%s.%s', Str::random(40), $uploaded_file->getClientOriginalExtension()));
         $path_parts = pathinfo($path);
 
-        try
-        {
+        try {
             $intervention_image = \InterventionImage::make(storage_path(sprintf('app/%s', $path)));
             $dimensions = [
                 'original' => [
@@ -55,13 +55,11 @@ class Repository extends AbstractCrudRepository
                 ]
             ];
 
-            foreach ($model->getImageDimensions($model_attribute) as $directory => $options)
-            {
+            foreach ($model->getImageDimensions($model_attribute) as $directory => $options) {
                 $intervention_image = \InterventionImage::make(storage_path(sprintf('app/%s', $path)));
                 $storage_directory = storage_path(sprintf('app/%s/%s', $path_parts['dirname'], $directory));
 
-                if (!File::exists($storage_directory))
-                {
+                if (!File::exists($storage_directory)) {
                     File::makeDirectory($storage_directory);
                 }
 
@@ -70,31 +68,23 @@ class Repository extends AbstractCrudRepository
                 $options['height'] = $options['height'] ?? round($options['width'] / $dimensions['original']['ratio']);
                 $options['width'] = $options['width'] ?? round($options['height'] / $dimensions['original']['ratio']);
 
-                foreach ($methods as $method)
-                {
-                    if (in_array($method, [ 'resize', 'fit' ]))
-                    {
+                foreach ($methods as $method) {
+                    if (in_array($method, [ 'resize', 'fit' ])) {
                         $intervention_image->$method($options['width'], $options['height'], function ($constraint) use ($options) {
-                            if (isset($options['constraints']))
-                            {
-                                foreach ($options['constraints'] as $constraint_method)
-                                {
+                            if (isset($options['constraints'])) {
+                                foreach ($options['constraints'] as $constraint_method) {
                                     $constraint->$constraint_method();
                                 }
                             }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         $intervention_image->$method($options['width'], $options['height']);
                     }
                 }
 
                 $intervention_image->save(sprintf('%s/%s', $storage_directory, $path_parts['basename']));
             }
-        }
-        catch (NotReadableException $e)
-        {
+        } catch (NotReadableException $e) {
             $dimensions = [
                 'original' => [
                     'width' => 'unknown',
@@ -102,12 +92,10 @@ class Repository extends AbstractCrudRepository
                 ]
             ];
 
-            foreach ($model->getImageDimensions($model_attribute) as $directory => $options)
-            {
+            foreach ($model->getImageDimensions($model_attribute) as $directory => $options) {
                 $storage_directory = storage_path(sprintf('app/%s/%s', $path_parts['dirname'], $directory));
 
-                if (!File::exists($storage_directory))
-                {
+                if (!File::exists($storage_directory)) {
                     File::makeDirectory($storage_directory);
                 }
 
@@ -115,19 +103,13 @@ class Repository extends AbstractCrudRepository
             }
         }
 
-        if ($model->$model_attribute() instanceof MorphOne)
-        {
-            if ($model->$model_attribute()->exists())
-            {
+        if ($model->$model_attribute() instanceof MorphOne) {
+            if ($model->$model_attribute()->exists()) {
                 $model->$model_attribute->delete();
             }
-        }
-        elseif ($model->$model_attribute() instanceof MorphMany)
-        {
+        } elseif ($model->$model_attribute() instanceof MorphMany) {
             //
-        }
-        else
-        {
+        } else {
             throw new \RuntimeException(sprintf('Invalid image relation type [%s] for [%s]->[%s]', get_class($model->$model_attribute()), get_class($model), $model_attribute));
         }
 

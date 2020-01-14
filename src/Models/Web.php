@@ -13,6 +13,7 @@ use Softworx\RocXolid\Common\Models\Traits\UserGroupAssociated;
 use Softworx\RocXolid\CMS\Models\WebFrontpageSettings;
 // user management models
 use Softworx\RocXolid\UserManagement\Models\Group as UserGroup;
+
 /**
  *
  */
@@ -59,8 +60,7 @@ class Web extends AbstractCrudModel
 
     protected function createIfNeededUserGroup()
     {
-        if (!$this->userGroup()->exists())
-        {
+        if (!$this->userGroup()->exists()) {
             $group = UserGroup::create([
                 'name' => $this->getTitle(),
             ]);
@@ -74,8 +74,7 @@ class Web extends AbstractCrudModel
 
     protected function createIfNeededFrontpageSettings()
     {
-        if (!$this->frontpageSettings()->exists())
-        {
+        if (!$this->frontpageSettings()->exists()) {
             $frontpage_settings = WebFrontpageSettings::make([
                 'name' => $this->getTitle(),
                 'template_set' => 'default',

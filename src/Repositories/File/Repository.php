@@ -2,31 +2,32 @@
 
 namespace Softworx\RocXolid\Common\Repositories\File;
 
-use Illuminate\Http\UploadedFile,
-    Illuminate\Support\Str,
-    Illuminate\Support\Facades\File,
-    Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 // rocXolid fundamentals
 use Softworx\RocXolid\Repositories\AbstractCrudRepository;
 // relations
-use Illuminate\Database\Eloquent\Relations\Relation,
-    Illuminate\Database\Eloquent\Relations\BelongsTo,
-    Illuminate\Database\Eloquent\Relations\BelongsToMany,
-    Illuminate\Database\Eloquent\Relations\HasMany,
-    Illuminate\Database\Eloquent\Relations\HasManyThrough,
-    Illuminate\Database\Eloquent\Relations\HasOne,
-    Illuminate\Database\Eloquent\Relations\HasOneOrMany,
-    Illuminate\Database\Eloquent\Relations\MorphMany,
-    Illuminate\Database\Eloquent\Relations\MorphOne,
-    Illuminate\Database\Eloquent\Relations\MorphTo,
-    Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 // contracts
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 // column types
-use Softworx\RocXolid\Repositories\Columns\Type\Text,
-    Softworx\RocXolid\Repositories\Columns\Type\ModelRelation;
+use Softworx\RocXolid\Repositories\Columns\Type\Text;
+use Softworx\RocXolid\Repositories\Columns\Type\ModelRelation;
 // common models
 use Softworx\RocXolid\Common\Models\File as FileModel;
+
 /**
  *
  */
@@ -42,19 +43,13 @@ class Repository extends AbstractCrudRepository
         $path = $uploaded_file->storeAs(sprintf('files/%s/%s', $model->getUploadPath(), $model_attribute), sprintf('%s.%s', Str::random(40), $uploaded_file->getClientOriginalExtension()));
         $path_parts = pathinfo($path);
 
-        if ($model->$model_attribute() instanceof MorphOne)
-        {
-            if ($model->$model_attribute()->exists())
-            {
+        if ($model->$model_attribute() instanceof MorphOne) {
+            if ($model->$model_attribute()->exists()) {
                 $model->$model_attribute->delete();
             }
-        }
-        elseif ($model->$model_attribute() instanceof MorphMany)
-        {
+        } elseif ($model->$model_attribute() instanceof MorphMany) {
             //
-        }
-        else
-        {
+        } else {
             throw new \RuntimeException(sprintf('Invalid file relation type [%s] for [%s]->[%s]', get_class($model->$model_attribute()), get_class($model), $model_attribute));
         }
 

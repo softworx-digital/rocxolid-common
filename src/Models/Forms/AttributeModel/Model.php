@@ -8,6 +8,7 @@ use Softworx\RocXolid\Forms\Contracts\Form;
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
 // rocXolid form field types
 use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
+
 /**
  *
  */
@@ -22,12 +23,9 @@ class Model extends RocXolidAbstractCrudForm
 
     protected function getFieldsDefinition(): array
     {
-        if (!$this->fields)
-        {
-            $this->getModel()->attributeGroups()->each(function($attribute_group)
-            {
-                $attribute_group->attributes->each(function($attribute) use ($attribute_group)
-                {
+        if (!$this->fields) {
+            $this->getModel()->attributeGroups()->each(function ($attribute_group) {
+                $attribute_group->attributes->each(function ($attribute) use ($attribute_group) {
                     $this->fields[$attribute->id] = $this->getFormFieldFactory()->makeAttributeFieldDefinition($attribute);
                 });
             });
@@ -47,12 +45,9 @@ class Model extends RocXolidAbstractCrudForm
 
     public function setFieldsModelValues(): Form
     {
-        $this->getModel()->attributeGroups()->each(function($attribute_group)
-        {
-            $attribute_group->attributes->each(function($attribute) use ($attribute_group)
-            {
-                if ($this->hasFormField($attribute->id))
-                {
+        $this->getModel()->attributeGroups()->each(function ($attribute_group) {
+            $attribute_group->attributes->each(function ($attribute) use ($attribute_group) {
+                if ($this->hasFormField($attribute->id)) {
                     $this
                         ->getFormField($attribute->id)
                             ->setValue($this->getModel()->attributeValue($attribute, true))

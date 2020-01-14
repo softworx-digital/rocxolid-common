@@ -14,6 +14,7 @@ use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Repositories\AttributeGroup\Repository;
 // common models
 use Softworx\RocXolid\Common\Models\AttributeGroup;
+
 /**
  *
  */

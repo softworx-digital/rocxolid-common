@@ -16,38 +16,27 @@ class Controller extends \Barryvdh\TranslationManager\Controller
 
     public function userCan($method_group)
     {
-dd(__METHOD__);
+        dd(__METHOD__);
         $permission = sprintf('\%s.%s', get_class($this), $method_group);
 
-        if ($user = Auth::guard('rocXolid')->user())
-        {
-            if ($user->id == 1)
-            {
+        if ($user = Auth::guard('rocXolid')->user()) {
+            if ($user->id == 1) {
                 return true;
             }
 
-            foreach ($user->permissions as $extra_permission)
-            {
-                if (($extra_permission->controller_class == sprintf('\%s', static::class)) && ($extra_permission->controller_method_group == $method_group))
-                {
+            foreach ($user->permissions as $extra_permission) {
+                if (($extra_permission->controller_class == sprintf('\%s', static::class)) && ($extra_permission->controller_method_group == $method_group)) {
                     return true;
-                }
-                elseif (($method_group == 'read-only') && (($extra_permission->controller_class == sprintf('\%s', static::class)) && ($extra_permission->controller_method_group == 'write')))
-                {
+                } elseif (($method_group == 'read-only') && (($extra_permission->controller_class == sprintf('\%s', static::class)) && ($extra_permission->controller_method_group == 'write'))) {
                     return true;
                 }
             }
 
-            foreach ($user->roles as $role)
-            {
-                foreach ($role->permissions as $permission)
-                {
-                    if (($permission->controller_class == sprintf('\%s', static::class)) && ($permission->controller_method_group == $method_group))
-                    {
+            foreach ($user->roles as $role) {
+                foreach ($role->permissions as $permission) {
+                    if (($permission->controller_class == sprintf('\%s', static::class)) && ($permission->controller_method_group == $method_group)) {
                         return true;
-                    }
-                    elseif (($method_group == 'read-only') && (($permission->controller_class == sprintf('\%s', static::class)) && ($permission->controller_method_group == 'write')))
-                    {
+                    } elseif (($method_group == 'read-only') && (($permission->controller_class == sprintf('\%s', static::class)) && ($permission->controller_method_group == 'write'))) {
                         return true;
                     }
                 }

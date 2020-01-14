@@ -31,8 +31,7 @@ class Controller extends AbstractCrudController
 
     public function get(CrudRequest $request, $id, $dimension = null)
     {
-        if ($image = Image::find($id))
-        {
+        if ($image = Image::find($id)) {
             return response($image->content($dimension))
                 ->header('Content-Type', $image->mime_type);
         }
@@ -53,16 +52,13 @@ class Controller extends AbstractCrudController
             ->adjustUpdateBeforeSubmit($request)
             ->submit();
 
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             $attribute = $this->getModel()->model_attribute;
 
-            if ($request->has('_data.is_model_primary') && $request->input('_data.is_model_primary'))
-            {
+            if ($request->has('_data.is_model_primary') && $request->input('_data.is_model_primary')) {
                 $images = ($this->getModel()->parent->$attribute instanceof Collection) ? $this->getModel()->parent->$attribute : [ $this->getModel()->parent->$attribute ];
 
-                foreach ($images as $image)
-                {
+                foreach ($images as $image) {
                     $image->is_model_primary = 0;
                     $image->save();
                 }
@@ -85,21 +81,16 @@ class Controller extends AbstractCrudController
                 ->replace($parent_form_field_component->getDomId('images', $this->getModel()->model_attribute), $parent_form_field_component->fetch('include.images'))
                 ->modalClose($model_viewer_component->getDomId('modal-update'))
                 ->get();
-        }
-        else
-        {
+        } else {
             return $this->errorResponse($request, $repository, $form, 'edit');
         }
     }
 
     protected function destroyResponse(CrudRequest $request, CrudableModel $model)
     {
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
             return $this->response->redirect($model->parent->getControllerRoute('edit'))->get();
-        }
-        else
-        {
+        } else {
             return redirect($model->parent->getControllerRoute('edit'));
         }
     }

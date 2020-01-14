@@ -13,18 +13,14 @@ class ExchangeRateService implements ExchangeRateServiceContract
 
     public function __call(string $name, $arguments)
     {
-        if (empty($this->cache))
-        {
+        if (empty($this->cache)) {
             $this->load();
         }
 
-        if (in_array(strtoupper($name), array_keys($this->cache)))
-        {
+        if (in_array(strtoupper($name), array_keys($this->cache))) {
             //return $this->getCurrencyExchangeRate(strtoupper($name));
             return $this->cache[strtoupper($name)];
-        }
-        else
-        {
+        } else {
             throw new \InvalidArgumentException(sprintf('Unsupported method / currency [%s] call', $name));
         }
     }
@@ -49,8 +45,7 @@ class ExchangeRateService implements ExchangeRateServiceContract
 
         $nodes = $xml->xpath(sprintf('//*[@time="%s"]/*[@currency="%s"]', $date, strtoupper($currency)));
 
-        if (empty($nodes))
-        {
+        if (empty($nodes)) {
             throw new \InvalidArgumentException(sprintf('Date [%s] and currency [%s] not found in %s', $date, $currency, self::URL_HISTORY));
         }
 
@@ -61,13 +56,11 @@ class ExchangeRateService implements ExchangeRateServiceContract
     {
         $xml = simplexml_load_file(self::URL);
 
-        if (!isset($xml->Cube) || !isset($xml->Cube->Cube) || !isset($xml->Cube->Cube->Cube))
-        {
+        if (!isset($xml->Cube) || !isset($xml->Cube->Cube) || !isset($xml->Cube->Cube->Cube)) {
             throw new \InvalidArgumentException(sprintf('Invalid data in [%s]', self::URL));
         }
 
-        foreach ($xml->Cube->Cube->Cube as $data)
-        {
+        foreach ($xml->Cube->Cube->Cube as $data) {
             $this->cache[(string)$data->attributes()->currency] = (float)$data->attributes()->rate;
         }
 

@@ -55,8 +55,7 @@ class Controller extends AbstractCrudController
 
     protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $attribute, string $action)
     {
-        if ($request->ajax() && $request->has('_section'))
-        {
+        if ($request->ajax() && $request->has('_section')) {
             $assignments = [];
 
             $form_component = CrudFormComponent::build($this, $this)
@@ -74,17 +73,14 @@ class Controller extends AbstractCrudController
                 ->replace($attribute_group_model_viewer_component->getDomId($request->_section), $attribute_group_model_viewer_component->fetch($template_name, $assignments))
                 ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
                 ->get();
-        }
-        else
-        {
+        } else {
             return parent::successResponse($request, $repository, $form, $attribute, $action);
         }
     }
 
     protected function destroyResponse(CrudRequest $request, CrudableModel $attribute)
     {
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
             $assignments = [];
 
             $model_viewer_component = $this->getModelViewerComponent($attribute);
@@ -96,9 +92,7 @@ class Controller extends AbstractCrudController
                 ->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments))
                 ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm'))
                 ->get();
-        }
-        else
-        {
+        } else {
             $attribute_group_controller = App::make(AttributeGroupController::class);
 
             return redirect($attribute_group_controller->getRoute('show', $attribute->attributeGroup));

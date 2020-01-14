@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 // common models
 use Softworx\RocXolid\Common\Models\Localization;
+
 /**
  *
  */

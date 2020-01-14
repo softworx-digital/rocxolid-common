@@ -87,8 +87,7 @@ class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFact
 
         $definition = [];
 
-        switch ($attribute->type)
-        {
+        switch ($attribute->type) {
             case Type::INTEGER:
                 $rules[] = 'nullable';
                 $rules[] = 'numeric';
@@ -127,8 +126,7 @@ class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFact
 
     protected function getAttributeFieldTypeClass(Attribute $attribute)
     {
-        if (!array_key_exists($attribute->type, self::$fields_mapping))
-        {
+        if (!array_key_exists($attribute->type, self::$fields_mapping)) {
             throw new \InvalidArgumentException(sprintf('Undefined field type for attribute [%s] type [%s]', $attribute->id, $attribute->type));
         }
 

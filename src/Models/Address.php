@@ -60,7 +60,8 @@ class Address extends AbstractCrudModel
 
     public function getAddressLabel($html = true, $with_name = false)
     {
-        $label = sprintf("%s %s\n%s %s\n%s%s%s",
+        $label = sprintf(
+            "%s %s\n%s %s\n%s%s%s",
             $this->street_name,
             $this->street_no,
             $this->zip,

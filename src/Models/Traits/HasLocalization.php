@@ -23,23 +23,18 @@ trait HasLocalization
 
     public function detectLocalization(Form $form)
     {
-        if (is_null($this->_detected_localization))
-        {
+        if (is_null($this->_detected_localization)) {
             $param = sprintf('%s.%s', FormField::SINGLE_DATA_PARAM, 'localization_id');
 
             $id = $form->getRequest()->input($param, null);
 
-            if (is_null($id) && ($input = $form->getInput()))
-            {
+            if (is_null($id) && ($input = $form->getInput())) {
                 $id = Arr::get($input, $param, null);
             }
 
-            if (is_null($id) && ($this->localization()->exists()))
-            {
+            if (is_null($id) && ($this->localization()->exists())) {
                 $this->_detected_localization = $this->localization;
-            }
-            else
-            {
+            } else {
                 $this->_detected_localization = Localization::findOrNew($id);
             }
         }

@@ -4,12 +4,13 @@ namespace Softworx\RocXolid\Common\Repositories\NameDay;
 
 use Softworx\RocXolid\Repositories\AbstractCrudRepository;
 // filters
-use Softworx\RocXolid\Repositories\Filters\Type\Text as TextFilter,
-    Softworx\RocXolid\Repositories\Filters\Type\Select as SelectFilter,
-    Softworx\RocXolid\Repositories\Filters\Type\ModelRelation as ModelRelationFilter;
+use Softworx\RocXolid\Repositories\Filters\Type\Text as TextFilter;
+use Softworx\RocXolid\Repositories\Filters\Type\Select as SelectFilter;
+use Softworx\RocXolid\Repositories\Filters\Type\ModelRelation as ModelRelationFilter;
 use Softworx\RocXolid\Repositories\Columns\Type\Text;
 use Softworx\RocXolid\Repositories\Columns\Type\Method;
 use Softworx\RocXolid\Repositories\Columns\Type\ModelRelation;
+
 /**
  *
  */

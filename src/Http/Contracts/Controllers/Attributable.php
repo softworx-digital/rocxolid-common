@@ -3,6 +3,7 @@
 namespace Softworx\RocXolid\Common\Http\Contracts\Controllers;
 
 use Softworx\RocXolid\Http\Requests\CrudRequest;
+
 /**
  *
  */

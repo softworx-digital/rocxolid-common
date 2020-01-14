@@ -12,6 +12,7 @@ use Softworx\RocXolid\Common\Models\Web;
 use Softworx\RocXolid\Common\Models\Traits\HasCountry;
 use Softworx\RocXolid\Common\Models\Traits\HasLanguage;
 use Softworx\RocXolid\Common\Models\Traits\HasLocale;
+
 /**
  *
  */
@@ -45,10 +46,8 @@ class Localization extends AbstractCrudModel
 
     public function beforeSave($data, $action = null)
     {
-        if ($this->seo_url_slug !== '/') // homepage
-        {
-            $this->seo_url_slug = collect(array_filter(explode('/', $this->seo_url_slug)))->map(function ($slug)
-            {
+        if ($this->seo_url_slug !== '/') { // homepage
+            $this->seo_url_slug = collect(array_filter(explode('/', $this->seo_url_slug)))->map(function ($slug) {
                 return Str::slug($slug);
             })->implode('/');
         }

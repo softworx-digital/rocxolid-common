@@ -60,8 +60,7 @@ class Country extends AbstractCrudModel
 
     public function getLanguageName($language = 'sk')
     {
-        if (isset($this->langauge_names[$language]) && isset($this->langauge_names[$language][$this->id]))
-        {
+        if (isset($this->langauge_names[$language]) && isset($this->langauge_names[$language][$this->id])) {
             return $this->langauge_names[$language][$this->id];
         }
 

@@ -25,8 +25,7 @@ trait Attributable
 
         $this->setModel($repository->findOrFail($id));
 
-        if (!$this->getModel() instanceof AttributableModel)
-        {
+        if (!$this->getModel() instanceof AttributableModel) {
             throw new \RuntimeException(sprintf('%s is not instance of %s', get_class($this->getModel()), AttributableModel::class));
         }
 
@@ -47,14 +46,11 @@ trait Attributable
             ->getModelViewerComponent($this->getModel())
             ->setFormComponent($form_component);
 
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
             return $this->response
                 ->modal($model_viewer_component->fetch('modal.attributes'))
                 ->get();
-        }
-        else
-        {
+        } else {
             return $this
                 ->getDashboard()
                 ->setModelViewerComponent($model_viewer_component)
@@ -70,8 +66,7 @@ trait Attributable
 
         $this->setModel($repository->findOrFail($id));
 
-        if (!$this->getModel() instanceof AttributableModel)
-        {
+        if (!$this->getModel() instanceof AttributableModel) {
             throw new \RuntimeException(sprintf('%s is not instance of %s', get_class($this->getModel()), AttributableModel::class));
         }
 
@@ -85,12 +80,9 @@ trait Attributable
             ->adjustCreateBeforeSubmit($request)
             ->submit();
 
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             return $this->successAttributes($request, $repository, $form, 'attributes');
-        }
-        else
-        {
+        } else {
             return $this->errorResponse($request, $repository, $form, 'attributes');
         }
     }

@@ -6,8 +6,9 @@ use Softworx\RocXolid\Models\AbstractCrudModel;
 // common contracts
 use Softworx\RocXolid\Common\Models\Contracts\Attributable;
 // common models
-use Softworx\RocXolid\Common\Models\AttributeGroup,
-    Softworx\RocXolid\Common\Models\AttributeValue;
+use Softworx\RocXolid\Common\Models\AttributeGroup;
+use Softworx\RocXolid\Common\Models\AttributeValue;
+
 /**
  *
  */

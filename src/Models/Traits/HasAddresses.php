@@ -2,10 +2,11 @@
 
 namespace Softworx\RocXolid\Common\Models\Traits;
 
-use Illuminate\Support\Collection,
-    Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations\Relation;
 // common models
 use Softworx\RocXolid\Common\Models\Address;
+
 /**
  *
  */

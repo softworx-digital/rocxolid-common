@@ -2,10 +2,11 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes,
-    Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 // rocXolid fundamentals
 use Softworx\RocXolid\Models\AbstractCrudModel;
+
 /**
  *
  */
@@ -53,8 +54,7 @@ class File extends AbstractCrudModel
 
     public function content($param = null)
     {
-        if (is_null($param))
-        {
+        if (is_null($param)) {
             return Storage::get($this->storage_path);
         }
 
@@ -65,8 +65,7 @@ class File extends AbstractCrudModel
 
     public function getPath($param = null)
     {
-        if (is_null($param))
-        {
+        if (is_null($param)) {
             return sprintf('/storage/%s', $this->storage_path);
         }
 

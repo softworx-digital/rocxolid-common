@@ -65,8 +65,7 @@ class Controller extends AbstractCrudController
 
     protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $attribute_value, string $action)
     {
-        if ($request->ajax() && $request->has('_section'))
-        {
+        if ($request->ajax() && $request->has('_section')) {
             $assignments = [];
 
             $form_component = CrudFormComponent::build($this, $this)
@@ -79,8 +78,7 @@ class Controller extends AbstractCrudController
             $attribute_model_viewer_component = $this->getAttributeViewerComponent($attribute_value->attribute);
             $template_name = sprintf('include.%s', $request->_section);
 
-            switch ($action)
-            {
+            switch ($action) {
                 case 'create':
                     $this->response->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments));
                     break;
@@ -91,17 +89,14 @@ class Controller extends AbstractCrudController
                 ->replace($attribute_model_viewer_component->getDomId($request->_section), $attribute_model_viewer_component->fetch($template_name, $assignments))
                 ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
                 ->get();
-        }
-        else
-        {
+        } else {
             return parent::successResponse($request, $repository, $form, $attribute_value, $action);
         }
     }
 
     protected function destroyResponse(CrudRequest $request, CrudableModel $attribute_value)
     {
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
             $assignments = [];
 
             $model_viewer_component = $this->getModelViewerComponent($attribute_value);
@@ -115,9 +110,7 @@ class Controller extends AbstractCrudController
                 ->replace($attribute_model_viewer_component->getDomId('attribute-values'), $attribute_model_viewer_component->fetch('include.attribute-values', $assignments))
                 ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm', $attribute_value->id))
                 ->get();
-        }
-        else
-        {
+        } else {
             $attribute_controller = App::make(AttributeController::class);
 
             return redirect($attribute_controller->getRoute('show', $attribute_value->attribute));

@@ -36,8 +36,7 @@ class Controller extends AbstractCrudController
 
     protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $model, string $action)
     {
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
             $model_viewer_component = $model->getModelViewerComponent();
 
             event(new AddressChanged($model, $this->response));
@@ -47,9 +46,7 @@ class Controller extends AbstractCrudController
                 ->replace($model_viewer_component->getDomId(), $model_viewer_component->fetch())
                 ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
                 ->get();
-        }
-        else
-        {
+        } else {
             return parent::successResponse($request, $repository, $form, $model, $action);
         }
     }

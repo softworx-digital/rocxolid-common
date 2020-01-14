@@ -9,8 +9,9 @@ use Softworx\RocXolid\Repositories\AbstractCrudRepository;
 // common support
 use Softworx\RocXolid\Common\Models\Forms\Attribute\Support\FormFieldFactory as AttributeFormFieldFactory;
 // common models
-use Softworx\RocXolid\Common\Models\Attribute,
-    Softworx\RocXolid\Common\Models\AttributeValue;
+use Softworx\RocXolid\Common\Models\Attribute;
+use Softworx\RocXolid\Common\Models\AttributeValue;
+
 /**
  *
  */
@@ -26,12 +27,10 @@ class Repository extends AbstractCrudRepository
     {
         $model->attributeValues()->detach();
 
-        foreach ($data as $attribute_id => $value)
-        {
+        foreach ($data as $attribute_id => $value) {
             $attribute = Attribute::findOrFail($attribute_id);
 
-            switch ($attribute->type)
-            {
+            switch ($attribute->type) {
                 case 'enum':
                     $column = 'attribute_value_id';
                     break;

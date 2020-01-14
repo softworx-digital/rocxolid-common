@@ -11,8 +11,7 @@ class UserGroupAssociating implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        if ($user = Auth::guard('rocXolid')->user())
-        {
+        if ($user = Auth::guard('rocXolid')->user()) {
             $user->applyGroupFilters($builder, $model->getQualifiedKeyName());
         }
     }

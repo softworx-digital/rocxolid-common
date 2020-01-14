@@ -38,8 +38,7 @@ class AttributeGroup extends AbstractCrudModel
 
     public function getModelType()
     {
-        if (($class = $this->model_type) && class_exists($class))
-        {
+        if (($class = $this->model_type) && class_exists($class)) {
             return $class::make()->getModelViewerComponent()->translate('model.title.singular');
         }
 
@@ -57,8 +56,7 @@ class AttributeGroup extends AbstractCrudModel
     {
         $models = new Collection();
 
-        foreach ($this->attributable as $class)
-        {
+        foreach ($this->attributable as $class) {
             //$models->put(Str::kebab((new \ReflectionClass($class))->getShortName()), $class);
             //$short_name = (new \ReflectionClass($class))->getShortName();
             $models->put($class, $class::make()->getModelViewerComponent()->translate('model.title.singular'));

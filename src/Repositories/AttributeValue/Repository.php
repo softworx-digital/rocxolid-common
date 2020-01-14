@@ -3,6 +3,7 @@
 namespace Softworx\RocXolid\Common\Repositories\AttributeValue;
 
 use Softworx\RocXolid\Repositories\AbstractCrudRepository;
+
 /**
  *
  */

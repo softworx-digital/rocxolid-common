@@ -2,12 +2,13 @@
 
 namespace Softworx\RocXolid\Common\Models\Traits;
 
-use Illuminate\Support\Collection,
-    Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations\Relation;
 // common models
-use Softworx\RocXolid\Common\Models\AttributeGroup,
-    Softworx\RocXolid\Common\Models\Attribute,
-    Softworx\RocXolid\Common\Models\AttributeValue;
+use Softworx\RocXolid\Common\Models\AttributeGroup;
+use Softworx\RocXolid\Common\Models\Attribute;
+use Softworx\RocXolid\Common\Models\AttributeValue;
+
 /**
  *
  */
@@ -37,10 +38,8 @@ trait HasAttributes
 
     public function attributeValue(Attribute $attribute, $raw = false)
     {
-        if ($pivot_attribute = $this->attributeValues->find(['attribute_id' => $attribute->id])->first())
-        {
-            switch ($pivot_attribute->type)
-            {
+        if ($pivot_attribute = $this->attributeValues->find(['attribute_id' => $attribute->id])->first()) {
+            switch ($pivot_attribute->type) {
                 case 'enum':
                     $attribute_value = AttributeValue::find($pivot_attribute->pivot->attribute_value_id);
                     return $attribute_value ? ($raw ? $attribute_value->id : $attribute_value->getTitle()) : null;
