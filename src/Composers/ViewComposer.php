@@ -2,7 +2,7 @@
 
 namespace Softworx\RocXolid\Common\Composers;
 
-use Softworx\RocXolid\Composers\ViewComposer as RocXolidViewComposer;
+use Softworx\RocXolid\Admin\Composers\ViewComposer as RocXolidViewComposer;
 
 class ViewComposer extends RocXolidViewComposer
 {
