@@ -104,7 +104,7 @@ class CreateCommonTables extends Migration
             $table->string('original_filename');
             $table->string('mime_type')->nullable();
             $table->string('extension');
-            $table->text('dimensions');
+            $table->text('sizes');
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedInteger('created_by')->nullable();

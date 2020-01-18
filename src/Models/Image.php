@@ -4,9 +4,9 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-// rocXolid fundamentals
+// rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\File;
 
 /**
@@ -14,7 +14,7 @@ use Softworx\RocXolid\Common\Models\File;
  */
 class Image extends File
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $guarded = [
         'id'

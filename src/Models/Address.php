@@ -2,6 +2,7 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\Common\Models\Traits\HasCountry;
@@ -74,8 +75,7 @@ class Address extends AbstractCrudModel
         return $html ? nl2br($label) : $label;
     }
 
-    // @todo: type hints
-    protected function allowPermissionException($user, $method_group, $permission)
+    protected function allowPermissionException(Authenticatable $user, string $method_group, string $permission)
     {
         if (!$this->exists) {
             return true;

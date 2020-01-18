@@ -23,7 +23,8 @@ class RouteServiceProvider extends IlluminateServiceProvider
     public function boot()
     {
         $this
-            ->load($this->app->router);
+            ->load($this->app->router)
+            ->mapRouteModels($this->app->router);
 
         return $this;
     }
@@ -105,7 +106,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 'prefix' => 'file',
                 'as' => 'file.',
             ], function ($router) {
-                $router->get('/file/{file}', 'Controller@get')->name('get');
+                $router->get('/get/{file}', 'Controller@get')->name('get');
             });
 
             $router->group([
@@ -113,9 +114,37 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 'prefix' => 'image',
                 'as' => 'image.',
             ], function ($router) {
-                $router->get('/image/{image}/{dimension?}', 'Controller@get')->name('get');
+                $router->get('/get/{image}/{size?}', 'Controller@get')->name('get');
             });
         });
+
+        return $this;
+    }
+
+    /**
+     * Define the route bindings for URL params.
+     *
+     * @param  \Illuminate\Routing\Router $router Router to be used for routing.
+     * @return \Illuminate\Support\ServiceProvider
+     */
+    private function mapRouteModels(Router $router): IlluminateServiceProvider
+    {
+        $router->model('web', \Softworx\RocXolid\Common\Models\Web::class);
+        $router->model('file', \Softworx\RocXolid\Common\Models\File::class);
+        $router->model('image', \Softworx\RocXolid\Common\Models\Image::class);
+        $router->model('country', \Softworx\RocXolid\Common\Models\Country::class);
+        $router->model('region', \Softworx\RocXolid\Common\Models\Region::class);
+        $router->model('district', \Softworx\RocXolid\Common\Models\District::class);
+        $router->model('city', \Softworx\RocXolid\Common\Models\City::class);
+        $router->model('language', \Softworx\RocXolid\Common\Models\Language::class);
+        $router->model('address', \Softworx\RocXolid\Common\Models\Address::class);
+        $router->model('locale', \Softworx\RocXolid\Common\Models\Locale::class);
+        $router->model('localization', \Softworx\RocXolid\Common\Models\Localization::class);
+        $router->model('nationality', \Softworx\RocXolid\Common\Models\Nationality::class);
+        $router->model('name_day', \Softworx\RocXolid\Common\Models\NameDay::class);
+        $router->model('attribute_group', \Softworx\RocXolid\Common\Models\AttributeGroup::class);
+        $router->model('attribute', \Softworx\RocXolid\Common\Models\Attribute::class);
+        $router->model('attribute_value', \Softworx\RocXolid\Common\Models\AttributeValue::class);
 
         return $this;
     }

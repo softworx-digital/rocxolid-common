@@ -4,6 +4,7 @@ namespace Softworx\RocXolid\Common\Http\Controllers\Image;
 
 use App;
 use Illuminate\Support\Collection;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 use Softworx\RocXolid\Components\Forms\FormField;
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
@@ -22,6 +23,18 @@ class Controller extends AbstractCrudController
 
     protected static $repository_class = Repository::class;
 
+    /**
+     * {@inheritDoc}
+     */
+    protected $form_mapping = [
+        'create' => 'create',
+        'store' => 'create',
+        'edit' => 'update',
+        'update' => 'update',
+        'edit.model' => 'update-in-model',
+        'update.model' => 'update-in-model',
+    ];
+
     public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
     {
         return ImageViewer::build($this, $this)
@@ -29,22 +42,20 @@ class Controller extends AbstractCrudController
             ->setController($this);
     }
 
-    public function get(CrudRequest $request, $id, $dimension = null)
+    public function get(CrudRequest $request, CrudableModel $image, $size = null)
     {
-        if ($image = Image::find($id)) {
-            return response($image->content($dimension))
-                ->header('Content-Type', $image->mime_type);
+        try {
+            return response($image->content($size))->header('Content-Type', $image->mime_type);
+        } catch (FileNotFoundException $e) {
+            abort(404);
         }
-
-        return null; // alebo placeholder?
     }
 
-    public function update(CrudRequest $request, $id)//: Response
+    public function update(CrudRequest $request, CrudableModel $model)//: Response
     {
-        $assignments = [];
-        $repository = $this->getRepository($this->getRepositoryParam($request));
+        $this->setModel($model);
 
-        $this->setModel($repository->find($id));
+        $repository = $this->getRepository($this->getRepositoryParam($request));
 
         $form = $repository->getForm($this->getFormParam($request));
         $form
@@ -66,21 +77,7 @@ class Controller extends AbstractCrudController
 
             $repository->updateModel($form->getFormFieldsValues()->toArray(), $this->getModel(), 'update');
 
-            $model_viewer_component = $this->getModelViewerComponent($this->getModel());
-
-            $parent_controller = App::make($this->getModel()->parent->getControllerClass());
-            $parent_controller->setModel($this->getModel()->parent);
-            $parent_form = $parent_controller
-                ->getRepository()
-                ->getForm($parent_controller->getFormParam($request));
-            $parent_form_field_component = (new FormField())->setFormField($parent_form->getFormField($this->getModel()->model_attribute));
-
-            $this->getModel()->parent->load($this->getModel()->model_attribute);
-
-            return $this->response
-                ->replace($parent_form_field_component->getDomId('images', $this->getModel()->model_attribute), $parent_form_field_component->fetch('include.images'))
-                ->modalClose($model_viewer_component->getDomId('modal-update'))
-                ->get();
+            return $this->getParentUpdateResponse();
         } else {
             return $this->errorResponse($request, $repository, $form, 'edit');
         }
@@ -89,9 +86,26 @@ class Controller extends AbstractCrudController
     protected function destroyResponse(CrudRequest $request, CrudableModel $model)
     {
         if ($request->ajax()) {
-            return $this->response->redirect($model->parent->getControllerRoute('edit'))->get();
+            // return $this->response->redirect($model->parent->getControllerRoute('show'))->get();
+            return $this->getParentUpdateResponse();
         } else {
-            return redirect($model->parent->getControllerRoute('edit'));
+            // return redirect($model->parent->getControllerRoute('show'));
+            return redirect($model->parent->deleteImageRedirectPath());
         }
+    }
+
+    protected function getParentUpdateResponse()
+    {
+        $model_viewer_component = $this->getModelViewerComponent($this->getModel());
+
+        $parent_controller = App::make($this->getModel()->parent->getControllerClass());
+        $parent_controller->setModel($this->getModel()->parent);
+
+        $parent_image_upload_component = $parent_controller->getImageUploadFormComponent();
+
+        return $this->response
+            ->replace($parent_image_upload_component->getOption('id'), $parent_image_upload_component->fetch('upload'))
+            ->modalClose($model_viewer_component->getDomId('modal-update'))
+            ->get();
     }
 }

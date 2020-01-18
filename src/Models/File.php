@@ -4,7 +4,7 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-// rocXolid fundamentals
+// rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
 
 /**

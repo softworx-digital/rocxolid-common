@@ -40,14 +40,14 @@ class Repository extends AbstractCrudRepository
     // @todo - tmp crudable model, inac nejaky imageable contract
     public function handleUpload(UploadedFile $uploaded_file, CrudableModel $model, $model_attribute)
     {
-        //$path = $uploaded_file->store(sprintf('images/%s/%s', $model->getUploadPath(), $model_attribute));
+        // $path = $uploaded_file->store(sprintf('images/%s/%s', $model->getUploadPath(), $model_attribute));
         // keep extension (was saving svg as txt)
         $path = $uploaded_file->storeAs(sprintf('images/%s/%s', $model->getUploadPath(), $model_attribute), sprintf('%s.%s', Str::random(40), $uploaded_file->getClientOriginalExtension()));
         $path_parts = pathinfo($path);
 
         try {
             $intervention_image = \InterventionImage::make(storage_path(sprintf('app/%s', $path)));
-            $dimensions = [
+            $sizes = [
                 'original' => [
                     'width' => $intervention_image->width(),
                     'height' => $intervention_image->height(),
@@ -55,7 +55,7 @@ class Repository extends AbstractCrudRepository
                 ]
             ];
 
-            foreach ($model->getImageDimensions($model_attribute) as $directory => $options) {
+            foreach ($model->getImageSizes($model_attribute) as $directory => $options) {
                 $intervention_image = \InterventionImage::make(storage_path(sprintf('app/%s', $path)));
                 $storage_directory = storage_path(sprintf('app/%s/%s', $path_parts['dirname'], $directory));
 
@@ -65,8 +65,8 @@ class Repository extends AbstractCrudRepository
 
                 $methods = is_array($options['method']) ? $options['method'] : [ $options['method'] ];
 
-                $options['height'] = $options['height'] ?? round($options['width'] / $dimensions['original']['ratio']);
-                $options['width'] = $options['width'] ?? round($options['height'] / $dimensions['original']['ratio']);
+                $options['height'] = $options['height'] ?? round($options['width'] / $sizes['original']['ratio']);
+                $options['width'] = $options['width'] ?? round($options['height'] / $sizes['original']['ratio']);
 
                 foreach ($methods as $method) {
                     if (in_array($method, [ 'resize', 'fit' ])) {
@@ -85,14 +85,14 @@ class Repository extends AbstractCrudRepository
                 $intervention_image->save(sprintf('%s/%s', $storage_directory, $path_parts['basename']));
             }
         } catch (NotReadableException $e) {
-            $dimensions = [
+            $sizes = [
                 'original' => [
                     'width' => 'unknown',
                     'height' => 'unknown',
                 ]
             ];
 
-            foreach ($model->getImageDimensions($model_attribute) as $directory => $options) {
+            foreach ($model->getImageSizes($model_attribute) as $directory => $options) {
                 $storage_directory = storage_path(sprintf('app/%s/%s', $path_parts['dirname'], $directory));
 
                 if (!File::exists($storage_directory)) {
@@ -120,7 +120,7 @@ class Repository extends AbstractCrudRepository
         $image->original_filename = $uploaded_file->getClientOriginalName();
         $image->mime_type = $uploaded_file->getClientMimeType();
         $image->extension = $uploaded_file->getClientOriginalExtension();
-        $image->dimensions = json_encode($dimensions + $model->getImageDimensions($model_attribute));
+        $image->sizes = json_encode($sizes + $model->getImageSizes($model_attribute));
         $image->is_model_primary = ($model->$model_attribute()->count() == 0);
 
         $model->$model_attribute()->save($image);

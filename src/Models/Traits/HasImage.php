@@ -2,6 +2,9 @@
 
 namespace Softworx\RocXolid\Common\Models\Traits;
 
+// rocXolid utils
+use Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse;
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Image;
 
 trait HasImage
@@ -13,7 +16,7 @@ trait HasImage
      *     'method' => fit|resize|crop
      * ]
      */
-    protected $default_image_dimensions = [
+    protected $default_image_sizes = [
         'image' => [
             'icon' => [
                 'width' => 26,
@@ -32,6 +35,14 @@ trait HasImage
                     'upsize',
                 ],
             ],
+            'thumb-square' => [
+                'width' => 64,
+                'height' => 64,
+                'method' => 'fit',
+                'constraints' => [
+                    'upsize',
+                ],
+            ],
             'small' => [
                 'width' => 256,
                 'height' => 256,
@@ -46,11 +57,18 @@ trait HasImage
 
     public function image()
     {
-        return $this->morphOne(Image::class, 'model')->where(sprintf('%s.model_attribute', (new Image())->getTable()), 'image')->orderBy(sprintf('%s.model_attribute_position', (new Image())->getTable()));
+        $table = (new Image())->getTable();
+
+        return $this->morphOne(Image::class, 'model')->where(sprintf('%s.model_attribute', $table), 'image')->orderBy(sprintf('%s.model_attribute_position', $table));
     }
 
-    public function makeImage()
+    public function onImageUpload(Image $image, AjaxResponse &$response)
     {
-        return new Image();
+        return $this;
+    }
+
+    public function deleteImageRedirectPath()
+    {
+        return $this->getControllerRoute('show');
     }
 }

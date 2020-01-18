@@ -13,7 +13,7 @@ trait HasImages
      *     'method' => fit|resize|crop
      * ]
      */
-    protected $default_image_dimensions = [
+    protected $default_image_sizes = [
         'images' => [
             'thumb' => [
                 'width' => 64,
