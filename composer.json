@@ -29,6 +29,12 @@
             ],
             "aliases": {
             }
+        },
+        "rocXolid": {
+            "title": {
+                "en": "Common",
+                "sk": "Všeobecné"
+            }
         }
     }
 }

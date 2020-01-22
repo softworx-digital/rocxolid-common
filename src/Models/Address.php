@@ -75,7 +75,7 @@ class Address extends AbstractCrudModel
         return $html ? nl2br($label) : $label;
     }
 
-    protected function allowPermissionException(Authenticatable $user, string $method_group, string $permission)
+    protected function allowPermissionException(Authenticatable $user, string $policy_ability_group, string $permission)
     {
         if (!$this->exists) {
             return true;

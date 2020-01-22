@@ -5,9 +5,9 @@ namespace Softworx\RocXolid\Common;
 use View;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\AliasLoader;
-use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+use Softworx\RocXolid\AbstractServiceProvider as RocXolidAbstractServiceProvider;
 
-class ServiceProvider extends IlluminateServiceProvider
+class ServiceProvider extends RocXolidAbstractServiceProvider
 {
     /**
      * Register the application services.
@@ -34,10 +34,11 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
+     * Expose config files and resources to be published.
      *
-     * @return \Illuminate\Support\ServiceProvider
+     * @return \Softworx\RocXolid\AbstractServiceProvider
      */
-    private function publish()
+    private function publish(): RocXolidAbstractServiceProvider
     {
         // config files
         // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="config" (--force to overwrite)
