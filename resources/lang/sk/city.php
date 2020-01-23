@@ -3,10 +3,14 @@
 return [
     'column' => [
         'name' => 'Názov',
+        'country' => 'Krajina',
+        'district' => 'Okres',
         'region' => 'Kraj',
     ],
     'field' => [
         'name' => 'Názov',
+        'country' => 'Krajina',
+        'district' => 'Okres',
         'region' => 'Kraj',
     ],
     'filter' => [
@@ -14,8 +18,8 @@ return [
     ],
     'model' => [
         'title' => [
-            'singular' => 'Okres',
-            'plural' => 'Okres',
+            'singular' => 'Mesto',
+            'plural' => 'Mestá',
         ],
     ],
 ];

@@ -3,19 +3,19 @@
 return [
     'column' => [
         'name' => 'Názov',
-        'region' => 'Kraj',
+        'country' => 'Krajina',
     ],
     'field' => [
         'name' => 'Názov',
-        'region' => 'Kraj',
+        'country' => 'Krajina',
     ],
     'filter' => [
         'name' => 'Názov',
     ],
     'model' => [
         'title' => [
-            'singular' => 'Okres',
-            'plural' => 'Okres',
+            'singular' => 'Kraj',
+            'plural' => 'Kraj',
         ],
     ],
 ];

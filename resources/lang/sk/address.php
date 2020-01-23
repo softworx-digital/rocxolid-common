@@ -3,7 +3,6 @@
 return [
     'column' => [
         'name' => 'Názov',
-        'description' => 'Popis',
         'country' => 'Krajina',
         'region' => 'Kraj',
         'district' => 'Okres',
@@ -18,7 +17,6 @@ return [
     ],
     'field' => [
         'name' => 'Názov',
-        'description' => 'Popis',
         'country' => 'Krajina',
         'region' => 'Kraj',
         'district' => 'Okres',

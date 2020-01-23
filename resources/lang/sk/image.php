@@ -11,6 +11,9 @@ return [
         'name' => 'Názov',
         'alt' => '<img[alt]>',
     ],
+    'filter' => [
+        'name' => 'Názov',
+    ],
     'model' => [
         'title' => [
             'singular' => 'Obrázok',

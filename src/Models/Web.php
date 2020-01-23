@@ -3,16 +3,14 @@
 namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-//
+// rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
-// traits
-use Softworx\RocXolid\Models\Traits\GetsRelationships;
-// common traits
-use Softworx\RocXolid\Common\Models\Traits\UserGroupAssociated;
-// cms models
-use Softworx\RocXolid\CMS\Models\WebFrontpageSettings;
-// user management models
+// rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\Group as UserGroup;
+//  rocXolid common model traits
+use Softworx\RocXolid\Common\Models\Traits\UserGroupAssociated;
+// rocXolid CMS models
+use Softworx\RocXolid\CMS\Models\WebFrontpageSettings;
 
 /**
  *
@@ -20,7 +18,6 @@ use Softworx\RocXolid\UserManagement\Models\Group as UserGroup;
 class Web extends AbstractCrudModel
 {
     use SoftDeletes;
-    use GetsRelationships;
     use UserGroupAssociated;
 
     protected $guarded = [

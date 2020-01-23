@@ -1,0 +1,50 @@
+<?php
+
+return [
+    'column' => [
+        'flag' => 'Vlajka',
+        'name' => 'Názov',
+        'code' => 'ISO 3166-2',
+        'capital' => 'Hlavné mesto',
+        'currency_code' => 'Mena',
+        'currency_symbol' => 'Mena (symbol)',
+        'currency_iso_4217' => 'Mena (ISO 4217)',
+    ],
+    'field' => [
+        'capital' => 'Hlavné mesto',
+        'citizenship' => 'Občianstvo',
+        'country_code' => 'Kód krajiny',
+        'currency' => 'Mena (názov)',
+        'currency_code' => 'Mena (kód)',
+        'currency_sub_unit' => 'Mena (podjednotka)',
+        'currency_symbol' => 'Mena (symbol)',
+        'currency_iso_4217' => 'Mena (ISO 4217)',
+        'currency_decimals' => 'Mena (počet desatinných miest)',
+        'currency_decimal_separator' => 'Mena (desatinný oddeľovač)',
+        'currency_thousand_separator' => 'Mena (oddeľovač tisícov)',
+        'full_name' => 'Úplný názov',
+        'iso_3166_2' => 'ISO 3166-2',
+        'iso_3166_3' => 'ISO 3166-3',
+        'name' => 'Názov',
+        'region_code' => 'Kód regiónu',
+        'sub_region_code' => 'Kód subregiónu',
+        'eea' => 'EEA',
+        'calling_code' => 'Tel. predvoľba',
+        'flag' => 'Vlajka',
+        'is_address_label_use_address' => 'Použiť pri adrese ulicu',
+        'is_address_label_use_address_detail' => 'Použiť pri adrese detail',
+        'is_address_label_use_postal_code' => 'Použiť pri adrese PSČ',
+        'is_address_label_use_city' => 'Použiť pri adrese mesto',
+        'is_address_label_use_region' => 'Použiť pri adrese región',
+        'is_address_label_use_country' => 'Použiť pri adrese krajinu',
+    ],
+    'filter' => [
+        'name' => 'Názov',
+    ],
+    'model' => [
+        'title' => [
+            'singular' => 'Krajina',
+            'plural' => 'Krajiny',
+        ],
+    ],
+];

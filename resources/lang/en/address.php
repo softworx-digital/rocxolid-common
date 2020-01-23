@@ -3,7 +3,6 @@
 return [
     'column' => [
         'name' => 'Title',
-        'description' => 'Description',
         'country' => 'Country',
         'region' => 'Region',
         'district' => 'District',
@@ -18,7 +17,6 @@ return [
     ],
     'field' => [
         'name' => 'Title',
-        'description' => 'Description',
         'country' => 'Country',
         'region' => 'Region',
         'district' => 'District',
