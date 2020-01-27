@@ -11,13 +11,13 @@ use Softworx\RocXolid\Common\Models\Address;
 /**
  *
  */
-trait HasAddresses
+trait HasAddress
 {
     /**
      * @Softworx\RocXolid\Annotations\AuthorizedRelation
      */
-    public function addresses(): MorphMany
+    public function address(): MorphOne
     {
-        return $this->morphMany(Address::class, 'model');
+        return $this->morphOne(Address::class, 'model')->where('is_default', 1);
     }
 }

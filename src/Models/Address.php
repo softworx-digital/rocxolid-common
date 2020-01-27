@@ -4,6 +4,7 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\Common\Models\Traits\HasCountry;
 use Softworx\RocXolid\Common\Models\Traits\HasRegion;
@@ -49,7 +50,7 @@ class Address extends AbstractCrudModel
         'district',
     ];
 
-    public function parent()
+    public function parent(): MorphTo
     {
         return $this->morphTo('model');
     }

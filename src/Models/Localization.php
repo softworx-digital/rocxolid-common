@@ -4,6 +4,7 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 // base models
 use Softworx\RocXolid\Models\AbstractCrudModel;
 // common models
@@ -55,7 +56,10 @@ class Localization extends AbstractCrudModel
         return $this;
     }
 
-    public function webs()
+    /**
+     * @Softworx\RocXolid\Annotations\AuthorizedRelation(policy_abilities="['assign']")
+     */
+    public function webs(): BelongsToMany
     {
         return $this->belongsToMany(Web::class, 'web_has_localizations');
     }
