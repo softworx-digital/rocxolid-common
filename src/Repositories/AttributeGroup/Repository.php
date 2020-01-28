@@ -104,8 +104,8 @@ class Repository extends AbstractCrudRepository
                     'class' => 'btn btn-success btn-sm margin-right-no',
                     'title-key' => 'attributes',
                 ],
-                'policy-ability' => 'show',
-                'policy-ability-group' => 'write',
+                'policy-ability' => 'view',
+                'action' => 'show',
             ],
         ],
         'edit' => [
@@ -118,8 +118,8 @@ class Repository extends AbstractCrudRepository
                     'class' => 'btn btn-primary btn-sm margin-right-no',
                     'title-key' => 'edit',
                 ],
-                'policy-ability' => 'edit',
-                'policy-ability-group' => 'write',
+                'policy-ability' => 'update',
+                'action' => 'edit',
             ],
         ],
         'delete-ajax' => [
@@ -133,8 +133,8 @@ class Repository extends AbstractCrudRepository
                     'class' => 'btn btn-danger btn-sm margin-right-no',
                     'title-key' => 'delete',
                 ],
-                'policy-ability' => 'destroyConfirm',
-                'policy-ability-group' => 'write',
+                'policy-ability' => 'delete',
+                'action' => 'destroyConfirm',
             ],
         ],
     ];
