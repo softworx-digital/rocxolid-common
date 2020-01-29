@@ -8,6 +8,6 @@ trait HasDistrict
 {
     public function district()
     {
-        return $this->belongsTo(District::class);
+        return $this->belongsTo(District::class)->withoutGlobalScopes();
     }
 }

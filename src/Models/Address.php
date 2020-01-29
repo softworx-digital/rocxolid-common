@@ -50,6 +50,18 @@ class Address extends AbstractCrudModel
         'district',
     ];
 
+    protected $system = [
+        'id',
+        'model_type',
+        'city_name', // @todo: so far
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
     public function parent(): MorphTo
     {
         return $this->morphTo('model');
@@ -74,14 +86,5 @@ class Address extends AbstractCrudModel
         );
 
         return $html ? nl2br($label) : $label;
-    }
-
-    protected function allowPermissionException(Authenticatable $user, string $policy_ability_group, string $permission)
-    {
-        if (!$this->exists) {
-            return true;
-        }
-
-        return !$this->exists || $this->parent->is($user);
     }
 }

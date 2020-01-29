@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Softworx\RocXolid\Common\Models\City;
 
 /**
+ * Filter for BelongsTo City relation query.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid
+ * @version 1.0.0
  */
 class CityBelongsTo
 {

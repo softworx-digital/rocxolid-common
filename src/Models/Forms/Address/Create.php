@@ -3,16 +3,21 @@
 namespace Softworx\RocXolid\Common\Models\Forms\Address;
 
 use Illuminate\Support\Collection;
+// rocXolid model scopes
+use Softworx\RocXolid\Models\Scopes\Owned as OwnedScope;
+// rocXolid form contracts
 use Softworx\RocXolid\Forms\Contracts\FormField;
+// rocXolid forms
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
+// rocXolid form field types
 use Softworx\RocXolid\Forms\Fields\Type\Hidden;
 use Softworx\RocXolid\Forms\Fields\Type\Input;
-use Softworx\RocXolid\Forms\Fields\Type\Email;
 use Softworx\RocXolid\Forms\Fields\Type\Select;
-use Softworx\RocXolid\Forms\Fields\Type\Datepicker;
 use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
 use Softworx\RocXolid\Forms\Fields\Type\CollectionSelectAutocomplete;
+// rocXolid common filters
 use Softworx\RocXolid\Common\Filters\CityBelongsTo;
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Country;
 use Softworx\RocXolid\Common\Models\Region;
 use Softworx\RocXolid\Common\Models\District;
@@ -27,6 +32,18 @@ class Create extends RocXolidAbstractCrudForm
     ];
 
     protected $fields = [
+        'relation' => [
+            'type' => Hidden::class,
+            'options' => [
+                'validation' => 'required',
+            ],
+        ],
+        'model_attribute' => [
+            'type' => Hidden::class,
+            'options' => [
+                'validation' => 'required',
+            ],
+        ],
         'model_type' => [
             'type' => Hidden::class,
             'options' => [],
@@ -162,13 +179,15 @@ class Create extends RocXolidAbstractCrudForm
 
     protected function adjustFieldsDefinition($fields)
     {
+        $fields['relation']['options']['value'] = $this->getInputFieldValue('relation');
+        $fields['model_attribute']['options']['value'] = $this->getInputFieldValue('model_attribute');
         $fields['model_type']['options']['value'] = $this->getInputFieldValue('model_type');
         $fields['model_id']['options']['value'] = $this->getInputFieldValue('model_id');
 
         // city
-        $city = City::find($this->getInputFieldValue('city_id'));
+        $city = City::withoutGlobalScope(app(OwnedScope::class))->find($this->getInputFieldValue('city_id'));
 
-        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id', 'aaa' => 'bbb'], 'ggg');
+        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id']);
         $fields['city_id']['options']['collection']['method'] = 'getSelectOption';
         $fields['city_id']['options']['attributes']['data-change-action'] = $this->getController()->getRoute('formReload', $this->getModel());
 

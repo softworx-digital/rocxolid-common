@@ -44,36 +44,14 @@ class Controller extends AbstractCrudController
 
             return $this->response
                 ->notifySuccess($model_viewer_component->translate('text.updated'))
-                ->replace($model_viewer_component->getDomId(), $model_viewer_component->fetch())
+                ->replace($model_viewer_component->getDomId(), $model_viewer_component->fetch('related.show', [
+                    'attribute' => 'address',
+                    'relation' => 'parent'
+                ])) // @todo: hardcoded, ugly
                 ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
                 ->get();
         } else {
             return parent::successResponse($request, $repository, $form, $model, $action);
         }
-    }
-
-    // @todo: hotfixed
-    protected function allowPermissionException(Authenticatable $user, string $action, string $permission, CrudableModel $model = null)
-    {
-        $data = collect(request()->get('_data'));
-
-        if ($data->has('model_type') && $data->has('model_id')) {
-            switch ($data->get('model_type')) {
-                case 'user':
-                    return $data->get('model_id') == $user->id;
-            }
-        }
-
-        $data = collect(request()->route()->parameters());
-
-        if ($data->has('address')) {
-            return $this->getRepository()->findOrFail($data->get('address'))->parent->is($user);
-        }
-
-        if ($data->has('id')) {
-            return $this->getRepository()->findOrFail($data->get('id'))->parent->is($user);
-        }
-
-        return false;
     }
 }
