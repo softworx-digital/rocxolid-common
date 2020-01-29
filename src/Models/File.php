@@ -14,10 +14,6 @@ class File extends AbstractCrudModel
 {
     use SoftDeletes;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'is_model_primary',
         'name',

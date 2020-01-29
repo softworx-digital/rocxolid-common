@@ -16,10 +16,6 @@ class Image extends File
 {
     // use SoftDeletes;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'is_model_primary',
         //'name',

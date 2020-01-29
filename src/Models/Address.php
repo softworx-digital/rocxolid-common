@@ -23,10 +23,6 @@ class Address extends AbstractCrudModel
 
     protected static $can_be_deleted = false;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'name',
         'description',

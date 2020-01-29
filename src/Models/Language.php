@@ -9,10 +9,6 @@ class Language extends AbstractCrudModel
 {
     use SoftDeletes;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'name',
         'is_admin_available',

@@ -9,10 +9,6 @@ class Locale extends AbstractCrudModel
 {
     use SoftDeletes;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'code',
         'name',

@@ -20,10 +20,6 @@ class Web extends AbstractCrudModel
     use SoftDeletes;
     use UserGroupAssociated;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'name', // internal
         'title',

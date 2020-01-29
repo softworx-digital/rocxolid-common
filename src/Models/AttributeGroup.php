@@ -17,10 +17,6 @@ class AttributeGroup extends AbstractCrudModel
         Product::class,
     ];
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'model_type',
         'name',

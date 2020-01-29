@@ -16,10 +16,6 @@ class City extends AbstractCrudModel
     use HasRegion;
     use HasDistrict;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'name',
         'description',

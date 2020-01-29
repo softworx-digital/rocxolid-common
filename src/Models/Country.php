@@ -11,10 +11,6 @@ class Country extends AbstractCrudModel
 {
     use SoftDeletes;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'capital',
         'citizenship',

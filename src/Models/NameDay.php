@@ -11,10 +11,6 @@ class NameDay extends AbstractCrudModel
     use SoftDeletes;
     use HasCountry;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'country_id',
         'day',

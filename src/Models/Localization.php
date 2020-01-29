@@ -26,10 +26,6 @@ class Localization extends AbstractCrudModel
 
     public $is_label_with_flag = true;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'name',
         'seo_url_slug',

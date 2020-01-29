@@ -11,10 +11,6 @@ class District extends AbstractCrudModel
     use SoftDeletes;
     use HasRegion;
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'name',
         'description',

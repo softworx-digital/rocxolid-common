@@ -12,10 +12,6 @@ class AttributeValue extends AbstractCrudModel
 
     const POSITION_COLUMN = 'attribute_position';
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'attribute_id',
         'name',

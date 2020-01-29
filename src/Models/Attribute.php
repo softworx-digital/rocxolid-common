@@ -19,10 +19,6 @@ class Attribute extends AbstractCrudModel
 
     const POSITION_COLUMN = 'attribute_group_position';
 
-    protected $guarded = [
-        'id'
-    ];
-
     protected $fillable = [
         'attribute_group_id',
         'type',
