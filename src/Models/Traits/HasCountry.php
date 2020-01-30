@@ -8,6 +8,6 @@ trait HasCountry
 {
     public function country()
     {
-        return $this->belongsTo(Country::class)->withoutGlobalScopes();
+        return $this->belongsTo(Country::class);
     }
 }

@@ -185,7 +185,7 @@ class Create extends RocXolidAbstractCrudForm
         $fields['model_id']['options']['value'] = $this->getInputFieldValue('model_id');
 
         // city
-        $city = City::withoutGlobalScope(app(OwnedScope::class))->find($this->getInputFieldValue('city_id'));
+        $city = City::find($this->getInputFieldValue('city_id'));
 
         $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id']);
         $fields['city_id']['options']['collection']['method'] = 'getSelectOption';

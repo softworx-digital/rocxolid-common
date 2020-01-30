@@ -8,6 +8,6 @@ trait HasCity
 {
     public function city()
     {
-        return $this->belongsTo(City::class)->withoutGlobalScopes();
+        return $this->belongsTo(City::class);
     }
 }
