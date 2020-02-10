@@ -2,14 +2,16 @@
 
 namespace Softworx\RocXolid\Common\Models\Traits;
 
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Address;
 
 /**
+ * Trait to add addresses relation to the model.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Admin
+ * @version 1.0.0
  */
 trait HasAddresses
 {
