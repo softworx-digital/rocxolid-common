@@ -35,4 +35,7 @@ return [
             'plural' => 'Addresses',
         ],
     ],
+    'text' => [
+        'copy' => 'Copy address to clipboard',
+    ],
 ];

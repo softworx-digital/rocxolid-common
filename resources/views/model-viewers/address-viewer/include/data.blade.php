@@ -1,5 +1,3 @@
-<div class="panel panel-default">
-    <address class="panel-body margin-bottom-0">
-        {!! $component->getModel()->getAddressLabel() !!}
-    </address>
-</div>
+<address id="{{ $component->getDomId('address-label') }}" class="panel-body margin-bottom-0">
+    {!! $component->getModel()->getAddressLabel() !!}
+</address>

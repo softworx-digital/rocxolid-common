@@ -35,4 +35,7 @@ return [
             'plural' => 'Adresy',
         ],
     ],
+    'text' => [
+        'copy' => 'Skopírovať adresu',
+    ],
 ];
