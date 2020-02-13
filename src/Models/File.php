@@ -72,6 +72,6 @@ class File extends AbstractCrudModel
 
     public function getDownloadUrl()
     {
-        return route('download', $this->id);
+        return route('download', $this->getKey());
     }
 }

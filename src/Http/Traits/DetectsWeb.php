@@ -27,7 +27,7 @@ trait DetectsWeb
             }
 
             if (!$this->_web->frontpageSettings()->exists()) {
-                //dd(sprintf('--web [%s] nema priradene frontpage settings--> 500 (exception) ?', $this->_web->id));
+                //dd(sprintf('--web [%s] nema priradene frontpage settings--> 500 (exception) ?', $this->_web->getKey()));
                 throw new \RuntimeException(sprintf('Web [%s] has no frontpage settings attached', $this->_web->getTitle()));
             }
         }

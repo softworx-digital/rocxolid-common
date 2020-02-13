@@ -38,11 +38,11 @@ trait HasAttributes
 
     public function attributeValue(Attribute $attribute, $raw = false)
     {
-        if ($pivot_attribute = $this->attributeValues->find(['attribute_id' => $attribute->id])->first()) {
+        if ($pivot_attribute = $this->attributeValues->find(['attribute_id' => $attribute->getKey()])->first()) {
             switch ($pivot_attribute->type) {
                 case 'enum':
                     $attribute_value = AttributeValue::find($pivot_attribute->pivot->attribute_value_id);
-                    return $attribute_value ? ($raw ? $attribute_value->id : $attribute_value->getTitle()) : null;
+                    return $attribute_value ? ($raw ? $attribute_value->getKey() : $attribute_value->getTitle()) : null;
                 case 'integer':
                 case 'decimal':
                     $column = sprintf('value_%s', $pivot_attribute->type);

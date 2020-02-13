@@ -14,6 +14,6 @@ class BelongsToWeb
 {
     public function apply(Builder $query, Model $queried_model, Web $web)
     {
-        return $query->where(sprintf('%s.web_id', $queried_model->getTable()), $web->exists ? $web->id : null);
+        return $query->where(sprintf('%s.web_id', $queried_model->getTable()), $web->exists ? $web->getKey() : null);
     }
 }

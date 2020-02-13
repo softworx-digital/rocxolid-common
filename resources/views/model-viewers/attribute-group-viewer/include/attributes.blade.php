@@ -14,14 +14,14 @@
                         <th class="text-center">{{ __('rocXolid::attribute.field.values') }}</th>
                     @if ((!isset($ro) || !$ro) && $component->getModel()->userCan('write'))
                         <th class="text-right" style="min-width: 90px;">
-                            <button class="btn btn-primary btn-sm col-xs-12" data-ajax-url="{{ $component->getModel()->attributes()->getRelated()->getControllerRoute('create', [ '_section' => 'attributes', '_data[attribute_group_id]' => $component->getModel()->id ]) }}" title="{{ __('rocXolid::attribute.table-button.add') }}"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-primary btn-sm col-xs-12" data-ajax-url="{{ $component->getModel()->attributes()->getRelated()->getControllerRoute('create', [ '_section' => 'attributes', '_data[attribute_group_id]' => $component->getModel()->getKey() ]) }}" title="{{ __('rocXolid::attribute.table-button.add') }}"><i class="fa fa-plus"></i></button>
                         </th>
                     @endif
                     </tr>
                 </thead>
                 <tbody class="sortable ajax-overlay" data-update-url="{{ $component->getModel()->getControllerRoute('reorder', [ 'relation' => 'attributes' ]) }}">
                 @foreach ($component->getModel()->attributes as $attribute)
-                    <tr data-item-id="{{ $attribute->id }}">
+                    <tr data-item-id="{{ $attribute->getKey() }}">
                         <td>{{ $attribute->name }}</td>
                         <td class="text-center">{{ __(sprintf('rocXolid::attribute.type-choices.%s', $attribute->type)) }}</td>
                     @if (false)

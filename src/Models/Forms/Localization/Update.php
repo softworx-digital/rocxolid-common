@@ -21,7 +21,7 @@ class Update extends RocXolidAbstractCrudForm
 
     protected function adjustFieldsDefinition($fields)
     {
-        $fields['seo_url_slug']['options']['validation']['rules'][] = Rule::unique($this->getModel()->getTable(), 'seo_url_slug')->ignore($this->getModel()->id);
+        $fields['seo_url_slug']['options']['validation']['rules'][] = Rule::unique($this->getModel()->getTable(), 'seo_url_slug')->ignore($this->getModel()->getKey());
         //
         //$fields['country_id']['type'] = CollectionSelectAutocomplete::class; // blbne autocomplete
         //$fields['country_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'country_id']);
@@ -29,7 +29,7 @@ class Update extends RocXolidAbstractCrudForm
             $query
                 ->where('language_id', $this->getFormField('language_id')->getValue())
                 ->where('locale_id', $this->getFormField('locale_id')->getValue());
-        })->ignore($this->getModel()->id);
+        })->ignore($this->getModel()->getKey());
         //
         //$fields['language_id']['type'] = CollectionSelectAutocomplete::class;
         //$fields['language_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'language_id']);
@@ -37,7 +37,7 @@ class Update extends RocXolidAbstractCrudForm
             $query
                 ->where('country_id', $this->getFormField('country_id')->getValue())
                 ->where('locale_id', $this->getFormField('locale_id')->getValue());
-        })->ignore($this->getModel()->id);
+        })->ignore($this->getModel()->getKey());
         //
         //$fields['locale_id']['type'] = CollectionSelectAutocomplete::class;
         //$fields['locale_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'locale_id']);
@@ -45,7 +45,7 @@ class Update extends RocXolidAbstractCrudForm
             $query
                 ->where('country_id', $this->getFormField('country_id')->getValue())
                 ->where('language_id', $this->getFormField('language_id')->getValue());
-        })->ignore($this->getModel()->id);
+        })->ignore($this->getModel()->getKey());
 
         return $fields;
     }

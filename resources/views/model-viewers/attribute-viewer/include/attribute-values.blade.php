@@ -8,7 +8,7 @@
                     <th class="text-center">{{ __('rocXolid::attribute-value.field.note') }}</th>
                 @if ((!isset($ro) || !$ro) && $component->getModel()->userCan('write'))
                     <th class="text-right" style="min-width: 90px;">
-                        <button class="btn btn-primary btn-sm col-xs-12" data-ajax-url="{{ $component->getModel()->attributeValues()->getRelated()->getControllerRoute('create', [ '_section' => 'attribute-values', '_data[attribute_id]' => $component->getModel()->id ]) }}" title="{{ __('rocXolid::attribute-value.table-button.add') }}"><i class="fa fa-plus"></i></button>
+                        <button class="btn btn-primary btn-sm col-xs-12" data-ajax-url="{{ $component->getModel()->attributeValues()->getRelated()->getControllerRoute('create', [ '_section' => 'attribute-values', '_data[attribute_id]' => $component->getModel()->getKey() ]) }}" title="{{ __('rocXolid::attribute-value.table-button.add') }}"><i class="fa fa-plus"></i></button>
                     </th>
                 @endif
                 </tr>

@@ -56,8 +56,8 @@ class Country extends AbstractCrudModel
 
     public function getLanguageName($language = 'sk')
     {
-        if (isset($this->langauge_names[$language]) && isset($this->langauge_names[$language][$this->id])) {
-            return $this->langauge_names[$language][$this->id];
+        if (isset($this->langauge_names[$language]) && isset($this->langauge_names[$language][$this->getKey()])) {
+            return $this->langauge_names[$language][$this->getKey()];
         }
 
         return $this->getTitle();
@@ -75,61 +75,61 @@ class Country extends AbstractCrudModel
 
     public function isPrimary()
     {
-        return collect(config('rocXolid.main.countries.default'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.default'))->contains($this->getKey());
     }
 
     public function isSecondary()
     {
-        return collect(config('rocXolid.main.countries.others'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.others'))->contains($this->getKey());
     }
 
     public function hasBirthNumber()
     {
-        return collect(config('rocXolid.main.countries.has_birth_no'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.has_birth_no'))->contains($this->getKey());
     }
 
     public function hasIDCardNumber()
     {
-        return collect(config('rocXolid.main.countries.has_id_card_no'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.has_id_card_no'))->contains($this->getKey());
     }
 
     public function hasPassportNumber()
     {
-        return !collect(config('rocXolid.main.countries.has_not_passport_no'))->contains($this->id);
+        return !collect(config('rocXolid.main.countries.has_not_passport_no'))->contains($this->getKey());
     }
 
     public function hasCompanyRegistrationNumber()
     {
-        return collect(config('rocXolid.main.countries.has_company_registration_no'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.has_company_registration_no'))->contains($this->getKey());
     }
 
     public function hasCompanyInsertionNumber()
     {
-        return collect(config('rocXolid.main.countries.has_company_insertion_no'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.has_company_insertion_no'))->contains($this->getKey());
     }
 
     public function hasTaxNumber()
     {
-        return collect(config('rocXolid.main.countries.has_tax_no'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.has_tax_no'))->contains($this->getKey());
     }
 
     public function hasRegions()
     {
-        return collect(config('rocXolid.main.countries.has_region_id'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.has_region_id'))->contains($this->getKey());
     }
 
     public function hasDistricts()
     {
-        return collect(config('rocXolid.main.countries.has_district_id'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.has_district_id'))->contains($this->getKey());
     }
 
     public function hasCities()
     {
-        return collect(config('rocXolid.main.countries.has_city_id'))->contains($this->id);
+        return collect(config('rocXolid.main.countries.has_city_id'))->contains($this->getKey());
     }
 
     public function hasCityName()
     {
-        return !collect(config('rocXolid.main.countries.has_not_city_name'))->contains($this->id);
+        return !collect(config('rocXolid.main.countries.has_not_city_name'))->contains($this->getKey());
     }
 }

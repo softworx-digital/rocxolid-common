@@ -108,7 +108,7 @@ class Controller extends AbstractCrudController
             return $this->response
                 ->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments))
                 ->replace($attribute_model_viewer_component->getDomId('attribute-values'), $attribute_model_viewer_component->fetch('include.attribute-values', $assignments))
-                ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm', $attribute_value->id))
+                ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm', $attribute_value->getKey()))
                 ->get();
         } else {
             $attribute_controller = App::make(AttributeController::class);

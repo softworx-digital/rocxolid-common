@@ -26,7 +26,7 @@ class Model extends RocXolidAbstractCrudForm
         if (!$this->fields) {
             $this->getModel()->attributeGroups()->each(function ($attribute_group) {
                 $attribute_group->attributes->each(function ($attribute) use ($attribute_group) {
-                    $this->fields[$attribute->id] = $this->getFormFieldFactory()->makeAttributeFieldDefinition($attribute);
+                    $this->fields[$attribute->getKey()] = $this->getFormFieldFactory()->makeAttributeFieldDefinition($attribute);
                 });
             });
         }
@@ -47,9 +47,9 @@ class Model extends RocXolidAbstractCrudForm
     {
         $this->getModel()->attributeGroups()->each(function ($attribute_group) {
             $attribute_group->attributes->each(function ($attribute) use ($attribute_group) {
-                if ($this->hasFormField($attribute->id)) {
+                if ($this->hasFormField($attribute->getKey())) {
                     $this
-                        ->getFormField($attribute->id)
+                        ->getFormField($attribute->getKey())
                             ->setValue($this->getModel()->attributeValue($attribute, true))
                             ->updateParent();
                 }

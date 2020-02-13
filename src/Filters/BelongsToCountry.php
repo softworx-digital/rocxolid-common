@@ -18,6 +18,6 @@ class BelongsToCountry
     {
         $foreign_key = sprintf('%s_%s', Str::snake((new \ReflectionClass($country))->getShortName()), $queried_model->getKeyName());
 
-        return $query->where(sprintf('%s.%s', $queried_model->getTable(), $foreign_key), $country->exists ? $country->id : null);
+        return $query->where(sprintf('%s.%s', $queried_model->getTable(), $foreign_key), $country->exists ? $country->getKey() : null);
     }
 }

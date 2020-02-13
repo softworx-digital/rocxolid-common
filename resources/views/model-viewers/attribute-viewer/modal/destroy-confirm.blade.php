@@ -1,4 +1,4 @@
-<div id="{{ $component->getDomId('modal-destroy-confirm', $component->getModel()->id) }}" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="{{ $component->getDomId('modal-destroy-confirm', $component->getModel()->getKey()) }}" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content ajax-overlay">
         {{ Form::open([ 'url' => $component->getController()->getRoute('destroy', $component->getModel()) ]) }}

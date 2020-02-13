@@ -27,6 +27,6 @@ class CityBelongsTo
 
         return $query
             ->join($city->getTable(), sprintf('%s.id', $queried_model->getTable()), '=', sprintf('%s.%s', $city->getTable(), $foreign_key))
-            ->where(sprintf('%s.id', $city->getTable()), $city->id);
+            ->where(sprintf('%s.id', $city->getTable()), $city->getKey());
     }
 }

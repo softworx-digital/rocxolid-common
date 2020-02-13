@@ -18,6 +18,6 @@ class BelongsToRegion
     {
         $foreign_key = sprintf('%s_%s', Str::snake((new \ReflectionClass($region))->getShortName()), $queried_model->getKeyName());
 
-        return $query->where(sprintf('%s.%s', $queried_model->getTable(), $foreign_key), $region->exists ? $region->id : null);
+        return $query->where(sprintf('%s.%s', $queried_model->getTable(), $foreign_key), $region->exists ? $region->getKey() : null);
     }
 }

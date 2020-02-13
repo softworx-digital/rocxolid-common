@@ -19,6 +19,6 @@ class WebBelongsTo
 
         return $query
             ->join($web->getTable(), sprintf('%s.id', $queried_model->getTable()), '=', sprintf('%s.%s', $web->getTable(), $foreign_key))
-            ->where(sprintf('%s.id', $web->getTable()), $web->id);
+            ->where(sprintf('%s.id', $web->getTable()), $web->getKey());
     }
 }

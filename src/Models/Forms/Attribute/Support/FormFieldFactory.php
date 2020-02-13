@@ -127,7 +127,7 @@ class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFact
     protected function getAttributeFieldTypeClass(Attribute $attribute)
     {
         if (!array_key_exists($attribute->type, self::$fields_mapping)) {
-            throw new \InvalidArgumentException(sprintf('Undefined field type for attribute [%s] type [%s]', $attribute->id, $attribute->type));
+            throw new \InvalidArgumentException(sprintf('Undefined field type for attribute [%s] type [%s]', $attribute->getKey(), $attribute->type));
         }
 
         $type = self::$fields_mapping[$attribute->type];
