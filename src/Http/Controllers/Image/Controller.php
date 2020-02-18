@@ -5,6 +5,10 @@ namespace Softworx\RocXolid\Common\Http\Controllers\Image;
 use App;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+// relations
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+// @todo
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 use Softworx\RocXolid\Components\Forms\FormField;
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
@@ -77,7 +81,7 @@ class Controller extends AbstractCrudController
 
             $repository->updateModel($form->getFormFieldsValues()->toArray(), $this->getModel(), 'update');
 
-            return $this->getParentUpdateResponse();
+            return $this->getParentUpdateResponse($attribute);
         } else {
             return $this->errorResponse($request, $repository, $form, 'edit');
         }
@@ -85,16 +89,18 @@ class Controller extends AbstractCrudController
 
     protected function destroyResponse(CrudRequest $request, CrudableModel $model)
     {
+        $attribute = $this->getModel()->model_attribute;
+
         if ($request->ajax()) {
             // return $this->response->redirect($model->parent->getControllerRoute('show'))->get();
-            return $this->getParentUpdateResponse();
+            return $this->getParentUpdateResponse($attribute);
         } else {
             // return redirect($model->parent->getControllerRoute('show'));
             return redirect($model->parent->deleteImageRedirectPath());
         }
     }
 
-    protected function getParentUpdateResponse()
+    protected function getParentUpdateResponse(string $model_attribute)
     {
         $model_viewer_component = $this->getModelViewerComponent($this->getModel());
 
@@ -102,6 +108,12 @@ class Controller extends AbstractCrudController
         $parent_controller->setModel($this->getModel()->parent);
 
         $parent_image_upload_component = $parent_controller->getImageUploadFormComponent();
+
+        if ($this->getModel()->parent->$model_attribute() instanceof MorphOne) {
+            $parent_image_upload_component = $parent_controller->getImageUploadFormComponent();
+        } elseif ($this->getModel()->parent->$model_attribute() instanceof MorphMany) {
+            $parent_image_upload_component = $parent_controller->getGalleryUploadFormComponent();
+        }
 
         return $this->response
             ->replace($parent_image_upload_component->getOption('id'), $parent_image_upload_component->fetch('upload'))

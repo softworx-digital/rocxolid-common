@@ -3,6 +3,8 @@
 namespace Softworx\RocXolid\Common\Models\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+// rocXolid utils
+use Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Image;
 
@@ -71,5 +73,17 @@ trait HasImages
             ->morphOne(Image::class, 'model')
             ->where(sprintf('%s.model_attribute', (new Image())->getTable()), 'images')
             ->where(sprintf('%s.is_model_primary', (new Image())->getTable()), 1);
+    }
+
+    // @todo: events?
+    public function onImageUpload(Image $image, AjaxResponse &$response)
+    {
+        return $this;
+    }
+
+    public function deleteImageRedirectPath()
+    {
+        // @todo: "hotfixed"
+        return $this->getControllerRoute('show', [ 'tab' => 'gallery' ]);
     }
 }

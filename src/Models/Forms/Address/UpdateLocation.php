@@ -17,18 +17,21 @@ use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
 use Softworx\RocXolid\Forms\Fields\Type\CollectionSelectAutocomplete;
 // rocXolid common filters
 use Softworx\RocXolid\Common\Filters\CityBelongsTo;
+use Softworx\RocXolid\Common\Filters\BelongsToCity;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Country;
 use Softworx\RocXolid\Common\Models\Region;
 use Softworx\RocXolid\Common\Models\District;
 use Softworx\RocXolid\Common\Models\City;
+use Softworx\RocXolid\Common\Models\CadastralArea;
 
-class Update extends RocXolidAbstractCrudForm
+class UpdateLocation extends RocXolidAbstractCrudForm
 {
     protected $options = [
         'method' => 'POST',
         'route-action' => 'update',
         'class' => 'form-horizontal form-label-left',
+        'section' => 'location',
     ];
 
     protected $fields = [
@@ -40,7 +43,7 @@ class Update extends RocXolidAbstractCrudForm
                 ],
                 'validation' => [
                     'rules' => [
-                        'required',
+                        'nullable',
                         'max:255',
                     ],
                 ],
@@ -54,23 +57,9 @@ class Update extends RocXolidAbstractCrudForm
                 ],
                 'validation' => [
                     'rules' => [
-                        'required',
+                        'nullable',
                         'integer',
                         'gt:0',
-                    ],
-                ],
-            ],
-        ],
-        'zip' => [
-            'type' => Input::class,
-            'options' => [
-                'label' => [
-                    'title' => 'zip',
-                ],
-                'validation' => [
-                    'rules' => [
-                        'required',
-                        'max:255',
                     ],
                 ],
             ],
@@ -86,9 +75,13 @@ class Update extends RocXolidAbstractCrudForm
                 'label' => [
                     'title' => 'city',
                 ],
+                'attributes' => [
+                    'title' => 'select',
+                ],
                 'validation' => [
                     'rules' => [
                         'required',
+                        'exists:cities,id',
                     ],
                 ],
             ],
@@ -109,6 +102,7 @@ class Update extends RocXolidAbstractCrudForm
                 'validation' => [
                     'rules' => [
                         'required',
+                        'exists:regions,id',
                     ],
                 ],
             ],
@@ -129,6 +123,28 @@ class Update extends RocXolidAbstractCrudForm
                 'validation' => [
                     'rules' => [
                         'required',
+                        'exists:districts,id',
+                    ],
+                ],
+            ],
+        ],
+        'cadastral_area_id' => [
+            'type' => CollectionSelect::class,
+            'options' => [
+                'collection' => [
+                    'model' => CadastralArea::class,
+                    'column' => 'name',
+                ],
+                'label' => [
+                    'title' => 'cadastralArea',
+                ],
+                'attributes' => [
+                    'title' => 'select',
+                ],
+                'validation' => [
+                    'rules' => [
+                        'required',
+                        'exists:cadastral_areas,id',
                     ],
                 ],
             ],
@@ -149,6 +165,35 @@ class Update extends RocXolidAbstractCrudForm
                 'validation' => [
                     'rules' => [
                         'required',
+                        'exists:countries,id',
+                    ],
+                ],
+            ],
+        ],
+        'latitude' => [
+            'type' => Input::class,
+            'options' => [
+                'label' => [
+                    'title' => 'latitude',
+                ],
+                'validation' => [
+                    'rules' => [
+                        'nullable',
+                        'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/',
+                    ],
+                ],
+            ],
+        ],
+        'longitude' => [
+            'type' => Input::class,
+            'options' => [
+                'label' => [
+                    'title' => 'longitude',
+                ],
+                'validation' => [
+                    'rules' => [
+                        'nullable',
+                        'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/',
                     ],
                 ],
             ],
@@ -168,6 +213,7 @@ class Update extends RocXolidAbstractCrudForm
             $fields['region_id']['options']['collection'] = collect();
             $fields['district_id']['options']['collection'] = collect();
             $fields['country_id']['options']['collection'] = collect();
+            $fields['cadastral_area_id']['options']['collection'] = collect();
         } else {
             // region
             $fields['region_id']['options']['attributes']['title'] = null;
@@ -189,6 +235,13 @@ class Update extends RocXolidAbstractCrudForm
                 'model' => Country::class,
                 'column' => 'name',
                 'filters' => [['class' => CityBelongsTo::class, 'data' => $city]]
+            ];
+            // cadastral area
+            $fields['cadastral_area_id']['options']['attributes']['title'] = null;
+            $fields['cadastral_area_id']['options']['collection'] = [
+                'model' => CadastralArea::class,
+                'column' => 'name',
+                'filters' => [['class' => BelongsToCity::class, 'data' => $city]]
             ];
         }
 

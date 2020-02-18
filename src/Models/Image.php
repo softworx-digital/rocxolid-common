@@ -20,7 +20,7 @@ class Image extends File
         'is_model_primary',
         //'name',
         'alt',
-        //'description',
+        'description',
     ];
 
     protected $relationships = [

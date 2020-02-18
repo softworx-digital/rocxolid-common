@@ -91,6 +91,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
             CrudRouterService::create('region', \Region\Controller::class);
             CrudRouterService::create('district', \District\Controller::class);
             CrudRouterService::create('city', \City\Controller::class);
+            CrudRouterService::create('cadastral-area', \CadastralArea\Controller::class);
             CrudRouterService::create('language', \Language\Controller::class);
             CrudRouterService::create('address', \Address\Controller::class);
             CrudRouterService::create('locale', \Locale\Controller::class);
@@ -116,6 +117,13 @@ class RouteServiceProvider extends IlluminateServiceProvider
             ], function ($router) {
                 $router->get('/get/{image}/{size?}', 'Controller@get')->name('get');
             });
+
+            $router->group([
+                'namespace' => 'Address',
+                'prefix' => 'address',
+            ], function ($router) {
+                $router->get('/show-map/{address}', 'Controller@showMap')->name('show-map');
+            });
         });
 
         return $this;
@@ -136,6 +144,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
         $router->model('region', \Softworx\RocXolid\Common\Models\Region::class);
         $router->model('district', \Softworx\RocXolid\Common\Models\District::class);
         $router->model('city', \Softworx\RocXolid\Common\Models\City::class);
+        $router->model('cadastral_area', \Softworx\RocXolid\Common\Models\CadastralArea::class);
         $router->model('language', \Softworx\RocXolid\Common\Models\Language::class);
         $router->model('address', \Softworx\RocXolid\Common\Models\Address::class);
         $router->model('locale', \Softworx\RocXolid\Common\Models\Locale::class);

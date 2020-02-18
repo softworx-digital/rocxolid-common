@@ -19,6 +19,7 @@ class CreateCommonTables extends Migration
             ->regions()
             ->districts()
             ->cities()
+            ->cadastralAreas()
             ->addresses()
             ->languages()
             ->locales()
@@ -48,6 +49,7 @@ class CreateCommonTables extends Migration
         Schema::dropIfExists('regions');
         Schema::dropIfExists('districts');
         Schema::dropIfExists('cities');
+        Schema::dropIfExists('cadastral_areas');
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('languages');
         Schema::dropIfExists('locales');
@@ -250,6 +252,31 @@ class CreateCommonTables extends Migration
         });
 
         return $this->importDump('cities');
+    }
+
+    protected function cadastralAreas()
+    {
+        Schema::create('cadastral_areas', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('city_id');
+
+            $table->string('name');
+            $table->text('description')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+
+            $table->foreign('city_id')
+                ->references('id')
+                ->on('cities')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+        });
+
+        return $this->importDump('cadastral_areas');
     }
 
     protected function addresses()

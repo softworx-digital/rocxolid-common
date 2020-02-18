@@ -7,6 +7,7 @@ return [
         'region' => 'Region',
         'district' => 'District',
         'city' => 'City',
+        'cadastralArea' => 'Cadastral area',
         'street_name' => 'Street',
         'street_no' => 'Street no.',
         'po_box' => 'P.O.Box',
@@ -21,6 +22,7 @@ return [
         'region' => 'Region',
         'district' => 'District',
         'city' => 'City',
+        'cadastralArea' => 'Cadastral area',
         'street_name' => 'Street',
         'street_no' => 'Street no.',
         'po_box' => 'P.O.Box',
@@ -37,5 +39,8 @@ return [
     ],
     'text' => [
         'copy' => 'Copy address to clipboard',
+        'location' => 'Location',
+        'map-location' => 'Map location',
+        'show-map' => 'Show on map',
     ],
 ];

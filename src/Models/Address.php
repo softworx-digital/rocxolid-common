@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\Common\Models\Traits\HasCountry;
+use Softworx\RocXolid\Common\Models\Traits\HasCadastralArea;
 use Softworx\RocXolid\Common\Models\Traits\HasRegion;
 use Softworx\RocXolid\Common\Models\Traits\HasDistrict;
 use Softworx\RocXolid\Common\Models\Traits\HasCity;
@@ -17,6 +18,7 @@ class Address extends AbstractCrudModel
 {
     use SoftDeletes;
     use HasCountry;
+    use HasCadastralArea;
     use HasRegion;
     use HasDistrict;
     use HasCity;
@@ -29,6 +31,7 @@ class Address extends AbstractCrudModel
         'country_id',
         'region_id',
         'district_id',
+        'cadastral_area_id',
         'city_id',
         'city_name',
         'street_name',
@@ -44,6 +47,7 @@ class Address extends AbstractCrudModel
         'country',
         'region',
         'district',
+        'cadastralArea',
     ];
 
     protected $system = [

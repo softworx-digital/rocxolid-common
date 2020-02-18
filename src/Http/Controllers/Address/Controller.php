@@ -26,6 +26,8 @@ class Controller extends AbstractCrudController
         'store' => 'create',
         'edit' => 'update',
         'update' => 'update',
+        'edit.location' => 'update-location',
+        'update.location' => 'update-location',
     ];
 
     public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
@@ -35,12 +37,45 @@ class Controller extends AbstractCrudController
             ->setController($this);
     }
 
+    /**
+     * Display the dialog with map location.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Models\Contracts\Crudable $model
+     */
+    public function showMap(CrudRequest $request, CrudableModel $model)//: View
+    {
+        // $this->authorize('sendTestNotification', $model);
+
+        $this->setModel($model);
+
+        $model_viewer_component = $this->getModelViewerComponent($this->getModel());
+
+        if ($request->ajax()) {
+            return $this->response
+                ->modal($model_viewer_component->fetch('modal.map'))
+                ->get();
+        } else {
+            return $this
+                ->getDashboard()
+                ->setModelViewerComponent($model_viewer_component)
+                ->render('model', [
+                    'model_viewer_template' => 'map'
+                ]);
+        }
+    }
+
     protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $model, string $action)
     {
         if ($request->ajax()) {
             $model_viewer_component = $model->getModelViewerComponent();
 
             event(new AddressChanged($model, $this->response));
+
+            // @todo: "hotfixed", extremely ugly
+            if ($request->has('_section') && ($request->input('_section') === 'location')) {
+                $model_viewer_component->setViewPackage('app');
+            }
 
             return $this->response
                 ->notifySuccess($model_viewer_component->translate('text.updated'))

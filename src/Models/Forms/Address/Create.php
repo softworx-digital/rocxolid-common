@@ -75,7 +75,8 @@ class Create extends RocXolidAbstractCrudForm
                 'validation' => [
                     'rules' => [
                         'required',
-                        'max:255',
+                        'integer',
+                        'gt:0',
                     ],
                 ],
             ],
@@ -191,18 +192,33 @@ class Create extends RocXolidAbstractCrudForm
         $fields['city_id']['options']['collection']['method'] = 'getSelectOption';
         $fields['city_id']['options']['attributes']['data-change-action'] = $this->getController()->getRoute('formReload', $this->getModel());
 
-        if (!is_null($city)) {
+        if (is_null($city)) {
+            $fields['region_id']['options']['collection'] = collect();
+            $fields['district_id']['options']['collection'] = collect();
+            $fields['country_id']['options']['collection'] = collect();
+        } else {
+            // region
             $fields['region_id']['options']['attributes']['title'] = null;
+            $fields['region_id']['options']['collection'] = [
+                'model' => Region::class,
+                'column' => 'name',
+                'filters' => [['class' => CityBelongsTo::class, 'data' => $city]]
+            ];
+            // district
             $fields['district_id']['options']['attributes']['title'] = null;
+            $fields['district_id']['options']['collection'] = [
+                'model' => District::class,
+                'column' => 'name',
+                'filters' => [['class' => CityBelongsTo::class, 'data' => $city]]
+            ];
+            // country
             $fields['country_id']['options']['attributes']['title'] = null;
+            $fields['country_id']['options']['collection'] = [
+                'model' => Country::class,
+                'column' => 'name',
+                'filters' => [['class' => CityBelongsTo::class, 'data' => $city]]
+            ];
         }
-
-        // region
-        $fields['region_id']['options']['collection']['filters'][] = ['class' => CityBelongsTo::class, 'data' => $city];
-        // district
-        $fields['district_id']['options']['collection']['filters'][] = ['class' => CityBelongsTo::class, 'data' => $city];
-        // country
-        $fields['country_id']['options']['collection']['filters'][] = ['class' => CityBelongsTo::class, 'data' => $city];
 
         return $fields;
     }

@@ -7,6 +7,7 @@ return [
         'region' => 'Kraj',
         'district' => 'Okres',
         'city' => 'Mesto',
+        'cadastralArea' => 'Katastrálne územie',
         'street_name' => 'Ulica',
         'street_no' => 'Číslo ulice',
         'po_box' => 'P.O.Box',
@@ -21,6 +22,7 @@ return [
         'region' => 'Kraj',
         'district' => 'Okres',
         'city' => 'Mesto',
+        'cadastralArea' => 'Katastrálne územie',
         'street_name' => 'Ulica',
         'street_no' => 'Číslo ulice',
         'po_box' => 'P.O.Box',
@@ -37,5 +39,8 @@ return [
     ],
     'text' => [
         'copy' => 'Skopírovať adresu',
+        'location' => 'Lokácia',
+        'map-location' => 'Poloha na mape',
+        'show-map' => 'Ukázať na mape',
     ],
 ];
