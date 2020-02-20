@@ -55,8 +55,6 @@ class Update extends RocXolidAbstractCrudForm
                 'validation' => [
                     'rules' => [
                         'required',
-                        'integer',
-                        'gt:0',
                     ],
                 ],
             ],
