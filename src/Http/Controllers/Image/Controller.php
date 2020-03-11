@@ -2,7 +2,6 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\Image;
 
-use App;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 // relations
@@ -104,7 +103,7 @@ class Controller extends AbstractCrudController
     {
         $model_viewer_component = $this->getModelViewerComponent($this->getModel());
 
-        $parent_controller = App::make($this->getModel()->parent->getControllerClass());
+        $parent_controller = app($this->getModel()->parent->getControllerClass());
         $parent_controller->setModel($this->getModel()->parent);
 
         $parent_image_upload_component = $parent_controller->getImageUploadFormComponent();

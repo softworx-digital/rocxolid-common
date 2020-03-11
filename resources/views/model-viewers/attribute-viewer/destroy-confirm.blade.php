@@ -9,7 +9,7 @@
 
         <div class="x_footer">
             <a class="btn btn-default" href="{{ $component->getController()->getRoute('index') }}"><i class="fa fa-chevron-left margin-right-10"></i>{{ $component->translate('button.back') }}</a>
-            <button type="submit" class="btn btn-danger pull-right"><i class="fa fa-trash-o margin-right-10"></i>{{ $component->translate('button.delete') }}</button>
+            <button type="submit" class="btn btn-danger pull-right"><i class="fa fa-trash margin-right-10"></i>{{ $component->translate('button.delete') }}</button>
         </div>
     {{ Form::close() }}
 </div>

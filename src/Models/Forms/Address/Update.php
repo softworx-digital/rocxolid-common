@@ -32,6 +32,22 @@ class Update extends RocXolidAbstractCrudForm
     ];
 
     protected $fields = [
+        'relation' => [
+            'type' => Hidden::class,
+            'options' => [
+                'validation' => 'required',
+            ],
+        ],
+        'model_attribute' => [
+            'type' => Hidden::class,
+            'options' => [
+                'validation' => 'required',
+            ],
+        ],
+        'model_type' => [
+            'type' => Hidden::class,
+            'options' => [],
+        ],
         'street_name' => [
             'type' => Input::class,
             'options' => [
@@ -155,6 +171,10 @@ class Update extends RocXolidAbstractCrudForm
 
     protected function adjustFieldsDefinition($fields)
     {
+        $fields['relation']['options']['value'] = $this->getInputFieldValue('relation');
+        $fields['model_attribute']['options']['value'] = $this->getInputFieldValue('model_attribute');
+        $fields['model_type']['options']['value'] = $this->getInputFieldValue('model_type');
+
         // city
         $city = City::find($this->getInputFieldValue('city_id')) ?? $this->getModel()->city;
 
