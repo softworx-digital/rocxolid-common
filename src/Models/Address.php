@@ -62,6 +62,11 @@ class Address extends AbstractCrudModel
         'deleted_by',
     ];
 
+    protected $decimals = [
+        // 'latitude',
+        // 'longitude',
+    ];
+
     public function parent(): MorphTo
     {
         return $this->morphTo('model');
@@ -86,5 +91,18 @@ class Address extends AbstractCrudModel
         );
 
         return $html ? nl2br($label) : $label;
+    }
+
+    public function fillCustom($data, $action = null)
+    {
+        if (!is_null($this->latitude)) {
+            $this->latitude = str_replace(',', '.', $this->latitude);
+        }
+
+        if (!is_null($this->longitude)) {
+            $this->longitude = str_replace(',', '.', $this->longitude);
+        }
+
+        return parent::fillCustom($data, $action);
     }
 }
