@@ -12,6 +12,7 @@ class District extends AbstractCrudModel
     use HasRegion;
 
     protected $fillable = [
+        'code',
         'name',
         'description',
     ];

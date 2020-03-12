@@ -13,6 +13,7 @@ class CadastralArea extends AbstractCrudModel
     use HasCity;
 
     protected $fillable = [
+        'code',
         'name',
         'description',
     ];

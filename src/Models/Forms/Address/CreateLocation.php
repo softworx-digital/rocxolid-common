@@ -26,11 +26,11 @@ use Softworx\RocXolid\Common\Models\District;
 use Softworx\RocXolid\Common\Models\City;
 use Softworx\RocXolid\Common\Models\CadastralArea;
 
-class UpdateLocation extends RocXolidAbstractCrudForm
+class CreateLocation extends RocXolidAbstractCrudForm
 {
     protected $options = [
         'method' => 'POST',
-        'route-action' => 'update',
+        'route-action' => 'store',
         'class' => 'form-horizontal form-label-left',
         'section' => 'location',
     ];
@@ -49,6 +49,10 @@ class UpdateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'model_type' => [
+            'type' => Hidden::class,
+            'options' => [],
+        ],
+        'model_id' => [
             'type' => Hidden::class,
             'options' => [],
         ],
@@ -220,11 +224,12 @@ class UpdateLocation extends RocXolidAbstractCrudForm
         $fields['relation']['options']['value'] = $this->getInputFieldValue('relation');
         $fields['model_attribute']['options']['value'] = $this->getInputFieldValue('model_attribute');
         $fields['model_type']['options']['value'] = $this->getInputFieldValue('model_type');
+        $fields['model_id']['options']['value'] = $this->getInputFieldValue('model_id');
 
         // city
-        $city = City::find($this->getInputFieldValue('city_id')) ?? $this->getModel()->city;
+        $city = City::find($this->getInputFieldValue('city_id'));
 
-        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id', 'form-param' => 'update-location']);
+        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id', 'form-param' => 'create-location']);
         $fields['city_id']['options']['attributes']['data-change-action'] = $this->getController()->getRoute('formReload', $this->getModel());
         $fields['city_id']['options']['collection']['method'] = 'getSelectOption';
         $fields['city_id']['options']['collection']['filters'][] = [

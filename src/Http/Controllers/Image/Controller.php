@@ -48,7 +48,7 @@ class Controller extends AbstractCrudController
     public function get(CrudRequest $request, CrudableModel $image, $size = null)
     {
         try {
-            return response($image->content($size))->header('Content-Type', $image->mime_type);
+            return response($image->content($size), 200)->header('Content-Type', $image->mime_type);
         } catch (FileNotFoundException $e) {
             abort(404);
         }

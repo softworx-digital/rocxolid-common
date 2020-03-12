@@ -163,6 +163,7 @@ class CreateCommonTables extends Migration
             $table->increments('id');
             $table->unsignedInteger('country_id');
 
+            $table->string('code');
             $table->string('name');
             $table->text('description')->nullable();
 
@@ -189,6 +190,7 @@ class CreateCommonTables extends Migration
             $table->unsignedInteger('country_id');
             $table->unsignedInteger('region_id');
 
+            $table->string('code');
             $table->string('name');
             $table->text('description')->nullable();
 
@@ -222,6 +224,8 @@ class CreateCommonTables extends Migration
             $table->unsignedInteger('region_id')->nullable();
             $table->unsignedInteger('district_id')->nullable();
 
+            $table->enum('type', ['city', 'territory'])->default('territory');
+            $table->string('code');
             $table->string('name');
             $table->string('zip')->nullable();
             $table->text('description')->nullable();
@@ -260,6 +264,7 @@ class CreateCommonTables extends Migration
             $table->increments('id');
             $table->unsignedInteger('city_id');
 
+            $table->string('code');
             $table->string('name');
             $table->text('description')->nullable();
 

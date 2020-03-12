@@ -12,6 +12,7 @@ class Region extends AbstractCrudModel
     use HasCountry;
 
     protected $fillable = [
+        'code',
         'name',
         'description',
     ];
