@@ -180,7 +180,11 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        return $this->importDump('regions');
+        $this
+            ->importDump('sk/regions')
+            ->importDump('cz/regions');
+
+        return $this;
     }
 
     protected function districts()
@@ -213,7 +217,11 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        return $this->importDump('districts');
+        $this
+            ->importDump('sk/districts')
+            ->importDump('cz/districts');
+
+        return $this;
     }
 
     protected function cities()
@@ -255,7 +263,11 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        return $this->importDump('cities');
+        $this
+            ->importDump('sk/cities')
+            ->importDump('cz/cities');
+
+        return $this;
     }
 
     protected function cadastralAreas()
@@ -281,7 +293,11 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        return $this->importDump('cadastral_areas');
+        $this
+            ->importDump('sk/cadastral_areas')
+            ->importDump('cz/cadastral_areas');
+
+        return $this;
     }
 
     protected function addresses()
