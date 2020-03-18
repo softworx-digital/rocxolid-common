@@ -99,7 +99,7 @@ class UpdateInAttributeGroup extends RocXolidAbstractCrudForm
                 'group' => ButtonGroup::DEFAULT_NAME,
                 'ajax' => true,
                 'label' => [
-                    'title' => 'submit_ajax',
+                    'title' => 'submit',
                 ],
                 'attributes' => [
                     'class' => 'btn btn-success',

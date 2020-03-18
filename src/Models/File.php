@@ -4,13 +4,19 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Uploadable;
+use Softworx\RocXolid\Models\Contracts\Downloadable;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
+// rocXolid common services
+use Softworx\RocXolid\Common\Services\FileUploadService;
 
 /**
  *
  */
-class File extends AbstractCrudModel
+class File extends AbstractCrudModel implements Uploadable, Downloadable
 {
     use SoftDeletes;
 
@@ -43,12 +49,39 @@ class File extends AbstractCrudModel
         return $this->morphTo('model');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getTitle()
     {
         return !empty($this->name) ? $this->name : $this->attachment_filename;
     }
 
-    public function content($param = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function getRelativeUploadPath(): string
+    {
+        return sprintf('%s/%s/%s', strtolower((new \ReflectionClass($this->parent))->getShortName()), $this->parent->getKey(), $this->model_attribute);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUploadData(UploadedFile $uploaded_file, string $storage_path): Uploadable
+    {
+        $this->storage_path = $storage_path;
+        $this->original_filename = $uploaded_file->getClientOriginalName();
+        $this->mime_type = $uploaded_file->getClientMimeType();
+        $this->extension = $uploaded_file->getClientOriginalExtension();
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function content($param = null): string
     {
         if (is_null($param)) {
             return Storage::get($this->storage_path);
@@ -56,21 +89,35 @@ class File extends AbstractCrudModel
 
         $pathinfo = pathinfo($this->storage_path);
 
-        return Storage::get(sprintf('/%s/%s/%s', $pathinfo['dirname'], $param, $pathinfo['basename']));
+        return Storage::get(sprintf('%s/%s/%s', $pathinfo['dirname'], $param, $pathinfo['basename']));
     }
 
-    public function getPath($param = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function getStorageRelativePath($param = null): string
     {
         if (is_null($param)) {
-            return sprintf('/storage/%s', $this->storage_path);
+            return $this->storage_path;
         }
 
         $pathinfo = pathinfo($this->storage_path);
 
-        return sprintf('/storage/%s/%s/%s', $pathinfo['dirname'], $param, $pathinfo['basename']);
+        return sprintf('%s/%s/%s', $pathinfo['dirname'], $param, $pathinfo['basename']);
     }
 
-    public function getDownloadUrl()
+    /**
+     * {@inheritDoc}
+     */
+    public function getStoragePath($param = null): string
+    {
+        return storage_path(sprintf('%s/%s', FileUploadService::STORAGE_DIR, $this->getStorageRelativePath($param)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDownloadUrl(): string
     {
         return route('download', $this->getKey());
     }

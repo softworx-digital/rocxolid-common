@@ -1,1 +1,1 @@
-<img src="{{ asset($component->getModel()->image->getPath($size)) }}" alt="{{ $component->getModel()->image->alt }}"/>
+{{ Html::image($component->getModel()->getControllerRoute('get', [ 'size' => 'mid' ]), $component->getModel()->alt, [ 'style' => 'max-width: 100%;' ]) }}

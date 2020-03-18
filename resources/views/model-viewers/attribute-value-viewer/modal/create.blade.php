@@ -6,7 +6,7 @@
                 <h4 class="modal-title">{{ $component->translate('model.title.singular') }} <small>{{ $component->translate(sprintf('action.%s', $route_method)) }}</small></h4>
             </div>
         @if ($component->getModel()->userCan('write'))
-            {!! $component->getFormComponent()->render('create-modal') !!}
+            {!! $component->getFormComponent()->render('modal.create') !!}
         @else
             <div class="modal-body">
                 <p class="text-center"><i class="fa fa-hand-stop-o text-danger fa-5x"></i></p>

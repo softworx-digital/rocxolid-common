@@ -2,12 +2,20 @@
 
 namespace Softworx\RocXolid\Common\Models\Traits;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-// rocXolid utils
-use Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Image;
 
+/**
+ * Trait to set up images relation to a model.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ */
 trait HasImages
 {
     /**
@@ -18,40 +26,38 @@ trait HasImages
      * ]
      */
     protected $default_image_sizes = [
-        'images' => [
-            'thumb' => [
-                'width' => 64,
-                'height' => 64,
-                'method' => 'resize',
-                'constraints' => [
-                    'aspectRatio',
-                    'upsize',
-                ],
+        'thumb' => [
+            'width' => 64,
+            'height' => 64,
+            'method' => 'resize',
+            'constraints' => [
+                'aspectRatio',
+                'upsize',
             ],
-            'small' => [
-                'width' => 256,
-                'height' => 256,
-                'method' => 'resize',
-                'constraints' => [
-                    'aspectRatio',
-                    'upsize',
-                ],
+        ],
+        'small' => [
+            'width' => 256,
+            'height' => 256,
+            'method' => 'resize',
+            'constraints' => [
+                'aspectRatio',
+                'upsize',
             ],
-            'small-square' => [
-                'width' => 256,
-                'height' => 256,
-                'method' => 'fit',
-                'constraints' => [
-                    'upsize',
-                ],
+        ],
+        'small-square' => [
+            'width' => 256,
+            'height' => 256,
+            'method' => 'fit',
+            'constraints' => [
+                'upsize',
             ],
-            '600x600' => [
-                'width' => 600,
-                'height' => 600,
-                'method' => 'fit',
-                'constraints' => [
-                    'upsize',
-                ],
+        ],
+        '600x600' => [
+            'width' => 600,
+            'height' => 600,
+            'method' => 'fit',
+            'constraints' => [
+                'upsize',
             ],
         ],
     ];
@@ -75,15 +81,48 @@ trait HasImages
             ->where(sprintf('%s.is_model_primary', (new Image())->getTable()), 1);
     }
 
-    // @todo: events?
-    public function onImageUpload(Image $image, AjaxResponse &$response)
+    /**
+     * Action to take if an image has been uploaded.
+     *
+     * @param \Softworx\RocXolid\Common\Models\Image $image
+     * @return \Softworx\RocXolid\Models\Contracts\Crudable
+     * @todo: events?
+     */
+    public function onImageUpload(Image $image): Crudable
     {
         return $this;
     }
 
-    public function deleteImageRedirectPath()
+    /**
+     * Retrieve redirect path after the image has been deleted.
+     *
+     * @return string
+     */
+    public function deleteImageRedirectPath(): string
     {
-        // @todo: "hotfixed"
         return $this->getControllerRoute('show', [ 'tab' => 'gallery' ]);
+    }
+
+    /**
+     * Get image dimensions for given attrribute.
+     *
+     * @param string $attribute
+     * @return Illuminate\Support\Collection
+     */
+    public function getImageSizes(string $attribute): Collection
+    {
+        if (property_exists($this, 'image_sizes')) {
+            if (isset($this->image_sizes[$attribute])) {
+                $image_sizes = $this->image_sizes[$attribute];
+            } else {
+                throw new \InvalidArgumentException(sprintf('Invalid image attribute [%s] requested, [%s] available', $attribute, implode(', ', array_keys($this->image_sizes))));
+            }
+        } elseif (property_exists($this, 'default_image_sizes')) {
+            $image_sizes = $this->default_image_sizes;
+        } else {
+            throw new \InvalidArgumentException(sprintf('Model [%s] has no image sizes definition', (new \ReflectionClass($this))->getName()));
+        }
+
+        return collect($image_sizes);
     }
 }

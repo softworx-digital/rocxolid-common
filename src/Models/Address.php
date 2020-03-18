@@ -5,13 +5,15 @@ namespace Softworx\RocXolid\Common\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+// rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
+// rocXolid common model traits
 use Softworx\RocXolid\Common\Models\Traits\HasCountry;
 use Softworx\RocXolid\Common\Models\Traits\HasCadastralArea;
 use Softworx\RocXolid\Common\Models\Traits\HasRegion;
 use Softworx\RocXolid\Common\Models\Traits\HasDistrict;
 use Softworx\RocXolid\Common\Models\Traits\HasCity;
-// user management
+// rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\User;
 
 class Address extends AbstractCrudModel

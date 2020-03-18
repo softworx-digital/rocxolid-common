@@ -2,19 +2,29 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\Image;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 // relations
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-// @todo
+// rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
-use Softworx\RocXolid\Components\Forms\FormField;
-use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
-use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
-use Softworx\RocXolid\Common\Models\Image;
-use Softworx\RocXolid\Common\Repositories\Image\Repository;
+// rocXolid repositorie contracts
+use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
+// rocXolid forms
+use Softworx\RocXolid\Forms\AbstractCrudForm;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
+// rocXolid components
 use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
+// rocXolid common controllers
+use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
+// rocXolid common models
+use Softworx\RocXolid\Common\Models\Image;
+// rocXolid common repositories
+use Softworx\RocXolid\Common\Repositories\Image\Repository;
+// rocXolid common components
 use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
 
 /**
@@ -38,14 +48,22 @@ class Controller extends AbstractCrudController
         'update.model' => 'update-in-model',
     ];
 
-    public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
+    public function getModelViewerComponent(Crudable $model): CrudModelViewerComponent
     {
         return ImageViewer::build($this, $this)
             ->setModel($model)
             ->setController($this);
     }
 
-    public function get(CrudRequest $request, CrudableModel $image, $size = null)
+    /**
+     * Return the image content making the image accessible per route.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Models\Contracts\Crudable $image
+     * @param string|null $size
+     * @return void
+     */
+    public function get(CrudRequest $request, Crudable $image, ?string $size = null)
     {
         try {
             return response($image->content($size), 200)->header('Content-Type', $image->mime_type);
@@ -54,39 +72,44 @@ class Controller extends AbstractCrudController
         }
     }
 
-    public function update(CrudRequest $request, CrudableModel $model)//: Response
+    /**
+     * {@inheritDoc}
+     */
+    protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, Crudable $model, string $action)
     {
-        $this->setModel($model);
+        if ($request->ajax()) {
+            $model_viewer_component = $model->getModelViewerComponent();
+            $parent_method = sprintf('onImage%s', Str::studly($action));
 
-        $repository = $this->getRepository($this->getRepositoryParam($request));
-
-        $form = $repository->getForm($this->getFormParam($request));
-        $form
-            //->adjustUpdate($request)
-            ->adjustUpdateBeforeSubmit($request)
-            ->submit();
-
-        if ($form->isValid()) {
-            $attribute = $this->getModel()->model_attribute;
-
-            if ($request->has('_data.is_model_primary') && $request->input('_data.is_model_primary')) {
-                $images = ($this->getModel()->parent->$attribute instanceof Collection) ? $this->getModel()->parent->$attribute : [ $this->getModel()->parent->$attribute ];
-
-                foreach ($images as $image) {
-                    $image->is_model_primary = 0;
-                    $image->save();
-                }
+            if (method_exists($model->parent->getCrudController(), $parent_method)) {
+                return $model->parent->getCrudController()->{$parent_method}($request, $model->parent);
             }
 
-            $repository->updateModel($form->getFormFieldsValues()->toArray(), $this->getModel(), 'update');
+            if ($model->parent->{$model->model_attribute}() instanceof MorphMany) {
+                $dom_id = $model_viewer_component->getDomId($model->model_attribute, 'images');
+                $template = 'gallery.images';
+            } else {
+                $dom_id = $model_viewer_component->getDomId($model->model_attribute);
+                $template = 'related.show';
+            }
 
-            return $this->getParentUpdateResponse($attribute);
+            return $this->response
+                ->notifySuccess($model_viewer_component->translate('text.updated'))
+                ->replace($dom_id, $model_viewer_component->fetch($template, [
+                    'attribute' => $model->model_attribute,
+                    'relation' => 'parent'
+                ])) // @todo: hardcoded, ugly
+                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
+                ->get();
         } else {
-            return $this->errorResponse($request, $repository, $form, 'edit');
+            return parent::successResponse($request, $repository, $form, $model, $action);
         }
     }
 
-    protected function destroyResponse(CrudRequest $request, CrudableModel $model)
+    /**
+     * {@inheritDoc}
+     */
+    protected function destroyResponse(CrudRequest $request, Crudable $model)
     {
         $attribute = $this->getModel()->model_attribute;
 
@@ -99,6 +122,7 @@ class Controller extends AbstractCrudController
         }
     }
 
+    /*
     protected function getParentUpdateResponse(string $model_attribute)
     {
         $model_viewer_component = $this->getModelViewerComponent($this->getModel());
@@ -119,4 +143,5 @@ class Controller extends AbstractCrudController
             ->modalClose($model_viewer_component->getDomId('modal-update'))
             ->get();
     }
+    */
 }

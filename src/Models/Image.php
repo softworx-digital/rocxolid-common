@@ -2,20 +2,19 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
-// rocXolid models
-use Softworx\RocXolid\Models\AbstractCrudModel;
+use Illuminate\Support\Collection;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Resizable;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\File;
+// rocXolid user management models
+use Softworx\RocXolid\UserManagement\Models\User;
 
 /**
  *
  */
-class Image extends File
+class Image extends File implements Resizable
 {
-    // use SoftDeletes;
-
     protected $fillable = [
         'is_model_primary',
         //'name',
@@ -29,5 +28,37 @@ class Image extends File
     public function parent()
     {
         return $this->morphTo('model');
+    }
+
+    public function resolvePolymorphUserModel()
+    {
+        return User::class;
+    }
+
+    public function fillCustom($data, $action = null)
+    {
+        if (is_null($this->model_attribute)) {
+            $this->model_attribute = $data['model_attribute'];
+        }
+
+        return parent::fillCustom($data, $action);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDimensions(): Collection
+    {
+        return collect($this->parent->getImageSizes($this->model_attribute));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setResizeData(Collection $sizes): Resizable
+    {
+        $this->sizes = $sizes->merge($this->getDimensions())->toJson();
+
+        return $this;
     }
 }
