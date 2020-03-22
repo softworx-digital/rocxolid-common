@@ -1,10 +1,8 @@
-<div class="alert alert-danger">todo model-viewers > image-viewer > default.blade</div>
-
-<div id="{{ $component->getDomId() }}" class="img img-small d-inline-block">
-    {!! $component->render('include.data', [ 'size' => $size ]) !!}
-    <div class="btn-group show-up">
-        <button class="btn btn-primary" data-ajax-url="{{ $component->getModel()->getControllerRoute('edit') }}"><i class="fa fa-pencil"></i></button>
-        <button class="btn btn-danger" data-ajax-url="{{ $component->getModel()->getControllerRoute('destroyConfirm') }}"><i class="fa fa-trash"></i></button>
-    </div>
-
+@if (isset($image) && isset($size))
+<div class="placeholder" data-image-src="{{ $image->getControllerRoute('get', [ 'size' => $size ]) }}"@if (isset($class)) data-image-class="{{ $class }}"@endif>
+    <img src="{{ $image->base64($size) }}" alt="{{ $image->alt }}" class="img-blur loaded @if (isset($class)){{ $class }}@endif"/>
+    <div style="padding-bottom: {{ $image->getHeightWidthRatio($size) * 100 }}%;"></div>
 </div>
+@else
+<div class="alert alert-danger">[{{ $view_name }}] specify image &amp; image size!</div>
+@endif

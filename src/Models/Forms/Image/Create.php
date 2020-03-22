@@ -5,10 +5,13 @@ namespace Softworx\RocXolid\Common\Models\Forms\Image;
 // relations
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+// rocXolid http requests
+use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid form fields
 use Softworx\RocXolid\Forms\Fields\Type\Hidden;
 use Softworx\RocXolid\Forms\Fields\Type\UploadImage;
 // rocXolid forms
+use Softworx\RocXolid\Forms\Contracts\Form;
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
 
 class Create extends RocXolidAbstractCrudForm
@@ -78,6 +81,13 @@ class Create extends RocXolidAbstractCrudForm
         ],
     ];
 
+    public function adjustFormOptions(): Form
+    {
+        $this->options['data-on-action-complete'] = $this->getController()->getRoute('onUploadComplete');
+
+        return $this;
+    }
+
     protected function adjustFieldsDefinition($fields)
     {
         $fields['relation']['options']['value'] = $this->getInputFieldValue('relation');
@@ -103,5 +113,12 @@ class Create extends RocXolidAbstractCrudForm
         }
 
         return $fields;
+    }
+
+    protected function adjustUploadComplete(CrudRequest $request): Form
+    {
+        unset($this->fields['upload']);
+
+        return $this;
     }
 }

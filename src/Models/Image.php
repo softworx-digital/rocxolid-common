@@ -44,6 +44,31 @@ class Image extends File implements Resizable
         return parent::fillCustom($data, $action);
     }
 
+    public function getMimeType()
+    {
+        return mime_content_type($this->getStoragePath());
+    }
+
+    public function base64($size = 'icon')
+    {
+        try {
+            return sprintf('data:%s;base64,%s', $this->getMimeType(), base64_encode($this->content($size)));
+        } catch (\Exception $e) {
+            return config('rocXolid.common.general.base64-image-preloader');
+        }
+    }
+
+    public function getHeightWidthRatio($size): float
+    {
+        try {
+            $intervention_image = \InterventionImage::make($this->getStoragePath($size));
+
+            return $intervention_image->height() / $intervention_image->width();
+        } catch (\Exception $e) {
+            return 1;
+        }
+    }
+
     /**
      * {@inheritDoc}
      */

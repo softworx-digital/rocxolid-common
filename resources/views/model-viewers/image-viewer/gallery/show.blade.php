@@ -1,4 +1,4 @@
-@can('view', [ $component->getModel()->$relation, $attribute ])
+@can ('view', [ $component->getModel()->$relation, $attribute ])
 <div id="{{ $component->getDomId($attribute) }}" class="panel panel-default overflow-hidden">
     {!! $component->render('gallery.panel-heading', [ 'relation' => $relation, 'attribute' => $attribute ]) !!}
     <div class="panel-body padding-0">

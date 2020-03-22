@@ -108,6 +108,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 'as' => 'file.',
             ], function ($router) {
                 $router->get('/get/{file}', 'Controller@get')->name('get');
+                $router->post('/upload-complete', 'Controller@onUploadComplete')->name('upload-complete');
             });
 
             $router->group([
@@ -116,6 +117,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 'as' => 'image.',
             ], function ($router) {
                 $router->get('/get/{image}/{size?}', 'Controller@get')->name('get');
+                $router->post('/upload-complete', 'Controller@onUploadComplete')->name('upload-complete');
             });
 
             $router->group([

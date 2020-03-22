@@ -81,20 +81,6 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
     /**
      * {@inheritDoc}
      */
-    public function content($param = null): string
-    {
-        if (is_null($param)) {
-            return Storage::get($this->storage_path);
-        }
-
-        $pathinfo = pathinfo($this->storage_path);
-
-        return Storage::get(sprintf('%s/%s/%s', $pathinfo['dirname'], $param, $pathinfo['basename']));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getStorageRelativePath($param = null): string
     {
         if (is_null($param)) {
@@ -112,6 +98,14 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
     public function getStoragePath($param = null): string
     {
         return storage_path(sprintf('%s/%s', FileUploadService::STORAGE_DIR, $this->getStorageRelativePath($param)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function content($param = null): string
+    {
+        return Storage::get($this->getStorageRelativePath($param));
     }
 
     /**

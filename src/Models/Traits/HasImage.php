@@ -126,6 +126,11 @@ trait HasImage
         return collect($image_sizes);
     }
 
+    public function getImagePlaceholder()
+    {
+        return config(sprintf('rocXolid.common.placeholder.%s.%s', (new \ReflectionClass($this))->getName(), 'image'), null);
+    }
+
     /*
     public function getImageSize(string $attribute, $size)
     {

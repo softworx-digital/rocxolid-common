@@ -44,6 +44,7 @@ class Controller extends AbstractCrudController
         'store' => 'create',
         'edit' => 'update',
         'update' => 'update',
+        'onUploadComplete' => 'upload',
         'edit.model' => 'update-in-model',
         'update.model' => 'update-in-model',
     ];
@@ -73,34 +74,49 @@ class Controller extends AbstractCrudController
     }
 
     /**
+     * Handle asynchronous file upload completion.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param string $action
+     * @return void
+     */
+    public function onUploadComplete(CrudRequest $request, string $action = 'create')
+    {
+        $repository = $this->getRepository($action);
+
+        $this->setModel($repository->getModel());
+
+        $form = $repository->getForm($this->getFormParam($request))->submit();
+
+        if (!$form->isValid()) {
+            return $this->onStoreError($request, $repository, $form);
+        }
+
+        $this->setModel($repository->fillModel($form->getFormFieldsValues()->toArray(), $this->getModel(), $action));
+
+        $this->authorize('create', $this->getModel());
+
+        // hack
+        if ($this->getModel()->parent->{$this->getModel()->model_attribute}() instanceof MorphOne) {
+            $this->setModel($this->getModel()->parent->{$this->getModel()->model_attribute});
+        }
+
+        return $this->replaceImagesResponse($this->getModel(), $action);
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, Crudable $model, string $action)
     {
         if ($request->ajax()) {
-            $model_viewer_component = $model->getModelViewerComponent();
             $parent_method = sprintf('onImage%s', Str::studly($action));
 
             if (method_exists($model->parent->getCrudController(), $parent_method)) {
                 return $model->parent->getCrudController()->{$parent_method}($request, $model->parent);
             }
 
-            if ($model->parent->{$model->model_attribute}() instanceof MorphMany) {
-                $dom_id = $model_viewer_component->getDomId($model->model_attribute, 'images');
-                $template = 'gallery.images';
-            } else {
-                $dom_id = $model_viewer_component->getDomId($model->model_attribute);
-                $template = 'related.show';
-            }
-
-            return $this->response
-                ->notifySuccess($model_viewer_component->translate('text.updated'))
-                ->replace($dom_id, $model_viewer_component->fetch($template, [
-                    'attribute' => $model->model_attribute,
-                    'relation' => 'parent'
-                ])) // @todo: hardcoded, ugly
-                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
-                ->get();
+            return $this->replaceImagesResponse($model, $action, ($action === 'update'));
         } else {
             return parent::successResponse($request, $repository, $form, $model, $action);
         }
@@ -115,11 +131,47 @@ class Controller extends AbstractCrudController
 
         if ($request->ajax()) {
             // return $this->response->redirect($model->parent->getControllerRoute('show'))->get();
-            return $this->getParentUpdateResponse($attribute);
+            // return $this->getParentUpdateResponse($attribute);
+            return $this->replaceImagesResponse($model, 'destroy-confirm');
         } else {
             // return redirect($model->parent->getControllerRoute('show'));
             return redirect($model->parent->deleteImageRedirectPath());
         }
+    }
+
+    private function replaceImagesResponse(Crudable $model, string $action, bool $close_modal = true)
+    {
+        $model_viewer_component = $model->getModelViewerComponent();
+
+        // @todo: hardcoded, ugly
+        $data = [
+            'attribute' => $model->model_attribute,
+            'relation' => 'parent',
+        ];
+
+        if ($model->parent->{$model->model_attribute}() instanceof MorphMany) {
+            $this->response
+                ->replace($model_viewer_component->getDomId($model->model_attribute, 'images'), $model_viewer_component->fetch('gallery.images', $data));
+
+            if ($close_modal) {
+                $this->response->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)));
+            }
+        } elseif ($model->parent->{$model->model_attribute}()->exists()) {
+            $this->response
+                ->replace($model_viewer_component->getDomId($model->model_attribute), $model_viewer_component->fetch('related.show', $data))
+                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)));
+        } else {
+            $this->response
+                ->replace($model_viewer_component->getDomId($model->model_attribute), $model_viewer_component->fetch('related.unavailable', $data + [
+                    'related' => $model->parent,
+                    'placeholder' => $model->parent->getImagePlaceholder(),
+                ]))
+                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)));
+        }
+
+        return $this->response
+            // ->notifySuccess($model_viewer_component->translate('text.updated'))
+            ->get();
     }
 
     /*
