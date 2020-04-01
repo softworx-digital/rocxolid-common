@@ -151,7 +151,10 @@ class Controller extends AbstractCrudController
 
         if ($model->parent->{$model->model_attribute}() instanceof MorphMany) {
             $this->response
-                ->replace($model_viewer_component->getDomId($model->model_attribute, 'images'), $model_viewer_component->fetch('gallery.images', $data));
+                ->replace(
+                    $model_viewer_component->getDomId($model->parent->getKey(), $model->model_attribute, 'images'),
+                    $model_viewer_component->fetch('gallery.images', $data)
+                );
 
             if ($close_modal) {
                 $this->response->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)));

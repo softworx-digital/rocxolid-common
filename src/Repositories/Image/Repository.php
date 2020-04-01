@@ -81,7 +81,7 @@ class Repository extends AbstractCrudRepository
 
     private function handleUpdate(CrudableModel $model, string $action): CrudableModel
     {
-        $model->parent->{$model->model_attribute}->where($model->getKeyName(), '!=', $model->getKey())->each(function($sibling) {
+        $model->parent->{$model->model_attribute}->where($model->getKeyName(), '!=', $model->getKey())->each(function ($sibling) {
             if ($sibling->is_model_primary) {
                 $sibling->update([
                     'is_model_primary' => 0,

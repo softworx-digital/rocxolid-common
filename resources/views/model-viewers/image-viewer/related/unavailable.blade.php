@@ -1,5 +1,5 @@
 @can ('view', [ $related, $attribute ])
-<div id="{{ $component->getDomId($attribute) }}" class="panel panel-default overflow-hidden">
+<div id="{{ $component->getDomId($attribute) }}" class="panel panel-default">
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-12">

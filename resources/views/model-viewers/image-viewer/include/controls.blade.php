@@ -9,11 +9,13 @@
 @endcan
 </div>
 
-<div class="btn-group btn-group-sm pull-right visible-xs-block">
-    <a class="btn btn-default" href="{{ asset(sprintf('storage/%s', $image->getStorageRelativePath())) }}" data-toggle="lightbox" data-gallery="{{ $attribute }}"><i class="fa fa-arrows-alt"></i></a><span class="btn btn-default drag-handle"><i class="fa fa-arrows"></i></span>
+<div class="btn-group btn-group-sm visible-xs-block show-up">
     <span class="btn btn-default drag-handle"><i class="fa fa-arrows"></i></span>
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
     <ul class="dropdown-menu">
+        <li><a href="{{ asset(sprintf('storage/%s', $image->getStorageRelativePath())) }}" data-toggle="lightbox" data-gallery="{{ $attribute }}">
+            <i class="fa fa-arrows-alt margin-right-5"></i>{{ $component->translate('button.show') }}
+        </a></a>
     @can ('update', [ $image->$relation, $attribute ])
         <li><a data-ajax-url="{{ $image->getControllerRoute('edit', $image->getRouteRelationParam($attribute, $relation)) }}">
             <i class="fa fa-pencil margin-right-5"></i>{{ $component->translate('button.edit') }}

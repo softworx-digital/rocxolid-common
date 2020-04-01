@@ -59,7 +59,7 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
             ]
         ];
 
-        $model->getDimensions()->each(function($options, $directory) use ($model, $sizes) {
+        $model->getDimensions()->each(function ($options, $directory) use ($model, $sizes) {
 
             $intervention_image = \InterventionImage::make($model->getStoragePath());
             $target_directory = dirname($model->getStoragePath($directory));
@@ -71,7 +71,7 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
             $w = $options['width'] ?? round($options['height'] / $sizes['original']['ratio']);
             $h = $options['height'] ?? round($options['width'] / $sizes['original']['ratio']);
 
-            collect($options['method'])->each(function($method) use (&$intervention_image, $options, $w, $h) {
+            collect($options['method'])->each(function ($method) use (&$intervention_image, $options, $w, $h) {
                 if (in_array($method, [ 'resize', 'fit' ])) {
                     $intervention_image->$method($w, $h, function ($constraint) use ($options) {
                         if (isset($options['constraints'])) {
@@ -109,7 +109,7 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
             ]
         ];
 
-        $model->getDimensions()->each(function($options, $directory) use ($model, $sizes) {
+        $model->getDimensions()->each(function ($options, $directory) use ($model, $sizes) {
             $target_directory = dirname($model->getStoragePath($directory));
 
             if (!File::exists($target_directory) && !File::makeDirectory($target_directory)) {

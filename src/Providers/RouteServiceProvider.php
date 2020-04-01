@@ -60,7 +60,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
             $router->group([
                 'namespace' => 'Translation',
                 'prefix' => 'translation',
-            ], function($router) {
+            ], function ($router) {
                 $router->get('{group?}', 'Controller@index')->where('group', '.*');
                 $router->post('import', 'Controller@postImport');
                 $router->post('find', 'Controller@postFind');
