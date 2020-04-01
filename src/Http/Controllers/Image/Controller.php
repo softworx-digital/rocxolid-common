@@ -176,27 +176,4 @@ class Controller extends AbstractCrudController
             // ->notifySuccess($model_viewer_component->translate('text.updated'))
             ->get();
     }
-
-    /*
-    protected function getParentUpdateResponse(string $model_attribute)
-    {
-        $model_viewer_component = $this->getModelViewerComponent($this->getModel());
-
-        $parent_controller = app($this->getModel()->parent->getControllerClass());
-        $parent_controller->setModel($this->getModel()->parent);
-
-        $parent_image_upload_component = $parent_controller->getImageUploadFormComponent();
-
-        if ($this->getModel()->parent->$model_attribute() instanceof MorphOne) {
-            $parent_image_upload_component = $parent_controller->getImageUploadFormComponent();
-        } elseif ($this->getModel()->parent->$model_attribute() instanceof MorphMany) {
-            $parent_image_upload_component = $parent_controller->getGalleryUploadFormComponent();
-        }
-
-        return $this->response
-            ->replace($parent_image_upload_component->getOption('id'), $parent_image_upload_component->fetch('upload'))
-            ->modalClose($model_viewer_component->getDomId('modal-update'))
-            ->get();
-    }
-    */
 }
