@@ -28,7 +28,7 @@ use Softworx\RocXolid\Common\Models\AttributeValue;
  */
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = AttributeModel::class;
+
 
     protected static $repository_class = Repository::class;
 

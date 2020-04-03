@@ -8,7 +8,7 @@ use Softworx\RocXolid\Common\Repositories\Country\Repository;
 
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = Country::class;
+
 
     protected static $repository_class = Repository::class;
 }

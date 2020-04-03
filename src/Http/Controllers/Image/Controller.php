@@ -32,7 +32,7 @@ use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
  */
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = Image::class;
+
 
     protected static $repository_class = Repository::class;
 

@@ -17,7 +17,7 @@ use Softworx\RocXolid\Common\Events\Address\Changed as AddressChanged;
 
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = Address::class;
+
 
     protected static $repository_class = Repository::class;
 

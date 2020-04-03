@@ -15,7 +15,7 @@ use Softworx\RocXolid\Common\Repositories\File\Repository;
  */
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = File::class;
+
 
     protected static $repository_class = Repository::class;
 

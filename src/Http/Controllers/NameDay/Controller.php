@@ -8,7 +8,7 @@ use Softworx\RocXolid\Common\Repositories\NameDay\Repository;
 
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = NameDay::class;
+
 
     protected static $repository_class = Repository::class;
 }
