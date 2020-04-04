@@ -19,8 +19,6 @@ use Softworx\RocXolid\Common\Components\ModelViewers\AttributeValueViewer;
 // common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Http\Controllers\Attribute\Controller as AttributeController;
-// common repositories
-use Softworx\RocXolid\Common\Repositories\AttributeValue\Repository;
 // common models
 use Softworx\RocXolid\Common\Models\AttributeGroup;
 use Softworx\RocXolid\Common\Models\Attribute;
@@ -31,10 +29,6 @@ use Softworx\RocXolid\Common\Models\AttributeValue;
  */
 class Controller extends AbstractCrudController
 {
-
-
-    protected static $repository_class = Repository::class;
-
     protected $form_mapping = [
         'create.attribute-values' => 'create-in-attribute',
         'store.attribute-values' => 'create-in-attribute',

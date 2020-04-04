@@ -14,8 +14,6 @@ use Softworx\RocXolid\Components\Forms\FormField;
 use Softworx\RocXolid\Components\Forms\CrudForm as CrudFormComponent;
 // rocXolid forms
 use Softworx\RocXolid\Forms\FileUploadForm;
-// rocXolid common repositories
-use Softworx\RocXolid\Common\Repositories\File\Repository as FileRepository;
 
 /**
  * Trait to upload and assign a file to a resource.

@@ -15,8 +15,6 @@ use Softworx\RocXolid\Components\Forms\CrudForm as CrudFormComponent;
 // common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Http\Controllers\Attribute\Controller as AttributeController;
-// common repositories
-use Softworx\RocXolid\Common\Repositories\AttributeModel\Repository;
 // common models
 use Softworx\RocXolid\Common\Models\AttributeModel;
 use Softworx\RocXolid\Common\Models\AttributeGroup;
@@ -28,10 +26,6 @@ use Softworx\RocXolid\Common\Models\AttributeValue;
  */
 class Controller extends AbstractCrudController
 {
-
-
-    protected static $repository_class = Repository::class;
-
     protected $form_mapping = [
 
     ];

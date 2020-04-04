@@ -60,7 +60,6 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
         ];
 
         $model->getDimensions()->each(function ($options, $directory) use ($model, $sizes) {
-
             $intervention_image = \InterventionImage::make($model->getStoragePath());
             $target_directory = dirname($model->getStoragePath($directory));
 

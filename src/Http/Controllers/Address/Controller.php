@@ -10,17 +10,12 @@ use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
 use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Models\Address;
-use Softworx\RocXolid\Common\Repositories\Address\Repository;
 use Softworx\RocXolid\Common\Components\ModelViewers\AddressViewer;
 // events
 use Softworx\RocXolid\Common\Events\Address\Changed as AddressChanged;
 
 class Controller extends AbstractCrudController
 {
-
-
-    protected static $repository_class = Repository::class;
-
     protected $form_mapping = [
         'create' => 'create',
         'store' => 'create',

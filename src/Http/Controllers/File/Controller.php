@@ -8,17 +8,12 @@ use Softworx\RocXolid\Components\Forms\FormField;
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Models\File;
-use Softworx\RocXolid\Common\Repositories\File\Repository;
 
 /**
  *
  */
 class Controller extends AbstractCrudController
 {
-
-
-    protected static $repository_class = Repository::class;
-
     public function get(CrudRequest $request, $id)
     {
         if ($file = File::find($id)) {

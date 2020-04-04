@@ -22,8 +22,6 @@ use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewer
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Image;
-// rocXolid common repositories
-use Softworx\RocXolid\Common\Repositories\Image\Repository;
 // rocXolid common components
 use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
 
@@ -32,10 +30,6 @@ use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
  */
 class Controller extends AbstractCrudController
 {
-
-
-    protected static $repository_class = Repository::class;
-
     /**
      * {@inheritDoc}
      */
