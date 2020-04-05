@@ -39,8 +39,6 @@ class Controller extends AbstractCrudController
         'edit' => 'update',
         'update' => 'update',
         'onUploadComplete' => 'upload',
-        'edit.model' => 'update-in-model',
-        'update.model' => 'update-in-model',
     ];
 
     /**
