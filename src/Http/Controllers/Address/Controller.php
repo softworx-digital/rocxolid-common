@@ -16,6 +16,8 @@ use Softworx\RocXolid\Common\Events\Address\Changed as AddressChanged;
 
 class Controller extends AbstractCrudController
 {
+    protected static $model_viewer_type = AddressViewer::class;
+
     protected $form_mapping = [
         'create' => 'create',
         'store' => 'create',
@@ -24,13 +26,6 @@ class Controller extends AbstractCrudController
         'edit.location' => 'update-location',
         'update.location' => 'update-location',
     ];
-
-    public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
-    {
-        return AddressViewer::build($this, $this)
-            ->setModel($model)
-            ->setController($this);
-    }
 
     /**
      * Display the dialog with map location.

@@ -46,7 +46,7 @@ use Softworx\RocXolid\Contracts\EventDispatchable;
 use Softworx\RocXolid\Forms\Contracts\Form;
 use Softworx\RocXolid\Forms\Contracts\FormField;
 use Softworx\RocXolid\Forms\Contracts\FormFieldable;
-use Softworx\RocXolid\Forms\Contracts\FormFieldFactory as FormFieldFactoryContract;
+use Softworx\RocXolid\Forms\Builders\Contracts\FormFieldFactory as FormFieldFactoryContract;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Attribute;
 

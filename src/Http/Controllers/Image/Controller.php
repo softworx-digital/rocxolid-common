@@ -30,6 +30,8 @@ use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
  */
 class Controller extends AbstractCrudController
 {
+    protected static $model_viewer_type = ImageViewer::class;
+
     /**
      * {@inheritDoc}
      */
@@ -42,13 +44,6 @@ class Controller extends AbstractCrudController
         'edit.model' => 'update-in-model',
         'update.model' => 'update-in-model',
     ];
-
-    public function getModelViewerComponent(Crudable $model): CrudModelViewerComponent
-    {
-        return ImageViewer::build($this, $this)
-            ->setModel($model)
-            ->setController($this);
-    }
 
     /**
      * Return the image content making the image accessible per route.

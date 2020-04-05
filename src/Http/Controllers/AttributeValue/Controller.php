@@ -29,19 +29,14 @@ use Softworx\RocXolid\Common\Models\AttributeValue;
  */
 class Controller extends AbstractCrudController
 {
+    protected static $model_viewer_type = AttributeValueViewer::class;
+
     protected $form_mapping = [
         'create.attribute-values' => 'create-in-attribute',
         'store.attribute-values' => 'create-in-attribute',
         'edit.attribute-values' => 'update-in-attribute',
         'update.attribute-values' => 'update-in-attribute',
     ];
-
-    public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
-    {
-        return AttributeValueViewer::build($this, $this)
-            ->setModel($model)
-            ->setController($this);
-    }
 
     public function getAttributeViewerComponent(Attribute $attribute): CrudModelViewerComponent
     {

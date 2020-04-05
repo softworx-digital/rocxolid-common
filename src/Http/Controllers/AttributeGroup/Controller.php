@@ -18,10 +18,5 @@ use Softworx\RocXolid\Common\Models\AttributeGroup;
  */
 class Controller extends AbstractCrudController
 {
-    public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
-    {
-        return AttributeGroupViewer::build($this, $this)
-            ->setModel($model)
-            ->setController($this);
-    }
+    protected static $model_viewer_type = AttributeGroupViewer::class;
 }
