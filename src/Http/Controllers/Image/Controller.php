@@ -53,7 +53,7 @@ class Controller extends AbstractCrudController
     /**
      * Return the image content making the image accessible per route.
      *
-     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request Incoming request.
      * @param \Softworx\RocXolid\Models\Contracts\Crudable $image
      * @param string|null $size
      * @return void
@@ -70,7 +70,7 @@ class Controller extends AbstractCrudController
     /**
      * Handle asynchronous file upload completion.
      *
-     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request Incoming request.
      * @param string $action
      * @return void
      */

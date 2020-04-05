@@ -35,7 +35,7 @@ class Controller extends AbstractCrudController
     /**
      * Display the dialog with map location.
      *
-     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request Incoming request.
      * @param \Softworx\RocXolid\Models\Contracts\Crudable $model
      */
     public function showMap(CrudRequest $request, CrudableModel $model)//: View

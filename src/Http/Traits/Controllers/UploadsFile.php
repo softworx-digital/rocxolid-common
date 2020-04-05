@@ -47,7 +47,7 @@ trait UploadsFile
     /**
      * Upload the file and assign it to specified resource.
      *
-     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request Incoming request.
      * @param int $id
      */
     public function fileUpload(CrudRequest $request, $id)
