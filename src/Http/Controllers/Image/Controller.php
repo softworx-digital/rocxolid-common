@@ -22,6 +22,8 @@ use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Models\Image;
 // rocXolid common components
 use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
+// rocXolid common service contracts
+use Softworx\RocXolid\Common\Services\Contracts\ImageUploadService;
 
 /**
  *
@@ -29,6 +31,13 @@ use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
 class Controller extends AbstractCrudController
 {
     protected static $model_viewer_type = ImageViewer::class;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $extra_services = [
+        ImageUploadService::class,
+    ];
 
     /**
      * {@inheritDoc}
@@ -67,14 +76,12 @@ class Controller extends AbstractCrudController
      */
     public function onUploadComplete(CrudRequest $request, string $action = 'create')
     {
-        $repository = $this->getRepository($action);
-
-        $this->setModel($repository->getModel());
-
-        $form = $repository->getForm($this->getFormParam($request))->submit();
+        $form = $this
+            ->getForm($request)
+            ->submit();
 
         if (!$form->isValid()) {
-            return $this->onStoreError($request, $repository, $form);
+            return $this->onStoreError($request, $form);
         }
 
         $this->setModel($repository->fillModel($form->getFormFieldsValues()->toArray(), $this->getModel(), $action));

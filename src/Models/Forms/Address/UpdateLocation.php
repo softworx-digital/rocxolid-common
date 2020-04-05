@@ -224,7 +224,8 @@ class UpdateLocation extends RocXolidAbstractCrudForm
         // city
         $city = City::find($this->getInputFieldValue('city_id')) ?? $this->getModel()->city;
 
-        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id', 'form-param' => 'update-location']);
+        // $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id', 'form-param' => 'update-location']);
+        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), [ 'f' => 'city_id' ]);
         $fields['city_id']['options']['attributes']['data-change-action'] = $this->getController()->getRoute('formReload', $this->getModel());
         $fields['city_id']['options']['collection']['method'] = 'getSelectOption';
         $fields['city_id']['options']['collection']['filters'][] = [

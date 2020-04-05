@@ -34,11 +34,7 @@ class Controller extends AbstractCrudController
      */
     public function showMap(CrudRequest $request, CrudableModel $model)//: View
     {
-        // $this->authorize('sendTestNotification', $model);
-
-        $this->setModel($model);
-
-        $model_viewer_component = $this->getModelViewerComponent($this->getModel());
+        $model_viewer_component = $this->getModelViewerComponent($model);
 
         if ($request->ajax()) {
             return $this->response
@@ -57,7 +53,7 @@ class Controller extends AbstractCrudController
     protected function successResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form, string $action)
     {
         if ($request->ajax()) {
-            $model_viewer_component = $model->getModelViewerComponent();
+            $model_viewer_component = $this->getModelViewerComponent($model);
 
             event(new AddressChanged($model, $this->response));
 
