@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 // rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
-// rocXolid repositorie contracts
-use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
 // rocXolid forms
 use Softworx\RocXolid\Forms\AbstractCrudForm;
 // rocXolid model contracts
@@ -96,7 +94,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, Crudable $model, string $action)
+    protected function successResponse(CrudRequest $request, Crudable $model, AbstractCrudForm $form, string $action)
     {
         if ($request->ajax()) {
             $parent_method = sprintf('onImage%s', Str::studly($action));
@@ -107,7 +105,7 @@ class Controller extends AbstractCrudController
 
             return $this->replaceImagesResponse($model, $action, ($action === 'update'));
         } else {
-            return parent::successResponse($request, $repository, $form, $model, $action);
+            return parent::successResponse($request, $model, $form, $action);
         }
     }
 
