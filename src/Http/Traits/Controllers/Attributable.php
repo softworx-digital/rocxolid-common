@@ -87,7 +87,7 @@ trait Attributable
         }
     }
 
-    protected function successAttributes(CrudRequest $request, Repository $repository, AbstractCrudForm $form, string $action)
+    protected function successAttributes(CrudRequest $request, AbstractCrudForm $form, string $action)
     {
         $attribute_model_controller = App::make(AttributeModelController::class);
         $attribute_model_repository = $attribute_model_controller->getRepository($attribute_model_controller->getRepositoryParam($request));

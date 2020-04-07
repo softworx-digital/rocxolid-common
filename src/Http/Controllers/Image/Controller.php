@@ -5,6 +5,7 @@ namespace Softworx\RocXolid\Common\Http\Controllers\Image;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 // relations
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 // rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
@@ -95,24 +96,10 @@ class Controller extends AbstractCrudController
      */
     public function onUploadComplete(CrudRequest $request)
     {
-        $param = $request->input('_param');
-        // @todo: "hotfixed" - image parent handles what should happen
-        $data = collect($request->input('_data'));
-        $parent_method = sprintf('onImage%s', Str::studly($param));
-
-        $model = $this->getRepository()->getModel();
-        $model = $this->getRepository()
-            ->fillModel($model, $data)
-            ->onCreateBeforeSave($data); // to set model attribute
-
-        if (method_exists($model->parent->getCrudController(), $parent_method)) {
-            return $model->parent->getCrudController()->{$parent_method}($request, $model->parent);
-        }
-
         $model_viewer_component = $this->getModelViewerComponent($this->getRepository()->getModel());
 
         return $this->response
-            ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $param)))
+            ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $request->input('_param'))))
             ->get();
     }
 
@@ -122,7 +109,7 @@ class Controller extends AbstractCrudController
     protected function onModelUpdated(CrudRequest $request, Crudable $model, AbstractCrudForm $form): CrudController
     {
         // @todo: "hotfixed"
-        if ($model->isParentPrimary() && $model->parent->{$model->model_attribute}() instanceof MorphMany) {
+        if ($model->isParentPrimary() && !$model->isParentSingle()) {
             $model->parent->{$model->model_attribute}->except($model->getKey())->each(function ($sibling) {
                 $sibling->update([
                     'is_model_primary' => 0,
@@ -151,7 +138,7 @@ class Controller extends AbstractCrudController
      */
     protected function destroyAjaxResponse(CrudRequest $request, Crudable $model)
     {
-        $model_viewer_component = $this->getModelViewerComponent($this->getRepository()->getModel());
+        $model_viewer_component = $this->getModelViewerComponent($model);
 
         return $this
             ->replaceImageContainerResponse($request, $model, 'destroy-confirm')
@@ -179,9 +166,9 @@ class Controller extends AbstractCrudController
         $model_viewer_component = $model->getModelViewerComponent();
 
         switch (true) {
-            case ($model->parent->{$model->model_attribute}() instanceof MorphMany):
+            case !$model->isParentSingle():
                 return $this->replaceMorphManyResponse($request, $model, $model_viewer_component, $param);
-            case ($model->parent->{$model->model_attribute}()->exists()):
+            case $model->exists() && !$model->trashed():
                 return $this->replaceMorphOneResponse($request, $model, $model_viewer_component, $param);
             default:
                 return $this->replaceMorphOneByPlaceholderResponse($request, $model, $model_viewer_component, $param);
@@ -216,9 +203,10 @@ class Controller extends AbstractCrudController
     private function replaceMorphOneResponse(CrudRequest $request, Crudable $model, ImageViewer $model_viewer_component, string $param)
     {
         return $this->response
+            ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $param)))
             ->replace(
-                    $model_viewer_component->getDomId($model->model_attribute),
-                    $model_viewer_component->fetch('related.show', $this->getTemplateRelationAssignment($model))
+                $model_viewer_component->getDomId($model->model_attribute),
+                $model_viewer_component->fetch('related.show', $this->getTemplateRelationAssignment($model))
             );
     }
 

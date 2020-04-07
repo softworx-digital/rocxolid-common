@@ -36,11 +36,6 @@ class Image extends File implements Resizable
         return User::class;
     }
 
-    public function isParentPrimary()
-    {
-        return $this->is_model_primary;
-    }
-
     public function onCreateBeforeSave(Collection $data): Crudable
     {
         $this->model_attribute = $data->get('model_attribute');
