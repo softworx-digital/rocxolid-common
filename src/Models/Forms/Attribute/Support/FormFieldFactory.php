@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 // rocXolid support
-use Softworx\RocXolid\Forms\Support\FormFieldFactory as RocXolidFormFieldFactory;
+use Softworx\RocXolid\Forms\Builders\FormFieldFactory as RocXolidFormFieldFactory;
 // rocXolid field types
 use Softworx\RocXolid\Forms\Fields\Type\BooleanRadio;
 use Softworx\RocXolid\Forms\Fields\Type\Button;

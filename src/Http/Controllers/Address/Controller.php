@@ -50,28 +50,24 @@ class Controller extends AbstractCrudController
         }
     }
 
-    protected function successResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form, string $action)
+    protected function successAjaxResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form)
     {
-        if ($request->ajax()) {
-            $model_viewer_component = $this->getModelViewerComponent($model);
+        $model_viewer_component = $this->getModelViewerComponent($model);
 
-            event(new AddressChanged($model, $this->response));
+        event(new AddressChanged($model, $this->response)); // @todo: this doesn't belong here
 
-            // @todo: "hotfixed", extremely ugly
-            if ($request->has('_section') && ($request->input('_section') === 'location')) {
-                $model_viewer_component->setViewPackage('app');
-            }
-
-            return $this->response
-                ->notifySuccess($model_viewer_component->translate('text.updated'))
-                ->replace($model_viewer_component->getDomId(), $model_viewer_component->fetch('related.show', [
-                    'attribute' => 'address',
-                    'relation' => 'parent'
-                ])) // @todo: hardcoded, ugly
-                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
-                ->get();
-        } else {
-            return parent::successResponse($request, $model, $form, $action);
+        // @todo: "hotfixed", extremely ugly
+        if ($request->has('_section') && ($request->input('_section') === 'location')) {
+            $model_viewer_component->setViewPackage('app');
         }
+
+        return $this->response
+            ->notifySuccess($model_viewer_component->translate('text.updated'))
+            ->replace($model_viewer_component->getDomId(), $model_viewer_component->fetch('related.show', [
+                'attribute' => 'address',
+                'relation' => 'parent'
+            ])) // @todo: hardcoded, ugly
+            ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $form->getParam())))
+            ->get();
     }
 }

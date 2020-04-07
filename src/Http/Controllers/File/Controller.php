@@ -54,7 +54,7 @@ class Controller extends AbstractCrudController
 
             $model_viewer_component = $this->getModelViewerComponent($this->getModel());
 
-            $parent_controller = App::make($this->getModel()->parent->getControllerClass());
+            $parent_controller = $this->getModel()->parent->getCrudController();
             $parent_controller->setModel($this->getModel()->parent);
             $parent_form = $parent_controller
                 ->getRepository()

@@ -2,9 +2,13 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
 // rocXolid common model traits
@@ -16,6 +20,13 @@ use Softworx\RocXolid\Common\Models\Traits\HasCity;
 // rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\User;
 
+/**
+ * Address model.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ */
 class Address extends AbstractCrudModel
 {
     use SoftDeletes;
@@ -25,8 +36,9 @@ class Address extends AbstractCrudModel
     use HasDistrict;
     use HasCity;
 
-    protected static $can_be_deleted = false;
-
+    /**
+     * {@inheritDoc}
+     */
     protected $fillable = [
         'name',
         'description',
@@ -44,6 +56,9 @@ class Address extends AbstractCrudModel
         'longitude',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $relationships = [
         'city',
         'country',
@@ -52,6 +67,9 @@ class Address extends AbstractCrudModel
         'cadastralArea',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $system = [
         'id',
         'model_type',
@@ -65,21 +83,36 @@ class Address extends AbstractCrudModel
     ];
 
     protected $decimals = [
-        // 'latitude',
-        // 'longitude',
+        // 'latitude', // not truly decimal formattable
+        // 'longitude', // not truly decimal formattable
     ];
 
+    /**
+     * Relation to parent.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function parent(): MorphTo
     {
         return $this->morphTo('model');
     }
 
-    public function resolvePolymorphUserModel()
+    /**
+     * {@inheritDoc}
+     */
+    public function resolvePolymorphUserModel(): string
     {
         return User::class;
     }
 
-    public function getAddressLabel($html = true, $with_name = false)
+    /**
+     * Format to a address label.
+     *
+     * @param boolean $html
+     * @param boolean $with_name
+     * @return string
+     */
+    public function getAddressLabel(bool $html = true, bool $with_name = false): string
     {
         $label = sprintf(
             "%s %s\n%s %s\n%s%s%s",
@@ -95,7 +128,10 @@ class Address extends AbstractCrudModel
         return $html ? nl2br($label) : $label;
     }
 
-    public function fillCustom($data, $action = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function fillCustom(Collection $data): Crudable
     {
         if (!is_null($this->latitude)) {
             $this->latitude = str_replace(',', '.', $this->latitude);
@@ -105,6 +141,14 @@ class Address extends AbstractCrudModel
             $this->longitude = str_replace(',', '.', $this->longitude);
         }
 
-        return parent::fillCustom($data, $action);
+        return parent::fillCustom($data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function canBeDeleted(Request $request): bool
+    {
+        return false;
     }
 }

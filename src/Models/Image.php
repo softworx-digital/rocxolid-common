@@ -4,6 +4,7 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Support\Collection;
 // rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
 use Softworx\RocXolid\Models\Contracts\Resizable;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\File;
@@ -35,13 +36,16 @@ class Image extends File implements Resizable
         return User::class;
     }
 
-    public function fillCustom($data, $action = null)
+    public function isParentPrimary()
     {
-        if (is_null($this->model_attribute)) {
-            $this->model_attribute = $data['model_attribute'];
-        }
+        return $this->is_model_primary;
+    }
 
-        return parent::fillCustom($data, $action);
+    public function onCreateBeforeSave(Collection $data): Crudable
+    {
+        $this->model_attribute = $data->get('model_attribute');
+
+        return parent::onCreateBeforeSave($data);
     }
 
     public function getMimeType()

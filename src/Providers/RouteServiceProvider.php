@@ -102,6 +102,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
             CrudRouterService::create('attribute', \Attribute\Controller::class);
             CrudRouterService::create('attribute-value', \AttributeValue\Controller::class);
 
+            /*
             $router->group([
                 'namespace' => 'File',
                 'prefix' => 'file',
@@ -110,6 +111,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 $router->get('/get/{file}', 'Controller@get')->name('get');
                 $router->post('/upload-complete', 'Controller@onUploadComplete')->name('upload-complete');
             });
+            */
 
             $router->group([
                 'namespace' => 'Image',

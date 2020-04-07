@@ -99,10 +99,10 @@ class Create extends RocXolidAbstractCrudForm
         $fake = $this->getModel();
         $model_attribute = $this->getInputFieldValue('model_attribute');
 
-        $fake->resolvePolymorphism([
+        $fake->resolvePolymorphism(collect([
             'model_type' => $this->getInputFieldValue('model_type'),
             'model_id' => $this->getInputFieldValue('model_id'),
-        ]);
+        ]));
 
         if ($fake->parent->{$model_attribute}() instanceof MorphOne) {
 
