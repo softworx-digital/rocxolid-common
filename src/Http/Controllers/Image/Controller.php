@@ -3,11 +3,9 @@
 namespace Softworx\RocXolid\Common\Http\Controllers\Image;
 
 use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 // relations
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 // rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid controller contracts
@@ -16,8 +14,6 @@ use Softworx\RocXolid\Http\Controllers\Contracts\Crudable as CrudController;
 use Softworx\RocXolid\Forms\AbstractCrudForm;
 // rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts\Crudable;
-// rocXolid components
-use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common models
@@ -28,9 +24,13 @@ use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
 use Softworx\RocXolid\Common\Services\Contracts\ImageUploadService;
 
 /**
+ * Image controller.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ * @todo: refactor together with image service
  */
-// @todo: refactor
 class Controller extends AbstractCrudController
 {
     protected static $model_viewer_type = ImageViewer::class;
@@ -95,10 +95,24 @@ class Controller extends AbstractCrudController
      */
     public function onUploadComplete(CrudRequest $request)
     {
+        $param = $request->input('_param');
+        // @todo: "hotfixed" - image parent handles what should happen
+        $data = collect($request->input('_data'));
+        $parent_method = sprintf('onImage%s', Str::studly($param));
+
+        $model = $this->getRepository()->getModel();
+        $model = $this->getRepository()
+            ->fillModel($model, $data)
+            ->onCreateBeforeSave($data); // to set model attribute
+
+        if (method_exists($model->parent->getCrudController(), $parent_method)) {
+            return $model->parent->getCrudController()->{$parent_method}($request, $model->parent);
+        }
+
         $model_viewer_component = $this->getModelViewerComponent($this->getRepository()->getModel());
 
         return $this->response
-            ->modalClose($model_viewer_component->getDomId('modal-create'))
+            ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $param)))
             ->get();
     }
 
@@ -124,13 +138,6 @@ class Controller extends AbstractCrudController
      */
     protected function successAjaxResponse(CrudRequest $request, Crudable $model, AbstractCrudForm $form)
     {
-        // @todo: "hotfixed"
-        $parent_method = sprintf('onImage%s', Str::studly($form->getParam()));
-
-        if (method_exists($model->parent->getCrudController(), $parent_method)) {
-            return $model->parent->getCrudController()->{$parent_method}($request, $model->parent);
-        }
-
         $model_viewer_component = $this->getModelViewerComponent($model);
 
         return $this

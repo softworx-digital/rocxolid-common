@@ -26,7 +26,7 @@ use Softworx\RocXolid\Common\Services\FileUploadService;
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
  * @version 1.0.0
- * @todo: refactor
+ * @todo: refactor together with image controller
  */
 class ImageUploadService extends FileUploadService implements ImageUploadServiceContract
 {
