@@ -96,7 +96,7 @@ class Controller extends AbstractCrudController
      */
     public function onUploadComplete(CrudRequest $request)
     {
-        $model_viewer_component = $this->getModelViewerComponent($this->getRepository()->getModel());
+        $model_viewer_component = $this->getModelViewerComponent();
 
         return $this->response
             ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $request->input('_param'))))

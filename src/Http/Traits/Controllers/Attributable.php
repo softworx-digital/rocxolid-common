@@ -21,6 +21,7 @@ trait Attributable
 {
     public function modelAttributes(CrudRequest $request, $id)
     {
+dd(__METHOD__, '@todo');
         $repository = $this->getRepository($this->getRepositoryParam($request));
 
         $this->setModel($repository->findOrFail($id));
@@ -62,6 +63,7 @@ trait Attributable
 
     public function modelAttributesStore(CrudRequest $request, $id)
     {
+dd(__METHOD__, '@todo');
         $repository = $this->getRepository($this->getRepositoryParam($request));
 
         $this->setModel($repository->findOrFail($id));
@@ -89,6 +91,7 @@ trait Attributable
 
     protected function successAttributes(CrudRequest $request, AbstractCrudForm $form, string $action)
     {
+dd(__METHOD__, '@todo');
         $attribute_model_controller = App::make(AttributeModelController::class);
         $attribute_model_repository = $attribute_model_controller->getRepository($attribute_model_controller->getRepositoryParam($request));
 

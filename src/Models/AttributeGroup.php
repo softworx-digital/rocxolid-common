@@ -50,7 +50,7 @@ class AttributeGroup extends AbstractCrudModel
 
     public function getAttributableModels()
     {
-        $models = new Collection();
+        $models = collect();
 
         foreach ($this->attributable as $class) {
             //$models->put(Str::kebab((new \ReflectionClass($class))->getShortName()), $class);

@@ -2,9 +2,8 @@
 
 namespace Softworx\RocXolid\Common;
 
-use View;
-use Illuminate\Routing\Router;
 use Illuminate\Foundation\AliasLoader;
+//
 use Softworx\RocXolid\AbstractServiceProvider as RocXolidAbstractServiceProvider;
 
 class ServiceProvider extends RocXolidAbstractServiceProvider

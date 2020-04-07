@@ -27,6 +27,7 @@ class Controller extends AbstractCrudController
 
     public function update(CrudRequest $request, $id)//: Response
     {
+dd(__METHOD__, '@todo');
         $assignments = [];
         $repository = $this->getRepository($this->getRepositoryParam($request));
 
@@ -52,7 +53,7 @@ class Controller extends AbstractCrudController
 
             $repository->updateModel($form->getFormFieldsValues()->toArray(), $this->getModel(), 'update');
 
-            $model_viewer_component = $this->getModelViewerComponent($this->getModel());
+            $model_viewer_component = $this->getModelViewerComponent();
 
             $parent_controller = $this->getModel()->parent->getCrudController();
             $parent_controller->setModel($this->getModel()->parent);
