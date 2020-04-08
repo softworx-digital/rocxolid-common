@@ -52,7 +52,7 @@ class Index extends AbstractCrudTable
                     ],
                 ],
             ],
-        ],
+        ],/*
         'userGroup' => [
             'type' => ModelRelation::class,
             'options' => [
@@ -70,7 +70,7 @@ class Index extends AbstractCrudTable
                     ],
                 ],
             ],
-        ],
+        ],*/
         'frontpageSettings' => [
             'type' => ModelRelation::class,
             'options' => [
