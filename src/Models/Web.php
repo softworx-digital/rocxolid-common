@@ -2,7 +2,10 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
 // rocXolid user management models
@@ -42,8 +45,9 @@ class Web extends AbstractCrudModel
         'defaultLocalization'
     ];
 
-    public function afterSave($data, $action = null)
+    public function onCreateBeforeSave(Collection $data): Crudable
     {
+// dd(__METHOD__, '@todo');
         $this
             ->createIfNeededUserGroup()
             ->createIfNeededFrontpageSettings();
@@ -54,12 +58,11 @@ class Web extends AbstractCrudModel
     protected function createIfNeededUserGroup()
     {
         if (!$this->userGroup()->exists()) {
-            $group = UserGroup::create([
+            $group = $this->userGroup()->getRelated()->create([
                 'name' => $this->getTitle(),
-            ]);
+            ]);//->associate($this); //->save()
 
             $this->userGroup()->associate($group);
-            $this->save();
         }
 
         return $this;
@@ -68,14 +71,9 @@ class Web extends AbstractCrudModel
     protected function createIfNeededFrontpageSettings()
     {
         if (!$this->frontpageSettings()->exists()) {
-            $frontpage_settings = WebFrontpageSettings::make([
+            $this->frontpageSettings()->create([
                 'name' => $this->getTitle(),
-                'template_set' => 'default',
-                //'livechatoo_language' => $this->language->iso_639_1,
             ]);
-
-            $frontpage_settings->web()->associate($this);
-            $frontpage_settings->save();
         }
 
         return $this;
