@@ -10,8 +10,4 @@ use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as RocXolidCrudMod
 class CrudModelViewer extends RocXolidCrudModelViewer
 {
     protected $view_package = 'rocXolid:common';
-
-    protected $view_directory = '';
-
-    protected $translation_package = 'rocXolid:common';
 }

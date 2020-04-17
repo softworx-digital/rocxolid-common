@@ -7,6 +7,4 @@ use Softworx\RocXolid\Components\AbstractActiveComponent as rocXolidAbstractActi
 abstract class AbstractActiveComponent extends RocXolidAbstractActiveComponent
 {
     protected $view_package = 'rocXolid:common';
-
-    protected $view_directory = '';
 }

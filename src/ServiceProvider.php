@@ -3,9 +3,16 @@
 namespace Softworx\RocXolid\Common;
 
 use Illuminate\Foundation\AliasLoader;
-//
+// rocXolid service providers
 use Softworx\RocXolid\AbstractServiceProvider as RocXolidAbstractServiceProvider;
 
+/**
+ * rocXolid Common package primary service provider.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ */
 class ServiceProvider extends RocXolidAbstractServiceProvider
 {
     /**
@@ -105,7 +112,6 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
      */
     private function bindAliases(AliasLoader $loader): RocXolidAbstractServiceProvider
     {
-        // ...
         return $this;
     }
 }
