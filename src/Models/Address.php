@@ -108,8 +108,8 @@ class Address extends AbstractCrudModel
     /**
      * Format to a address label.
      *
-     * @param boolean $html
-     * @param boolean $with_name
+     * @param bool $html
+     * @param bool $with_name
      * @return string
      */
     public function getAddressLabel(bool $html = true, bool $with_name = false): string

@@ -6,4 +6,5 @@ use Softworx\RocXolid\Common\Components\ModelViewers\CrudModelViewer;
 
 class ImageViewer extends CrudModelViewer
 {
+
 }
