@@ -70,10 +70,21 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
      */
     public function setUploadData(UploadedFile $uploaded_file, string $storage_path): Uploadable
     {
-        $this->storage_path = $storage_path;
+        $this->setStorageData($storage_path);
+
         $this->original_filename = $uploaded_file->getClientOriginalName();
         $this->mime_type = $uploaded_file->getClientMimeType();
         $this->extension = $uploaded_file->getClientOriginalExtension();
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStorageData(string $storage_path): Uploadable
+    {
+        $this->storage_path = $storage_path;
 
         return $this;
     }
