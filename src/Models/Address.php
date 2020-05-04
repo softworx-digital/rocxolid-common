@@ -112,16 +112,34 @@ class Address extends AbstractCrudModel
      * @param bool $with_name
      * @return string
      */
-    public function getAddressLabel(bool $html = true, bool $with_name = false): string
+    public function getAddressLabel(bool $html = true, bool $inline = false): string
     {
+        $separator = $inline ? ', ' : "\n";
+
+        if (filled($this->street_name) && filled($this->street_no)) {
+            $identification = sprintf('%s %s', $this->street_name, $this->street_no);
+        } elseif ($this->city()->exists() && method_exists($this->parent, 'getAddressCityIdentifier')) {
+            $identification = sprintf('%s %s', $this->city->getTitle(), $this->parent->getAddressCityIdentifier());
+        } elseif (method_exists($this->parent, 'getAddressIdentifier')) {
+            $identification = $this->parent->getAddressIdentifier();
+        } else {
+            $identification = null;
+        }
+
+        if (method_exists($this->parent, 'getAddressQualifier')) {
+            $qualification = $this->parent->getAddressQualifier();
+        } else {
+            $qualification = null;
+        }
+
         $label = sprintf(
-            "%s %s\n%s %s\n%s%s%s",
-            $this->street_name,
-            $this->street_no,
+            "%s%s%s %s{$separator}%s%s%s",
+            $identification ? $identification . $separator : null,
+            $qualification ? $qualification . $separator : null,
             $this->zip,
             $this->city()->exists() ? $this->city->getTitle() : null,
-            $this->region()->exists() ? $this->region->getTitle() . "\n" : null,
-            $this->district()->exists() ? $this->district->getTitle() . "\n" : null,
+            $this->region()->exists() ? $this->region->getTitle() . $separator : null,
+            $this->district()->exists() ? $this->district->getTitle() . $separator : null,
             $this->country()->exists() ? $this->country->getTitle() : null
         );
 
