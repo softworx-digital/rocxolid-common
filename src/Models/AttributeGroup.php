@@ -2,8 +2,6 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\Common\Models\Attribute;
@@ -53,8 +51,8 @@ class AttributeGroup extends AbstractCrudModel
         $models = collect();
 
         foreach ($this->attributable as $class) {
-            //$models->put(Str::kebab((new \ReflectionClass($class))->getShortName()), $class);
-            //$short_name = (new \ReflectionClass($class))->getShortName();
+            // $models->put(app($class)->getModelName(), $class);
+            // $short_name = (new \ReflectionClass($class))->getShortName();
             $models->put($class, $class::make()->getModelViewerComponent()->translate('model.title.singular'));
         }
 
