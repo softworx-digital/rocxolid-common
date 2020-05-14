@@ -147,6 +147,16 @@ class Address extends AbstractCrudModel
     }
 
     /**
+     * Format to a inline address label.
+     *
+     * @return string
+     */
+    public function getInlineAddressLabel(): string
+    {
+        return $this->getAddressLabel(false, true);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function fillCustom(Collection $data): Crudable
