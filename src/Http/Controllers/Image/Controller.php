@@ -2,11 +2,7 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\Image;
 
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-// relations
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 // rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid controller contracts
@@ -17,8 +13,6 @@ use Softworx\RocXolid\Forms\AbstractCrudForm;
 use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
-// rocXolid common models
-use Softworx\RocXolid\Common\Models\Image;
 // rocXolid common components
 use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
 // rocXolid common service contracts
