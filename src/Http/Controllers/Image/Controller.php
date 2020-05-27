@@ -28,6 +28,14 @@ use Softworx\RocXolid\Common\Services\Contracts\ImageUploadService;
  */
 class Controller extends AbstractCrudController
 {
+    /**
+     * {@inheritDoc}
+     */
+    protected $use_ajax_destroy_confirmation = true;
+
+    /**
+     * {@inheritDoc}
+     */
     protected static $model_viewer_type = ImageViewer::class;
 
     /**
@@ -136,7 +144,7 @@ class Controller extends AbstractCrudController
 
         return $this
             ->replaceImageContainerResponse($request, $model, 'destroy-confirm')
-            ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm'))
+            ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm', $model->getKey()))
             ->get();
     }
 
