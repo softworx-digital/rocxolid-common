@@ -2,13 +2,16 @@
 <div id="{{ $component->getDomId($related->getKey(), $attribute) }}" class="panel panel-default">
     <div class="panel-heading">
         <div class="row">
-            <div class="col-xs-12">
-                <div class="btn-group btn-group-sm center-block hidden-xs" role="group">
+            <div class="col-sm-8 col-xs-10">
+                <h4 class="text-overflow margin-top-7 margin-bottom-7">{{ $component->getModel()->parent->getModelViewerComponent()->translate(sprintf('field.%s', $attribute)) }}</h4>
+            </div>
+            <div class="col-sm-4 col-xs-2">
+                <div class="btn-group btn-group-sm pull-right hidden-xs" role="group">
                 @can ('create', [ $related, $attribute ])
                     <a
                         class="btn btn-default"
                         data-ajax-url="{{ $component->getModel()->getControllerRoute('create', $component->getModel()->getRouteRelationParam($attribute, $relation, $related)) }}">
-                        <i class="fa fa-upload margin-right-5"></i>{{ $component->translate('button.upload-image') }}
+                        <i class="fa fa-upload margin-right-5"></i>{{ $upload_button_label ?? $component->translate('button.upload') }}
                     </a>
                 @endcan
                 </div>
@@ -18,16 +21,13 @@
                     <ul class="dropdown-menu">
                     @can ('create', [ $related, $attribute ])
                         <li><a data-ajax-url="{{ $component->getModel()->getControllerRoute('create', $component->getModel()->getRouteRelationParam($attribute, $relation, $related)) }}">
-                            <i class="fa fa-upload margin-right-5"></i>{{ $component->translate('button.upload-image') }}
+                            <i class="fa fa-upload margin-right-5"></i>{{ $upload_button_label ?? $component->translate('button.upload') }}
                         </a></li>
                     @endcan
                     </ul>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="panel-body text-center text-primary">
-        {{ Html::image(sprintf('vendor/softworx/rocXolid/images/%s.svg', $placeholder ?? $component->getModel()->{$relation}()->getRelated()->getImagePlaceholder() ?? 'placeholder'), $attribute, [ 'style' => 'max-width: 100%; padding: 3em;' ]) }}
     </div>
 </div>
 @endcan

@@ -95,8 +95,13 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
     private function bindContracts(): RocXolidAbstractServiceProvider
     {
         $this->app->singleton(
-            Services\Contracts\ImageUploadService::class,
-            Services\ImageUploadService::class
+            Services\Contracts\FileUploadService::class,
+            Services\FileUploadService::class
+        );
+
+        $this->app->singleton(
+            Services\Contracts\ImageProcessService::class,
+            Services\ImageProcessService::class
         );
 
         return $this;

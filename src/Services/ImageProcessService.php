@@ -2,52 +2,37 @@
 
 namespace Softworx\RocXolid\Common\Services;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-// relations
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 // third party
 use Intervention\Image\Exception\NotReadableException;
-// rocXolid utils
-use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid model contracts
-use Softworx\RocXolid\Models\Contracts\Uploadable;
 use Softworx\RocXolid\Models\Contracts\Resizable;
 // rocXolid common service contracts
-use Softworx\RocXolid\Common\Services\Contracts\ImageUploadService as ImageUploadServiceContract;
-// rocXolid common services
-use Softworx\RocXolid\Common\Services\FileUploadService;
+use Softworx\RocXolid\Common\Services\Contracts\ImageProcessService as ImageProcessServiceContract;
 
 /**
- * Service to handle image uploads.
+ * Service to handle image post .
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
  * @version 1.0.0
- * @todo: refactor together with image controller
  */
-class ImageUploadService extends FileUploadService implements ImageUploadServiceContract
+class ImageProcessService implements ImageProcessServiceContract
 {
     const STORAGE_SUBDIR = 'images';
 
     /**
-     * Process upload request.
-     * The model serves as a fake filled wtih submitted data to be cloned.
-     *
-     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
-     * @param \Softworx\RocXolid\Models\Contracts\Uploadable $model
-     * @return \Softworx\RocXolid\Models\Contracts\Uploadable
-     * @todo: make this FileService::handleUpload() override and process further execution somewhere else
+     * {@inheritDoc}
      */
-    public function handleFileinputUpload(CrudRequest $request, Uploadable $model): Uploadable
+    /*
+    public function handleFileUpload(CrudRequest $request, Uploadable $model): Uploadable
     {
         collect($request->file())->each(function ($data) use (&$model) {
             collect($data)->each(function ($uploaded_file, $field_name) use (&$model) {
                 $image = $model->replicate();
 
-                $this->handleUpload($uploaded_file, $image, function($image) use (&$model) {
+                $this->handleUploadedFile($uploaded_file, $image, function($image) use (&$model) {
                     $image = $this->handleResize($image);
 
                     if ($image->parent->{$image->model_attribute}() instanceof MorphOne) {
@@ -69,6 +54,7 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
 
         return $model;
     }
+    */
 
     /**
      * {@inheritDoc}
@@ -76,7 +62,7 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
     public function handleResize(Resizable $model): Resizable
     {
         try {
-            $this->saveResized($model);
+            $this->resize($model);
         } catch (NotReadableException $e) {
             $this->onFileNotReadable($model);
         }
@@ -85,27 +71,28 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
     }
 
     /**
-     * Process model image dimensions definition, resize the physical image according to the settings,
-     * save to the file in appropriate subfolder.
+     * Process model image dimensions definition, resize the physical image according to the settings.
+     * Subsequently store the processed resized image in appropriate subfolder.
      *
      * @param \Softworx\RocXolid\Models\Contracts\Resizable $model
-     * @return \Softworx\RocXolid\Common\Services\Contracts\ImageUploadService
+     * @return \Softworx\RocXolid\Common\Services\Contracts\ImageProcessService
+     * @throws \Intervention\Image\Exception\NotReadableException
+     * @todo: refactor?
      */
-    protected function saveResized(Resizable $model): ImageUploadServiceContract
+    protected function resize(Resizable $model): ImageProcessServiceContract
     {
-        $source_path = $model->getStoragePath();
+        $physical = $model->getPhysicalImage();
 
-        $intervention_image = \InterventionImage::make($model->getStoragePath());
         $sizes = [
             'original' => [
-                'width' => $intervention_image->width(),
-                'height' => $intervention_image->height(),
-                'ratio' => $intervention_image->width() / $intervention_image->height(),
+                'width' => $physical->width(),
+                'height' => $physical->height(),
+                'ratio' => $physical->width() / $physical->height(),
             ]
         ];
 
         $model->getDimensions()->each(function ($options, $directory) use ($model, $sizes) {
-            $intervention_image = \InterventionImage::make($model->getStoragePath());
+            $physical = $model->getPhysicalImage();
             $target_directory = dirname($model->getStoragePath($directory));
 
             if (!File::exists($target_directory) && !File::makeDirectory($target_directory)) {
@@ -115,9 +102,9 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
             $w = $options['width'] ?? round($options['height'] / $sizes['original']['ratio']);
             $h = $options['height'] ?? round($options['width'] / $sizes['original']['ratio']);
 
-            collect($options['method'])->each(function ($method) use (&$intervention_image, $options, $w, $h) {
+            collect($options['method'])->each(function ($method) use (&$physical, $options, $w, $h) {
                 if (in_array($method, [ 'resize', 'fit' ])) {
-                    $intervention_image->$method($w, $h, function ($constraint) use ($options) {
+                    $physical->$method($w, $h, function ($constraint) use ($options) {
                         if (isset($options['constraints'])) {
                             foreach ($options['constraints'] as $constraint_method) {
                                 $constraint->$constraint_method();
@@ -125,11 +112,11 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
                         }
                     });
                 } else {
-                    $intervention_image->$method($w, $h);
+                    $physical->$method($w, $h);
                 }
             });
 
-            $intervention_image->save(sprintf('%s/%s', $target_directory, basename($model->getStoragePath())));
+            $physical->save(sprintf('%s/%s', $target_directory, basename($model->getStoragePath())));
         });
 
         $model->setResizeData(collect($sizes));
@@ -142,9 +129,10 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
      * Copy the original file to subfolders dedicated for each size.
      *
      * @param \Softworx\RocXolid\Models\Contracts\Resizable $model
-     * @return \Softworx\RocXolid\Common\Services\Contracts\ImageUploadService
+     * @return \Softworx\RocXolid\Common\Services\Contracts\ImageProcessService
+     * @throws \RuntimeException
      */
-    protected function onFileNotReadable(Resizable $model): ImageUploadServiceContract
+    protected function onFileNotReadable(Resizable $model): ImageProcessServiceContract
     {
         $sizes = [
             'original' => [
@@ -166,33 +154,5 @@ class ImageUploadService extends FileUploadService implements ImageUploadService
         $model->setResizeData(collect($sizes));
 
         return $this;
-    }
-
-    /**
-     * Handle MorphOne image relation.
-     *
-     * @param \Softworx\RocXolid\Models\Contracts\Uploadable $model
-     * @return \Softworx\RocXolid\Models\Contracts\Uploadable
-     */
-    protected function onMorphOneImageUploaded(Uploadable $model): Uploadable
-    {
-        if ($model->parent->{$model->model_attribute}()->exists()) {
-            $model->parent->{$model->model_attribute}->delete();
-        }
-
-        return $model;
-    }
-
-    /**
-     * Handle MorphMany image relation.
-     *
-     * @param \Softworx\RocXolid\Models\Contracts\Uploadable $model
-     * @return \Softworx\RocXolid\Models\Contracts\Uploadable
-     */
-    protected function onMorphManyImageUploaded(Uploadable $model): Uploadable
-    {
-        $model->is_model_primary = ($model->parent->{$model->model_attribute}()->count() == 0);
-
-        return $model;
     }
 }

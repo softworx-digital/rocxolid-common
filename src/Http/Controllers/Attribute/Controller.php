@@ -2,7 +2,8 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\Attribute;
 
-// rocXolid utils
+use Illuminate\Http\Response;
+// rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
@@ -16,7 +17,11 @@ use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Models\Attribute;
 
 /**
- * @todo: docblock
+ * Attributes controller.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
  */
 class Controller extends AbstractCrudController
 {
@@ -40,8 +45,9 @@ class Controller extends AbstractCrudController
      *
      * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
      * @param \Softworx\RocXolid\Common\Models\Attribute $attribute
+     * @return array
      */
-    public function setValues(CrudRequest $request, Attribute $attribute)
+    public function setValues(CrudRequest $request, Attribute $attribute): array
     {
         $model_viewer_component = $this->getAttributeViewerComponent($attribute);
 
@@ -53,7 +59,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function successAjaxResponse(CrudRequest $request, CrudableModel $attribute, AbstractCrudForm $form)
+    protected function successAjaxResponse(CrudRequest $request, CrudableModel $attribute, AbstractCrudForm $form): array
     {
         $model_viewer_component = $this->getModelViewerComponent($attribute);
         $attribute_group_model_viewer_component = $attribute->attributeGroup->getModelViewerComponent();
@@ -69,7 +75,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function destroyAjaxResponse(CrudRequest $request, CrudableModel $attribute)
+    protected function destroyAjaxResponse(CrudRequest $request, CrudableModel $attribute): array
     {
         $model_viewer_component = $this->getModelViewerComponent($attribute);
         $attribute_group_model_viewer_component = $attribute->attributeGroup->getModelViewerComponent();
@@ -83,7 +89,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function destroyNonAjaxResponse(CrudRequest $request, CrudableModel $attribute)
+    protected function destroyNonAjaxResponse(CrudRequest $request, CrudableModel $attribute)//: Response
     {
         return redirect($attribute->attributeGroup->getControllerRoute());
     }

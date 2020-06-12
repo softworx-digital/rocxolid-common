@@ -2,10 +2,12 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
 // rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
 use Softworx\RocXolid\Models\Contracts\Uploadable;
 use Softworx\RocXolid\Models\Contracts\Downloadable;
 // rocXolid models
@@ -14,12 +16,21 @@ use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\Common\Services\FileUploadService;
 
 /**
- *
+ * @todo: cleanup
  */
 class File extends AbstractCrudModel implements Uploadable, Downloadable
 {
     use SoftDeletes;
 
+    /**
+     * Storage location subdirectory.
+     * @todo: method for this
+     */
+    const STORAGE_SUBDIR = 'files';
+
+    /**
+     * {@inheritDoc}
+     */
     protected $fillable = [
         'is_model_primary',
         'name',
@@ -27,12 +38,18 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
         'description',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $system = [
         'model_type',
         'model_id',
         'model_attribute',
         'model_attribute_position',
         'storage_path',
+        'original_filename',
+        'mime_type',
+        'extension',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -41,37 +58,60 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
         'deleted_by',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $relationships = [
     ];
 
+    /**
+     * Parent access relation.
+     */
     public function parent()
     {
         return $this->morphTo('model');
     }
 
     /**
-     * {@inheritDoc}
+     * Obtain MIME type for given file.
+     *
+     * @return string
      */
-    public function getTitle()
+    public function getMimeType(): string
     {
-        return !empty($this->name) ? $this->name : $this->attachment_filename;
+        return $this->mime_type;
+        // return mime_content_type($this->getStoragePath());
     }
 
     /**
      * {@inheritDoc}
+     */
+    public function getTitle(): string
+    {
+        return $this->name ?? $this->attachment_filename;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @todo: ugly
      */
     public function getRelativeUploadPath(): string
     {
-        return sprintf('%s/%s/%s', strtolower((new \ReflectionClass($this->parent))->getShortName()), $this->parent->getKey(), $this->model_attribute);
+        return sprintf(
+            '%s/%s/%s/%s',
+            static::STORAGE_SUBDIR,
+            strtolower((new \ReflectionClass($this->parent))->getShortName()),
+            $this->parent->getKey(),
+            $this->model_attribute
+        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setUploadData(UploadedFile $uploaded_file, string $storage_path): Uploadable
+    public function setUploadData(UploadedFile $uploaded_file): Uploadable
     {
-        $this->setStorageData($storage_path);
-
+        $this->attachment_filename = $uploaded_file->getClientOriginalName();
         $this->original_filename = $uploaded_file->getClientOriginalName();
         $this->mime_type = $uploaded_file->getClientMimeType();
         $this->extension = $uploaded_file->getClientOriginalExtension();
@@ -125,5 +165,16 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
     public function getDownloadUrl(): string
     {
         return route('download', $this->getKey());
+    }
+
+    /**
+     * {@inheritDoc}
+     * @todo: ugly
+     */
+    public function onCreateBeforeSave(Collection $data): Crudable
+    {
+        $this->model_attribute = $data->get('model_attribute');
+
+        return parent::onCreateBeforeSave($data);
     }
 }

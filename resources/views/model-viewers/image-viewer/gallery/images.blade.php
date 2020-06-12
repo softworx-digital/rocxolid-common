@@ -1,4 +1,4 @@
-<div id="{{ $component->getDomId($component->getModel()->$relation->getKey(), $attribute, 'images') }}" class="row">
+<div id="{{ $component->getDomId($component->getModel()->$relation->getKey(), $attribute, 'content') }}" class="row">
     <ul class="list-unstyled {{-- grid --}} sortable images col-xs-12 margin-0"
         data-update-url="{{ $component->getModel()->$relation->getControllerRoute('reorder', [ 'relation' => $attribute ]) }}"
         {{-- data-masonry='{ "itemSelector": "li", "columnWidth": 256 }' --}}>

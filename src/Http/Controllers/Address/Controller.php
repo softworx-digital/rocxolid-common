@@ -2,21 +2,36 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\Address;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+// rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
+// rocXolid forms
 use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
-use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
-use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
+// rocXolid controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
-use Softworx\RocXolid\Common\Models\Address;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
+// rocXolid common components
 use Softworx\RocXolid\Common\Components\ModelViewers\AddressViewer;
-// events
+// rocXolid common events
 use Softworx\RocXolid\Common\Events\Address\Changed as AddressChanged;
 
+/**
+ * Address controller.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ */
 class Controller extends AbstractCrudController
 {
+    /**
+     * {@inheritDoc}
+     */
     protected static $model_viewer_type = AddressViewer::class;
 
+    /**
+     * {@inheritDoc}
+     */
     protected $form_mapping = [
         'create' => 'create',
         'store' => 'create',
@@ -50,7 +65,10 @@ class Controller extends AbstractCrudController
         }
     }
 
-    protected function successAjaxResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form)
+    /**
+     * {@inheritDoc}
+     */
+    protected function successAjaxResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form): array
     {
         $model_viewer_component = $this->getModelViewerComponent($model);
 

@@ -2,7 +2,8 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\AttributeValue;
 
-// rocXolid utils
+use Illuminate\Http\Response;
+// rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
@@ -67,7 +68,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function successAjaxResponse(CrudRequest $request, CrudableModel $attribute_value, AbstractCrudForm $form)
+    protected function successAjaxResponse(CrudRequest $request, CrudableModel $attribute_value, AbstractCrudForm $form): array
     {
         $model_viewer_component = $this->getModelViewerComponent($attribute_value);
 
@@ -94,7 +95,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function destroyAjaxResponse(CrudRequest $request, CrudableModel $attribute_value)
+    protected function destroyAjaxResponse(CrudRequest $request, CrudableModel $attribute_value): array
     {
         $model_viewer_component = $this->getModelViewerComponent($attribute_value);
 
@@ -111,7 +112,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function destroyNonAjaxResponse(CrudRequest $request, CrudableModel $attribute)
+    protected function destroyNonAjaxResponse(CrudRequest $request, CrudableModel $attribute)//: Response
     {
         return redirect($attribute_value->attribute->getControllerRoute());
     }
