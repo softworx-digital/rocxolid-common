@@ -112,7 +112,7 @@ class Address extends AbstractCrudModel
      * @param bool $with_name
      * @return string
      */
-    public function getAddressLabel(bool $html = true, bool $inline = false): string
+    public function getAddressLabel(bool $html = true, bool $inline = false, bool $full = true): string
     {
         $separator = $inline ? ', ' : "\n";
 
@@ -132,16 +132,26 @@ class Address extends AbstractCrudModel
             $qualification = null;
         }
 
-        $label = sprintf(
-            "%s%s%s %s{$separator}%s%s%s",
-            $identification ? $identification . $separator : null,
-            $qualification ? $qualification . $separator : null,
-            $this->zip,
-            $this->city()->exists() ? $this->city->getTitle() : null,
-            $this->region()->exists() ? $this->region->getTitle() . $separator : null,
-            $this->district()->exists() ? $this->district->getTitle() . $separator : null,
-            $this->country()->exists() ? $this->country->getTitle() : null
-        );
+        if ($full) {
+            $label = sprintf(
+                "%s%s%s %s{$separator}%s%s%s",
+                $identification ? $identification . $separator : null,
+                $qualification ? $qualification . $separator : null,
+                $this->zip,
+                $this->city()->exists() ? $this->city->getTitle() : null,
+                $this->region()->exists() ? $this->region->getTitle() . $separator : null,
+                $this->district()->exists() ? $this->district->getTitle() . $separator : null,
+                $this->country()->exists() ? $this->country->getTitle() : null
+            );
+        } else {
+            $label = sprintf(
+                "%s%s%s %s",
+                $identification ? $identification . $separator : null,
+                $qualification ? $qualification . $separator : null,
+                $this->zip,
+                $this->city()->exists() ? $this->city->getTitle() : null
+            );
+        }
 
         return $html ? nl2br($label) : $label;
     }
@@ -154,6 +164,16 @@ class Address extends AbstractCrudModel
     public function getInlineAddressLabel(): string
     {
         return $this->getAddressLabel(false, true);
+    }
+
+    /**
+     * Format to a brief inline address label.
+     *
+     * @return string
+     */
+    public function getBriefInlineAddressLabel(): string
+    {
+        return $this->getAddressLabel(false, true, false);
     }
 
     /**
