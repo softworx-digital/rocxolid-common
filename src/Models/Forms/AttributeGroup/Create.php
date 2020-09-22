@@ -3,7 +3,7 @@
 namespace Softworx\RocXolid\Common\Models\Forms\AttributeGroup;
 
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
-// fields
+// rocXolid form fields
 use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
 
 class Create extends RocXolidAbstractCrudForm
