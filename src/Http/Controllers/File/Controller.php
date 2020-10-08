@@ -51,7 +51,24 @@ class Controller extends AbstractUploadController
     {
         try {
             return response($file->content(), 200)
-                ->header('Content-Type', $file->mime_type)
+                ->header('Content-Type', $file->mime_type);
+        } catch (FileNotFoundException $e) {
+            abort(404);
+        }
+    }
+
+    /**
+     * Force the file download prompt.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request Incoming request.
+     * @param \Softworx\RocXolid\Models\Contracts\Crudable $file
+     * @return void
+     */
+    public function download(CrudRequest $request, Crudable $file): Response
+    {
+        try {
+            return $this
+                ->get($request, $file)
                 ->header('Content-Disposition', sprintf('attachment; filename="%s"', $file->attachment_filename));
         } catch (FileNotFoundException $e) {
             abort(404);
@@ -64,7 +81,18 @@ class Controller extends AbstractUploadController
     protected function onUploadableStored(FileUploadService $file_upload_service, UploadedFile $uploaded_file, Uploadable $model): CrudController
     {
         $model->save();
-        // $model->parent->onImageUpload($model, $this);
+
+        $model->parent->onFileUpload($model, $this);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function onModelDestroyed(CrudRequest $request, Crudable $model): CrudController
+    {
+        $model->parent->onFileDestroyed($model, $this);
 
         return $this;
     }

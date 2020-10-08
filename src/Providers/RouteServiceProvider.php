@@ -109,6 +109,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 'as' => 'file.',
             ], function ($router) {
                 $router->get('/get/{file}', 'Controller@get')->name('get');
+                $router->get('/download/{file}', 'Controller@download')->name('download');
                 $router->post('/upload-complete', 'Controller@onUploadComplete')->name('upload-complete');
             });
 

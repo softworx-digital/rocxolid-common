@@ -84,6 +84,17 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
     }
 
     /**
+     * Check MIME type for given file.
+     *
+     * @param string $mime_type
+     * @return bool
+     */
+    public function isMimeType(string $mime_type): bool
+    {
+        return $this->mime_type === $mime_type;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getTitle(): string
@@ -132,7 +143,7 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
     /**
      * {@inheritDoc}
      */
-    public function getStorageRelativePath($param = null): string
+    public function getStorageRelativePath(?string $param = null): string
     {
         if (is_null($param)) {
             return $this->storage_path;
@@ -146,7 +157,7 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
     /**
      * {@inheritDoc}
      */
-    public function getStoragePath($param = null): string
+    public function getStoragePath(?string $param = null): string
     {
         return storage_path(sprintf('%s/%s', FileUploadService::STORAGE_DIR, $this->getStorageRelativePath($param)));
     }
@@ -154,7 +165,15 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
     /**
      * {@inheritDoc}
      */
-    public function content($param = null): string
+    public function isFileValid(?string $param = null): bool
+    {
+        return $this->storage_path && file_exists($this->getStoragePath($param));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function content(?string $param = null): string
     {
         return Storage::get($this->getStorageRelativePath($param));
     }
