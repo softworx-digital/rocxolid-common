@@ -91,7 +91,7 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
      */
     public function isMimeType(string $mime_type): bool
     {
-        return $this->mime_type === $mime_type;
+        return preg_match(sprintf('/%s/', str_replace('/', '\/', $mime_type)), $this->mime_type);
     }
 
     /**

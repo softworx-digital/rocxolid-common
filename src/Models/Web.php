@@ -12,7 +12,7 @@ use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\UserManagement\Models\Group as UserGroup;
 //  rocXolid common model traits
 use Softworx\RocXolid\Common\Models\Traits\UserGroupAssociated;
-// rocXolid CMS models
+// rocXolid cms models
 use Softworx\RocXolid\CMS\Models\WebFrontpageSettings;
 
 /**

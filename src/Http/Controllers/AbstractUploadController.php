@@ -175,7 +175,7 @@ abstract class AbstractUploadController extends AbstractCrudController
 
         return $this->response
             ->replace(
-                $model_viewer_component->getDomId($model->parent->getKey(), $model->model_attribute),
+                $model_viewer_component->getDomId(md5(get_class($model->parent)), $model->parent->getKey(), $model->model_attribute),
                 $model_viewer_component->fetch($this->getTemplateNameForPlaceholder($model, $param), $assignment)
             );
     }
@@ -195,7 +195,7 @@ abstract class AbstractUploadController extends AbstractCrudController
         return $this->response
             ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $param)))
             ->replace(
-                $model_viewer_component->getDomId($model->parent->getKey(), $model->model_attribute),
+                $model_viewer_component->getDomId(md5(get_class($model->parent)), $model->parent->getKey(), $model->model_attribute),
                 $model_viewer_component->fetch($this->getTemplateNameForMorpOne($model, $param), $assignment)
             );
     }
@@ -214,7 +214,7 @@ abstract class AbstractUploadController extends AbstractCrudController
 
         return $this->response
             ->replace(
-                $model_viewer_component->getDomId($model->parent->getKey(), $model->model_attribute, 'content'),
+                $model_viewer_component->getDomId(md5(get_class($model->parent)), $model->parent->getKey(), $model->model_attribute, 'content'),
                 $model_viewer_component->fetch($this->getTemplateNameForMorphMany($model, $param), $assignment)
             );
     }

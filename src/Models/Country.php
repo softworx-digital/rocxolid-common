@@ -103,6 +103,11 @@ class Country extends AbstractCrudModel
         return collect(config('rocXolid.main.countries.has_company_registration_no'))->contains($this->getKey());
     }
 
+    public function hasCompanyInsertionDivision()
+    {
+        return collect(config('rocXolid.main.countries.has_company_insertion_division'))->contains($this->getKey());
+    }
+
     public function hasCompanyInsertionNumber()
     {
         return collect(config('rocXolid.main.countries.has_company_insertion_no'))->contains($this->getKey());
