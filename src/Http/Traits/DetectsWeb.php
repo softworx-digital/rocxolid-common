@@ -3,7 +3,7 @@
 namespace Softworx\RocXolid\Common\Http\Traits;
 
 use Config;
-use View;
+use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Softworx\RocXolid\Common\Models\Web;
