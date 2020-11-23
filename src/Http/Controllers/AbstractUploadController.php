@@ -127,7 +127,7 @@ abstract class AbstractUploadController extends AbstractCrudController
      */
     protected function handleUpload(CrudRequest $request, Uploadable $model): Uploadable
     {
-        return $this->fileUploadService()->handleFileUploadRequest($request, $model, function(
+        return $this->fileUploadService()->handleFileUploadRequest($request, $model, function (
             FileUploadService $file_upload_service,
             UploadedFile $uploaded_file,
             Uploadable $uploadable

@@ -68,10 +68,13 @@ class FileUploadService implements FileUploadServiceContract
         } elseif ($model->parent->{$model->model_attribute}() instanceof MorphMany) {
             $model = $this->onMorphManyModelUploaded($model);
         } else {
-            throw new \RuntimeException(sprintf(
+            throw new \RuntimeException(
+                sprintf(
                 'Invalid model relation type [%s] for [%s]->[%s]',
                 get_class($model->parent->{$model->model_attribute}()),
-                get_class($model->parent), $model->model_attribute)
+                get_class($model->parent),
+                $model->model_attribute
+            )
             );
         }
 

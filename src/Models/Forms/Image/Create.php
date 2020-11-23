@@ -105,7 +105,6 @@ class Create extends RocXolidAbstractCrudForm
         ]));
 
         if ($fake->parent->{$model_attribute}() instanceof MorphOne) {
-
         } elseif ($fake->parent->{$model_attribute}() instanceof MorphMany) {
             $fields['upload']['options']['attributes']['multiple'] = true;
         } else {

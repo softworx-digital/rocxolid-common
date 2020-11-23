@@ -47,7 +47,7 @@ class Web extends AbstractCrudModel
 
     public function onCreateBeforeSave(Collection $data): Crudable
     {
-// dd(__METHOD__, '@todo');
+        // dd(__METHOD__, '@todo');
         $this
             ->createIfNeededUserGroup()
             ->createIfNeededFrontpageSettings();

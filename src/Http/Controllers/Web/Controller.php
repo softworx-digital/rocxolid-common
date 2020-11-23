@@ -13,5 +13,4 @@ use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
  */
 class Controller extends AbstractCrudController
 {
-
 }
