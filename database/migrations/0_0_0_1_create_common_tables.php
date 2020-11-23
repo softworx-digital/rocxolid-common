@@ -712,7 +712,12 @@ class CreateCommonTables extends Migration
     {
         $file = realpath(sprintf('%s/../dumps/rocXolid/%s/%s.sql', __DIR__, $package, $table));
 
-        DB::unprepared(file_get_contents($file));
+        try {
+            DB::unprepared(file_get_contents($file));
+        } catch (\ErrorException $e) {
+            dump(sprintf('%s/../dumps/rocXolid/%s/%s.sql', __DIR__, $package, $table));
+            dd($file, $e);
+        }
 
         return $this;
     }
