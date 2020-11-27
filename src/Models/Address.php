@@ -73,6 +73,8 @@ class Address extends AbstractCrudModel
     protected $system = [
         'id',
         'model_type',
+        'model_id',
+        'model_attribute',
         'city_name', // @todo: so far
         'created_at',
         'updated_at',
@@ -198,5 +200,16 @@ class Address extends AbstractCrudModel
     public function canBeDeleted(Request $request): bool
     {
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @todo: ugly
+     */
+    public function onCreateBeforeSave(Collection $data): Crudable
+    {
+        $this->model_attribute = $data->get('model_attribute');
+
+        return parent::onCreateBeforeSave($data);
     }
 }

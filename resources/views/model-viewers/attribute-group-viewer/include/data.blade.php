@@ -1,4 +1,4 @@
-@foreach ($component->getModel()->getShowAttributes(isset($except) ? $except : []) as $field => $value)
+@foreach ($component->getModel()->getShowAttributes($except ?? []) as $field => $value)
     <div class="row">
         <label class="col-md-4 col-xs-6 text-right">{{ $component->translate(sprintf('field.%s', $field)) }}</label>
     @if (in_array($field, ['model_type']))

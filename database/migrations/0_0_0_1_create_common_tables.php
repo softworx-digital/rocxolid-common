@@ -305,6 +305,9 @@ class CreateCommonTables extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->increments('id');
             $table->morphs('model');
+            $table->string('model_attribute');
+            $table->unsignedInteger('model_attribute_position')->default(0);
+            $table->boolean('is_model_primary')->default(0);
 
             $table->string('name')->nullable();
             $table->text('description')->nullable();
@@ -326,8 +329,6 @@ class CreateCommonTables extends Migration
             $table->string('po_box')->nullable();
             $table->string('zip')->nullable();
             $table->string('apartment_no')->nullable();
-
-            $table->boolean('is_default')->default(1);
 
             $table->timestamps();
             $table->softDeletes();
