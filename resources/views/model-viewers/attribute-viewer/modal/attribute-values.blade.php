@@ -3,9 +3,9 @@
         <div class="modal-content ajax-overlay">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">{{ $component->getModel()->getTitle() }} <small>@lang('rocXolid::attribute.field.values')</small></h4>
+                <h4 class="modal-title">{{ $component->getModel()->getTitle() }} <small>{{ $component->translate('text.values') }}</small></h4>
             </div>
-            <div class="modal-body text-center">
+            <div class="modal-body">
                 {!! $component->render('include.attribute-values') !!}
             </div>
             <div class="modal-footer">

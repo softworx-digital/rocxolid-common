@@ -2,67 +2,40 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\AttributeValue;
 
-use Illuminate\Http\Response;
+// rocXolid utils
+use Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse;
 // rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 // rocXolid form contracts
 use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
-// rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\AttributeGroupViewer;
-use Softworx\RocXolid\Common\Components\ModelViewers\AttributeViewer;
-use Softworx\RocXolid\Common\Components\ModelViewers\AttributeValueViewer;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
+// rocXolid common repositories
+use Softworx\RocXolid\Common\Repositories\AttributeValue\Repository as AttributeValueRepository;
 // rocXolid common models
-use Softworx\RocXolid\Common\Models\AttributeGroup;
 use Softworx\RocXolid\Common\Models\Attribute;
 
 /**
- * @todo: docblock
+ * AttributeValue controller.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
  */
 class Controller extends AbstractCrudController
 {
     /**
-     * {@inheritDoc}
-     */
-    protected static $model_viewer_type = AttributeValueViewer::class;
-
-    /**
-     * {@inheritDoc}
-     */
-    protected $form_mapping = [
-        'create.attribute-values' => 'create-in-attribute',
-        'store.attribute-values' => 'create-in-attribute',
-        'edit.attribute-values' => 'update-in-attribute',
-        'update.attribute-values' => 'update-in-attribute',
-    ];
-
-    /**
-     * Obtain attribute viewer.
+     * Constructor.
      *
+     * @param \Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse $response
+     * @param \Softworx\RocXolid\Common\Repositories\AttributeValueRepository\Repository $repository
      * @param \Softworx\RocXolid\Common\Models\Attribute $attribute
-     * @return \Softworx\RocXolid\Common\Components\ModelViewers\AttributeViewer
      */
-    public function getAttributeViewerComponent(Attribute $attribute): AttributeViewer
+    public function __construct(AjaxResponse $response, AttributeValueRepository $repository, Attribute $attribute)
     {
-        return AttributeViewer::build($this, $this)
-            ->setModel($attribute)
-            ->setController($this);
-    }
-
-    /**
-     * Obtain attribute group viewer.
-     *
-     * @param \Softworx\RocXolid\Common\Models\AttributeGroup $attribute_group
-     * @return \Softworx\RocXolid\Common\Components\ModelViewers\AttributeGroupViewer
-     */
-    public function getAttributeGroupViewerComponent(AttributeGroup $attribute_group): AttributeGroupViewer
-    {
-        return AttributeGroupViewer::build($this, $this)
-            ->setModel($attribute_group)
-            ->setController($this);
+        parent::__construct($response, $attribute->exists() ? $repository->setAttribute($attribute) : $repository);
     }
 
     /**
@@ -70,20 +43,9 @@ class Controller extends AbstractCrudController
      */
     protected function successAjaxResponse(CrudRequest $request, CrudableModel $attribute_value, AbstractCrudForm $form): array
     {
-        $model_viewer_component = $this->getModelViewerComponent($attribute_value);
-
-        $attribute_group_model_viewer_component = $this->getAttributeGroupViewerComponent($attribute_value->attribute->attributeGroup);
-        $attribute_model_viewer_component = $this->getAttributeViewerComponent($attribute_value->attribute);
+        $model_viewer_component = $this->getModelViewerComponent();
+        $attribute_model_viewer_component = $attribute_value->attribute->getModelViewerComponent();
         $template_name = sprintf('include.%s', $request->_section);
-
-        dd(__METHOD__, '@todo');
-        /*
-        switch ($action) {
-            case 'create':
-                $this->response->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes'));
-                break;
-        }
-        */
 
         return $this->response
             ->notifySuccess($model_viewer_component->translate('text.updated'))
@@ -97,7 +59,7 @@ class Controller extends AbstractCrudController
      */
     protected function destroyAjaxResponse(CrudRequest $request, CrudableModel $attribute_value): array
     {
-        $model_viewer_component = $this->getModelViewerComponent($attribute_value);
+        $model_viewer_component = $this->getModelViewerComponent();
 
         $attribute_group_model_viewer_component = $this->getAttributeGroupViewerComponent($attribute_value->attribute->attributeGroup);
         $attribute_model_viewer_component = $this->getAttributeViewerComponent($attribute_value->attribute);
@@ -112,8 +74,8 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function destroyNonAjaxResponse(CrudRequest $request, CrudableModel $attribute)//: Response
+    protected function destroyNonAjaxResponse(CrudRequest $request, CrudableModel $attribute_value)//: Response
     {
-        return redirect($attribute_value->attribute->getControllerRoute());
+        return redirect($attribute_value->attribute->attributeGroup->getControllerRoute());
     }
 }

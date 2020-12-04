@@ -125,4 +125,10 @@ trait HasImages
 
         return collect($image_sizes);
     }
+
+    // @todo
+    public function getImagePlaceholder()
+    {
+        return config(sprintf('rocXolid.common.placeholder.%s.%s', (new \ReflectionClass($this))->getName(), 'image'), null);
+    }
 }

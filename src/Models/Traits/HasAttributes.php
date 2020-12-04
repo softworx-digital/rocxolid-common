@@ -46,7 +46,7 @@ trait HasAttributes
                 case 'integer':
                 case 'decimal':
                     $column = sprintf('value_%s', $pivot_attribute->type);
-                    return $raw ? $pivot_attribute->pivot->$column : number_format($pivot_attribute->pivot->$column, 2, ',', ' ');
+                    return $raw ? $pivot_attribute->pivot->$column : number_format($pivot_attribute->pivot->$column, 2, ',', ' '); // @todo: use NumberFormatter // getAttributeViewValue somehow
                 default:
                     $column = sprintf('value_%s', $pivot_attribute->type);
                     return $pivot_attribute->pivot->$column;

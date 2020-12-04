@@ -2,26 +2,27 @@
 
 namespace Softworx\RocXolid\Common\Models\Tables\AttributeGroup;
 
+// rocXolid tables & types
 use Softworx\RocXolid\Tables\AbstractCrudTable;
-// filters
-use Softworx\RocXolid\Tables\Filters\Type\Text as TextFilter;
-use Softworx\RocXolid\Tables\Filters\Type\Select as SelectFilter;
-use Softworx\RocXolid\Tables\Filters\Type\ModelRelation as ModelRelationFilter;
-// columns
-use Softworx\RocXolid\Tables\Columns\Type\Text;
-use Softworx\RocXolid\Tables\Columns\Type\Image;
-use Softworx\RocXolid\Tables\Columns\Type\Method;
-use Softworx\RocXolid\Tables\Columns\Type\ButtonAnchor;
-use Softworx\RocXolid\Tables\Columns\Type\ModelRelation;
+use Softworx\RocXolid\Tables\Filters\Type as FilterType;
+use Softworx\RocXolid\Tables\Columns\Type as ColumnType;
+use Softworx\RocXolid\Tables\Buttons\Type as ButtonType;
 
 /**
+ * Default AttributeGroup table.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
  */
 class Index extends AbstractCrudTable
 {
+    /**
+     * {@inheritDoc}
+     */
     protected $filters = [
         'full_name' => [
-            'type' => TextFilter::class,
+            'type' => FilterType\Text::class,
             'options' => [
                 'label' => [
                     'title' => 'full_name'
@@ -33,9 +34,12 @@ class Index extends AbstractCrudTable
         ],
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $columns = [
         'name' => [
-            'type' => Text::class,
+            'type' => ColumnType\Text::class,
             'options' => [
                 'label' => [
                     'title' => 'name'
@@ -43,12 +47,12 @@ class Index extends AbstractCrudTable
             ],
         ],
         'model_type' => [
-            'type' => Method::class,
+            'type' => ColumnType\Method::class,
             'options' => [
                 'label' => [
                     'title' => 'model_type'
                 ],
-                'method' => 'getModelType',
+                'method' => 'getModelTypeTitle',
                 'wrapper' => [
                     'attributes' => [
                         'class' => 'text-center',
@@ -56,16 +60,8 @@ class Index extends AbstractCrudTable
                 ],
             ],
         ],
-        'description' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'description'
-                ],
-            ],
-        ],
         'note' => [
-            'type' => Text::class,
+            'type' => ColumnType\Text::class,
             'options' => [
                 'label' => [
                     'title' => 'note'
@@ -73,7 +69,7 @@ class Index extends AbstractCrudTable
             ],
         ],
         'attributes' => [
-            'type' => ModelRelation::class,
+            'type' => ColumnType\ModelRelation::class,
             'options' => [
                 'ajax' => true,
                 'label' => [
@@ -93,37 +89,26 @@ class Index extends AbstractCrudTable
         ],
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $buttons = [
-        'attributes' => [
-            'type' => ButtonAnchor::class,
+        'show' => [
+            'type' => ButtonType\ButtonAnchor::class,
             'options' => [
                 'label' => [
-                    'icon' => 'fa fa-list',
+                    'icon' => 'fa fa-window-maximize',
                 ],
                 'attributes' => [
-                    'class' => 'btn btn-success btn-sm margin-right-no',
-                    'title-key' => 'attributes',
+                    'class' => 'btn btn-info btn-sm margin-right-no',
+                    'title-key' => 'show',
                 ],
                 'policy-ability' => 'view',
                 'action' => 'show',
             ],
         ],
-        'edit' => [
-            'type' => ButtonAnchor::class,
-            'options' => [
-                'label' => [
-                    'icon' => 'fa fa-pencil',
-                ],
-                'attributes' => [
-                    'class' => 'btn btn-primary btn-sm margin-right-no',
-                    'title-key' => 'edit',
-                ],
-                'policy-ability' => 'update',
-                'action' => 'edit',
-            ],
-        ],
         'delete-ajax' => [
-            'type' => ButtonAnchor::class,
+            'type' => ButtonType\ButtonAnchor::class,
             'options' => [
                 'ajax' => true,
                 'label' => [

@@ -2,115 +2,127 @@
 
 namespace Softworx\RocXolid\Common\Models\Tables\Attribute;
 
+// rocXolid tables & types
 use Softworx\RocXolid\Tables\AbstractCrudTable;
-// filters
-use Softworx\RocXolid\Tables\Filters\Type\Text as TextFilter;
-use Softworx\RocXolid\Tables\Filters\Type\Select as SelectFilter;
-use Softworx\RocXolid\Tables\Filters\Type\ModelRelation as ModelRelationFilter;
-use Softworx\RocXolid\Tables\Columns\Type\Text;
-use Softworx\RocXolid\Tables\Columns\Type\Image;
-use Softworx\RocXolid\Tables\Columns\Type\ModelRelation;
+use Softworx\RocXolid\Tables\Filters\Type as FilterType;
+use Softworx\RocXolid\Tables\Columns\Type as ColumnType;
+use Softworx\RocXolid\Tables\Buttons\Type as ButtonType;
 
 /**
+ * Default Attribute table.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
  */
 class Index extends AbstractCrudTable
 {
-    protected $filters = [
-        'full_name' => [
-            'type' => TextFilter::class,
+    /**
+     * {@inheritDoc}
+     */
+    protected $columns = [
+        'name' => [
+            'type' => ColumnType\Text::class,
             'options' => [
                 'label' => [
-                    'title' => 'full_name'
+                    'title' => 'name'
                 ],
-                'attributes' => [
-                    'placeholder' => 'name'
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+            ],
+        ],
+        'type' => [
+            'type' => ColumnType\Text::class,
+            'options' => [
+                'label' => [
+                    'title' => 'type'
+                ],
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+            ],
+        ],
+        'units' => [
+            'type' => ColumnType\Text::class,
+            'options' => [
+                'label' => [
+                    'title' => 'units'
+                ],
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+            ],
+        ],
+        'values' => [
+            'type' => ColumnType\Method::class,
+            'options' => [
+                'label' => [
+                    'title' => 'values'
+                ],
+                'method' => 'formatAttributeValues',
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
                 ],
             ],
         ],
     ];
 
-    protected $columns = [
-        'flag' => [
-            'type' => Image::class,
+    /**
+     * {@inheritDoc}
+     */
+    protected $buttons = [
+        'set-values' => [
+            'type' => ButtonType\ButtonAnchor::class,
             'options' => [
+                'ajax' => true,
                 'label' => [
-                    'title' => 'flag',
+                    'icon' => 'fa fa-list',
                 ],
-                'path' => '/images/flags',
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
+                'attributes' => [
+                    'class' => 'btn btn-info btn-sm margin-right-no',
+                    'title-key' => 'set-values',
                 ],
+                'policy-ability' => 'setValues',
+                'action' => 'setValues',
             ],
         ],
-        'full_name' => [
-            'type' => Text::class,
+        'edit' => [
+            'type' => ButtonType\ButtonAnchor::class,
             'options' => [
+                'ajax' => true,
                 'label' => [
-                    'title' => 'name'
+                    'icon' => 'fa fa-pencil',
                 ],
+                'attributes' => [
+                    'class' => 'btn btn-primary btn-sm margin-right-no',
+                    'title-key' => 'edit',
+                ],
+                'policy-ability' => 'update',
+                'action' => 'edit',
             ],
         ],
-        'iso_3166_2' => [
-            'type' => Text::class,
+        'delete-ajax' => [
+            'type' => ButtonType\ButtonAnchor::class,
             'options' => [
+                'ajax' => true,
                 'label' => [
-                    'title' => 'code'
+                    'icon' => 'fa fa-trash',
                 ],
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
+                'attributes' => [
+                    'class' => 'btn btn-danger btn-sm margin-right-no',
+                    'title-key' => 'delete',
                 ],
-            ],
-        ],
-        'capital' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'capital'
-                ],
-            ],
-        ],
-        'currency_code' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'currency_code'
-                ],
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
-                ],
-            ],
-        ],
-        'currency_symbol' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'currency_symbol'
-                ],
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
-                ],
-            ],
-        ],
-        'currency_iso_4217' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'currency_iso_4217'
-                ],
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
-                ],
+                'policy-ability' => 'delete',
+                'action' => 'destroyConfirm',
             ],
         ],
     ];

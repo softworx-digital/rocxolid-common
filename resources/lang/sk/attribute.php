@@ -4,9 +4,8 @@ return [
     'column' => [
         'attribute_group_id' => 'Skupina atribútov',
         'attribute_group_position' => 'Pozícia',
-        'type' => 'Typ',
         'is_multiple' => 'Viacnásobný',
-        'name' => 'Názov',
+        'units' => 'Jednotky',
         'values' => 'Možné hodnoty',
         //
         'attributeGroup' => 'Skupina atribútov',
@@ -14,9 +13,8 @@ return [
     'field' => [
         'attribute_group_id' => 'Skupina atribútov',
         'attribute_group_position' => 'Pozícia',
-        'type' => 'Typ',
         'is_multiple' => 'Viacnásobný',
-        'name' => 'Názov',
+        'units' => 'Jednotky',
         'values' => 'Možné hodnoty',
         //
         'attributeGroup' => 'Skupina atribútov',
@@ -30,13 +28,15 @@ return [
             'plural' => 'Atribúty',
         ],
     ],
-    'type-choices' => [
-        'boolean' => 'Áno / Nie voľba',
-        'integer' => 'Celočíselná hodnota',
-        'decimal' => 'Číselná hodnota',
-        'string' => 'Reťazec',
-        'text' => 'Text',
-        'enum' => 'Voľba z definovaných možností',
+    'choice' => [
+        'type' => [
+            'boolean' => 'Áno / Nie voľba',
+            'integer' => 'Celočíselná hodnota',
+            'decimal' => 'Číselná hodnota',
+            'string' => 'Reťazec',
+            'text' => 'Text',
+            'enum' => 'Voľba z definovaných možností',
+        ],
     ],
     'type-values' => [
         'boolean' => 'Áno / Nie',
@@ -44,5 +44,8 @@ return [
         'decimal' => 'Akékoľvek desatinné číslo',
         'string' => 'Reťazec znakov dĺžky max. 250',
         'text' => 'Text',
+    ],
+    'text' => [
+        'values' => 'Definované možnosti hodnôt',
     ],
 ];

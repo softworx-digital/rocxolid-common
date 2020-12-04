@@ -11,12 +11,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
-// rocXolid common model traits
-use Softworx\RocXolid\Common\Models\Traits\HasCountry;
-use Softworx\RocXolid\Common\Models\Traits\HasCadastralArea;
-use Softworx\RocXolid\Common\Models\Traits\HasRegion;
-use Softworx\RocXolid\Common\Models\Traits\HasDistrict;
-use Softworx\RocXolid\Common\Models\Traits\HasCity;
 // rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\User;
 
@@ -26,15 +20,16 @@ use Softworx\RocXolid\UserManagement\Models\User;
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
  * @version 1.0.0
+ * @todo: revise
  */
 class Address extends AbstractCrudModel
 {
     use SoftDeletes;
-    use HasCountry;
-    use HasCadastralArea;
-    use HasRegion;
-    use HasDistrict;
-    use HasCity;
+    use Traits\HasCountry;
+    use Traits\HasCadastralArea;
+    use Traits\HasRegion;
+    use Traits\HasDistrict;
+    use Traits\HasCity;
 
     /**
      * {@inheritDoc}

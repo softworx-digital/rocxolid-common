@@ -22,6 +22,7 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
      */
     public function register()
     {
+        $this->app->register(Providers\AuthServiceProvider::class);
         $this->app->register(Providers\ConfigurationServiceProvider::class);
         $this->app->register(Providers\ViewServiceProvider::class);
         $this->app->register(Providers\RouteServiceProvider::class);

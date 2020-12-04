@@ -2,7 +2,8 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\Attribute;
 
-use Illuminate\Http\Response;
+// rocXolid utils
+use Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse;
 // rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid model contracts
@@ -13,11 +14,14 @@ use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
 use Softworx\RocXolid\Common\Components\ModelViewers\AttributeViewer;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
+// rocXolid common repositories
+use Softworx\RocXolid\Common\Repositories\Attribute\Repository as AttributeRepository;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Attribute;
+use Softworx\RocXolid\Common\Models\AttributeGroup;
 
 /**
- * Attributes controller.
+ * Attribute controller.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
@@ -31,17 +35,19 @@ class Controller extends AbstractCrudController
     protected static $model_viewer_type = AttributeViewer::class;
 
     /**
-     * {@inheritDoc}
+     * Constructor.
+     *
+     * @param \Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse $response
+     * @param \Softworx\RocXolid\Common\Repositories\Attribute\Repository $repository
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup $attribute_group
      */
-    protected $form_mapping = [
-        'create.attributes' => 'create-in-attribute-group',
-        'store.attributes' => 'create-in-attribute-group',
-        'edit.attributes' => 'update-in-attribute-group',
-        'update.attributes' => 'update-in-attribute-group',
-    ];
+    public function __construct(AjaxResponse $response, AttributeRepository $repository, AttributeGroup $attribute_group)
+    {
+        parent::__construct($response, $attribute_group->exists() ? $repository->setAttributeGroup($attribute_group) : $repository);
+    }
 
     /**
-     * @todo: docblock
+     * Display modal to set AttributeValues to Attribute.
      *
      * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
      * @param \Softworx\RocXolid\Common\Models\Attribute $attribute
@@ -49,7 +55,8 @@ class Controller extends AbstractCrudController
      */
     public function setValues(CrudRequest $request, Attribute $attribute): array
     {
-        $model_viewer_component = $this->getAttributeViewerComponent($attribute);
+        // $model_viewer_component = $this->getAttributeViewerComponent($attribute);
+        $model_viewer_component = $this->getModelViewerComponent($attribute);
 
         return $this->response
             ->modal($model_viewer_component->fetch('modal.attribute-values', [ 'attribute' => $attribute ]))

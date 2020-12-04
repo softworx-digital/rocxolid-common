@@ -536,6 +536,7 @@ class CreateCommonTables extends Migration
             $table->enum('type', ['boolean', 'integer', 'decimal', 'string', 'text', 'enum']);
             $table->boolean('is_multiple')->default(0);
             $table->string('name');
+            $table->string('units')->nullable();
             $table->text('description')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();

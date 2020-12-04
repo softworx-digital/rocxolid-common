@@ -19,6 +19,7 @@ class ConfigurationServiceProvider extends IlluminateServiceProvider
     protected $config_files = [
         'rocXolid.common.general' => '/../../config/general.php',
         'rocXolid.common.placeholder' => '/../../config/placeholder.php',
+        'rocXolid.common.attributes' => '/../../config/attributes.php',
     ];
 
     /**
