@@ -2,56 +2,18 @@
 
 namespace Softworx\RocXolid\Common\Models\Forms\Attribute\Support;
 
-// doctrine
 use Doctrine\DBAL\Types\Type;
-// relations
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 // rocXolid support
 use Softworx\RocXolid\Forms\Builders\FormFieldFactory as RocXolidFormFieldFactory;
 // rocXolid field types
-use Softworx\RocXolid\Forms\Fields\Type\BooleanRadio;
-use Softworx\RocXolid\Forms\Fields\Type\Button;
-use Softworx\RocXolid\Forms\Fields\Type\ButtonAnchor;
-use Softworx\RocXolid\Forms\Fields\Type\ButtonGroup;
-use Softworx\RocXolid\Forms\Fields\Type\ButtonSubmit;
-use Softworx\RocXolid\Forms\Fields\Type\ButtonToolbar;
-use Softworx\RocXolid\Forms\Fields\Type\Checkbox;
-use Softworx\RocXolid\Forms\Fields\Type\CheckboxToggle;
-use Softworx\RocXolid\Forms\Fields\Type\CollectionCheckbox;
-use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
-use Softworx\RocXolid\Forms\Fields\Type\Colorpicker;
-use Softworx\RocXolid\Forms\Fields\Type\Datepicker;
-use Softworx\RocXolid\Forms\Fields\Type\Timepicker;
-use Softworx\RocXolid\Forms\Fields\Type\DateTimepicker;
-use Softworx\RocXolid\Forms\Fields\Type\FormFieldGroup;
-use Softworx\RocXolid\Forms\Fields\Type\FormFieldGroupAddable;
-use Softworx\RocXolid\Forms\Fields\Type\Input;
-use Softworx\RocXolid\Forms\Fields\Type\Radio;
-use Softworx\RocXolid\Forms\Fields\Type\Select;
-use Softworx\RocXolid\Forms\Fields\Type\Switchery;
-use Softworx\RocXolid\Forms\Fields\Type\Textarea;
-use Softworx\RocXolid\Forms\Fields\Type\WysiwygTextarea;
+use Softworx\RocXolid\Forms\Fields\Type as FieldType;
 // rocXolid contracts
-use Softworx\RocXolid\Contracts\EventDispatchable;
-use Softworx\RocXolid\Forms\Contracts\Form;
-use Softworx\RocXolid\Forms\Contracts\FormField;
-use Softworx\RocXolid\Forms\Contracts\FormFieldable;
 use Softworx\RocXolid\Forms\Builders\Contracts\FormFieldFactory as FormFieldFactoryContract;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Attribute;
 
 /**
- *
+ * @todo: revise
  */
 class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFactoryContract
 {
@@ -61,29 +23,17 @@ class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFact
      * @var array
      */
     protected static $fields_mapping = [
-        Type::BOOLEAN       => CheckboxToggle::class,
-        Type::INTEGER       => Input::class,
-        Type::DECIMAL       => Input::class,
-        Type::STRING        => Input::class,
-        Type::TEXT          => Textarea::class,
-        'enum'              => CollectionSelect::class,
+        Type::BOOLEAN       => FieldType\CheckboxToggle::class,
+        Type::INTEGER       => FieldType\Input::class,
+        Type::DECIMAL       => FieldType\Input::class,
+        Type::STRING        => FieldType\Input::class,
+        Type::TEXT          => FieldType\Textarea::class,
+        'enum'              => FieldType\CollectionSelect::class,
     ];
 
     public function makeAttributeFieldDefinition(Attribute $attribute, $rules = []): array
     {
         $type = $this->getAttributeFieldTypeClass($attribute);
-
-        /*
-        if ($attribute->getNotnull())
-        {
-            $rules[] = 'required';
-        }
-
-        if ($attribute->getLength())
-        {
-            $rules[] = 'max:' . $attribute->getLength();
-        }
-        */
 
         $definition = [];
 
@@ -106,22 +56,31 @@ class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFact
             case 'enum':
                 $definition['options'] = [
                     'collection' => $attribute->attributeValues->pluck('name', 'id'),
-                    // 'show_null_option' => true,
                 ];
                 break;
         }
 
-        return array_merge_recursive([
+        $definition = array_merge_recursive([
             'type' => $type,
             'options' => [
                 'label' => [
-                    'title' => $attribute->getTitle(),
+                    'title-translated' => $attribute->getTitle(),
                 ],
                 'validation' => [
                     'rules' => $rules,
                 ],
             ],
         ], $definition);
+
+        if (filled($attribute->units)) {
+            $definition = array_merge_recursive([
+                'options' => [
+                    'units' => $attribute->units,
+                ],
+            ], $definition);
+        }
+
+        return $definition;
     }
 
     protected function getAttributeFieldTypeClass(Attribute $attribute)

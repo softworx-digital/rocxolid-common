@@ -145,4 +145,19 @@ class Attribute extends AbstractCrudModel
     {
         return $this->is_multiple;
     }
+
+    /**
+     * Obtain appropriate column name for AttributeModel.
+     *
+     * @return string
+     */
+    public function getModelValueColumnName(): string
+    {
+        switch ($this->type) {
+            case 'enum':
+                return 'attribute_value_id';
+            default:
+                return sprintf('value_%s', $this->type);
+        }
+    }
 }

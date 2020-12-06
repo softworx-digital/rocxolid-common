@@ -5,7 +5,6 @@ return [
         'attribute_group_id' => 'Skupina atribútov',
         'attribute_group_position' => 'Pozícia',
         'is_multiple' => 'Viacnásobný',
-        'units' => 'Jednotky',
         'values' => 'Možné hodnoty',
         //
         'attributeGroup' => 'Skupina atribútov',
@@ -14,7 +13,6 @@ return [
         'attribute_group_id' => 'Skupina atribútov',
         'attribute_group_position' => 'Pozícia',
         'is_multiple' => 'Viacnásobný',
-        'units' => 'Jednotky',
         'values' => 'Možné hodnoty',
         //
         'attributeGroup' => 'Skupina atribútov',

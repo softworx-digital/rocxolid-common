@@ -2,18 +2,23 @@
 
 namespace Softworx\RocXolid\Common\Models\Forms\AttributeModel;
 
-// rocXolid contracts
-use Softworx\RocXolid\Forms\Contracts\Form;
 // rocXolid forms
+use Softworx\RocXolid\Forms\Builders\Contracts\FormFieldFactory;
+use Softworx\RocXolid\Forms\Contracts\Form;
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
-// rocXolid form field types
-use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
+// rocXolid common forms
+use Softworx\RocXolid\Common\Models\Forms\Attribute\Support\FormFieldFactory as AttributeFormFieldFactory;
+// rocXolid common models
+use Softworx\RocXolid\Common\Models\Attribute;
 
 /**
  *
  */
-class Model extends RocXolidAbstractCrudForm
+class General extends RocXolidAbstractCrudForm
 {
+    /**
+     * {@inheritDoc}
+     */
     protected $options = [
         'method' => 'POST',
         //'route-action' => 'store', // is set Softworx\RocXolid\Common\Http\Traits\Controllers\Attribute for specific model controller
@@ -21,19 +26,23 @@ class Model extends RocXolidAbstractCrudForm
         'section' => 'attributes',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected function getFieldsDefinition(): array
     {
         if (!$this->fields) {
-            $this->getModel()->attributeGroups()->each(function ($attribute_group) {
-                $attribute_group->attributes->each(function ($attribute) use ($attribute_group) {
-                    $this->fields[$attribute->getKey()] = $this->getFormFieldFactory()->makeAttributeFieldDefinition($attribute);
-                });
+            $this->getController()->getAttributeGroup()->attributes->each(function (Attribute $attribute) {
+                $this->fields[$attribute->getKey()] = $this->getFormFieldFactory()->makeAttributeFieldDefinition($attribute);
             });
         }
 
         return $this->adjustFieldsDefinition($this->fields);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function buildFields($validate = true): Form
     {
         parent::buildFields($validate);
@@ -43,6 +52,9 @@ class Model extends RocXolidAbstractCrudForm
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setFieldsModelValues(): Form
     {
         $this->getModel()->attributeGroups()->each(function ($attribute_group) {
@@ -57,5 +69,14 @@ class Model extends RocXolidAbstractCrudForm
         });
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @todo: hotfixed, unoptimized, make general forms refactoring forst to fix it properly
+     */
+    public function getFormFieldFactory(): FormFieldFactory
+    {
+        return app(AttributeFormFieldFactory::class);
     }
 }

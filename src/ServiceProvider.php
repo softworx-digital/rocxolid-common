@@ -105,6 +105,16 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
             Services\ImageProcessService::class
         );
 
+        // @todo: doesn't work since this is appliable to constructor dependency resolution
+        // need to refactor forms in general at first
+        /*
+        $this->app->when(Models\Forms\AttributeModel\General::class)
+            ->needs(\Softworx\RocXolid\Forms\Builders\Contracts\FormFieldFactory::class)
+            ->give(function () {
+                return app(Models\Forms\Attribute\Support\FormFieldFactory);
+            });
+        */
+
         return $this;
     }
 
