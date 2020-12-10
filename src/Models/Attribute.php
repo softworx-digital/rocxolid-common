@@ -50,6 +50,7 @@ class Attribute extends AbstractCrudModel
         'type',
         //'is_multiple',
         'name',
+        'code',
         'units',
         'description',
         'note',

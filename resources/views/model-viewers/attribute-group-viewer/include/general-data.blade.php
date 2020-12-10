@@ -14,6 +14,8 @@
             <dd>{{ $component->getModel()->getTitle() }}</dd>
             <dt>{{ $component->translate('field.model_type') }}</dt>
             <dd>{{ $component->getModel()->getModelTypeTitle() }}</dd>
+            <dt>{{ $component->translate('field.code') }}</dt>
+            <dd>{{ $component->getModel()->getAttributeViewValue('code') }}</dd>
         </dl>
     </div>
 </div>

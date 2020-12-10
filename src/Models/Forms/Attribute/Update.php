@@ -84,6 +84,19 @@ class Update extends RocXolidAbstractCrudForm
                 ],
             ],
         ],
+        'code' => [
+            'type' => FieldType\Input::class,
+            'options' => [
+                'label' => [
+                    'title' => 'code',
+                ],
+                'validation' => [
+                    'rules' => [
+                        'max:255',
+                    ],
+                ],
+            ],
+        ],
         'units' => [
             'type' => FieldType\Input::class,
             'options' => [

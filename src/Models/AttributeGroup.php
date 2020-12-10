@@ -32,6 +32,7 @@ class AttributeGroup extends AbstractCrudModel
     protected const GENERAL_DATA_ATTRIBUTES = [
         'model_type',
         'name',
+        'code',
     ];
 
     protected const DESCRIPTION_DATA_ATTRIBUTES = [
@@ -55,6 +56,7 @@ class AttributeGroup extends AbstractCrudModel
     protected $fillable = [
         'model_type',
         'name',
+        'code',
         'description',
         'note',
     ];

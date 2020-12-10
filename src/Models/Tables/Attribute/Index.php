@@ -34,6 +34,19 @@ class Index extends AbstractCrudTable
                 ],
             ],
         ],
+        'code' => [
+            'type' => ColumnType\Text::class,
+            'options' => [
+                'label' => [
+                    'title' => 'code'
+                ],
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+            ],
+        ],
         'type' => [
             'type' => ColumnType\Text::class,
             'options' => [

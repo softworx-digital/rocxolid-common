@@ -30,6 +30,7 @@ class AttributeValue extends AbstractCrudModel
     protected $fillable = [
         'attribute_id',
         'name',
+        'code',
         'description',
         'note',
     ];
