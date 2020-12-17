@@ -80,7 +80,7 @@ class Index extends AbstractCrudTable
                     'title' => 'note'
                 ],
             ],
-        ],
+        ],/*
         'attributes' => [
             'type' => ColumnType\ModelRelation::class,
             'options' => [
@@ -99,7 +99,7 @@ class Index extends AbstractCrudTable
                     ],
                 ],
             ],
-        ],
+        ],*/
     ];
 
     /**

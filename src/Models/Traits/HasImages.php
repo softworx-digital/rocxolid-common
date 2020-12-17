@@ -26,12 +26,28 @@ trait HasImages
      * ]
      */
     protected $default_image_sizes = [
+        'icon' => [
+            'width' => 26,
+            'height' => 26,
+            'method' => 'fit',
+            'constraints' => [
+                'upsize',
+            ],
+        ],
         'thumb' => [
             'width' => 64,
             'height' => 64,
             'method' => 'resize',
             'constraints' => [
                 'aspectRatio',
+                'upsize',
+            ],
+        ],
+        'thumb-square' => [
+            'width' => 64,
+            'height' => 64,
+            'method' => 'fit',
+            'constraints' => [
                 'upsize',
             ],
         ],
@@ -52,11 +68,12 @@ trait HasImages
                 'upsize',
             ],
         ],
-        '600x600' => [
-            'width' => 600,
-            'height' => 600,
-            'method' => 'fit',
+        'mid' => [
+            'width' => 512,
+            'height' => 512,
+            'method' => 'resize',
             'constraints' => [
+                'aspectRatio',
                 'upsize',
             ],
         ],

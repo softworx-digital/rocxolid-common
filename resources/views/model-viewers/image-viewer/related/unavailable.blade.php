@@ -1,5 +1,6 @@
 @can ('view', [ $related, $attribute ])
 <div id="{{ $component->getDomId(md5(get_class($related)), $related->getKey(), $attribute) }}" class="panel panel-default">
+    @if (!isset($read_only) || !$read_only)
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-12">
@@ -26,6 +27,7 @@
             </div>
         </div>
     </div>
+    @endif
     <div class="panel-body text-center text-primary">
         {{ Html::image(sprintf('vendor/softworx/rocXolid/images/%s.svg', $placeholder ?? $component->getModel()->{$relation}()->getRelated()->getImagePlaceholder() ?? 'placeholder'), $attribute, [ 'style' => 'max-width: 100%; padding: 3em;' ]) }}
     </div>

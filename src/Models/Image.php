@@ -113,6 +113,10 @@ class Image extends File implements Resizable
      */
     public function getPhysicalImage(?string $size = null)
     {
-        return \InterventionImage::make($this->getStoragePath($size));
+        if ($this->isFileValid($size)) {
+            return \InterventionImage::make($this->getStoragePath($size));
+        } else {
+            throw new \RuntimeException(sprintf('Problems reading file [%s]. Probably does not exist.', $this->getStoragePath($size)));
+        }
     }
 }
