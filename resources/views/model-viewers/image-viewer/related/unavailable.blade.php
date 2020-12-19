@@ -1,6 +1,6 @@
 @can ('view', [ $related, $attribute ])
 <div id="{{ $component->getDomId(md5(get_class($related)), $related->getKey(), $attribute) }}" class="panel panel-default">
-    @if (!isset($read_only) || !$read_only)
+    @if (!($read_only ?? false))
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-12">

@@ -1,5 +1,6 @@
 <div class="panel-heading">
     <div class="row">
+    @if (!($read_only ?? false))
     @if (false)
         <div class="col-sm-5 col-xs-11">
             <h3 class="panel-title margin-top-7">
@@ -54,5 +55,6 @@
                 </ul>
             </div>
         </div>
+    @endif
     </div>
 </div>
