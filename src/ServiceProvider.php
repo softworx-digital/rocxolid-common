@@ -105,7 +105,7 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
             Services\ImageProcessService::class
         );
 
-        // @todo: doesn't work since this is appliable to constructor dependency resolution
+        // @todo doesn't work since this is appliable to constructor dependency resolution
         // need to refactor forms in general at first
         /*
         $this->app->when(Models\Forms\AttributeModel\General::class)

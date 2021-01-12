@@ -86,7 +86,7 @@ trait HasImage
      *
      * @param \Softworx\RocXolid\Common\Models\Image $image
      * @return \Softworx\RocXolid\Models\Contracts\Crudable
-     * @todo: events?
+     * @todo events?
      */
     public function onImageUpload(Image $image): Crudable
     {

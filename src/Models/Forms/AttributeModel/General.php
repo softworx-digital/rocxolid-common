@@ -73,7 +73,7 @@ class General extends RocXolidAbstractCrudForm
 
     /**
      * {@inheritDoc}
-     * @todo: hotfixed, unoptimized, make general forms refactoring forst to fix it properly
+     * @todo hotfixed, unoptimized, make general forms refactoring forst to fix it properly
      */
     public function getFormFieldFactory(): FormFieldFactory
     {

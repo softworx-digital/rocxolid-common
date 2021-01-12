@@ -13,7 +13,7 @@ use Softworx\RocXolid\Common\Models\File;
 use Softworx\RocXolid\UserManagement\Models\User;
 
 /**
- * @todo: refactor?
+ * @todo refactor?
  */
 class Image extends File implements Resizable
 {

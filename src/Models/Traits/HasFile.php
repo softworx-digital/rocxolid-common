@@ -30,7 +30,7 @@ trait HasFile
      *
      * @param \Softworx\RocXolid\Common\Models\File $file
      * @return \Softworx\RocXolid\Models\Contracts\Crudable
-     * @todo: events?
+     * @todo events?
      */
     public function onFileUpload(File $file): Crudable
     {
@@ -42,7 +42,7 @@ trait HasFile
      *
      * @param \Softworx\RocXolid\Common\Models\File $file
      * @return \Softworx\RocXolid\Models\Contracts\Crudable
-     * @todo: events?
+     * @todo events?
      */
     public function onFileDestroyed(File $file): Crudable
     {

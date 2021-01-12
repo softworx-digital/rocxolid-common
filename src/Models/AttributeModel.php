@@ -11,7 +11,7 @@ use Softworx\RocXolid\Common\Models\AttributeValue;
 
 /**
  * AttributeModel model.
- * @todo: ???
+ * @todo ???
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common

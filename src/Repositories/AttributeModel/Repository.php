@@ -18,7 +18,7 @@ use Softworx\RocXolid\Common\Models\AttributeGroup;
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
  * @version 1.0.0
- * @todo: revise & better use pivots instead probably
+ * @todo revise & better use pivots instead probably
  */
 class Repository extends CrudRepository
 {

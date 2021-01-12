@@ -15,7 +15,7 @@ use Softworx\RocXolid\Common\Models\AttributeGroup;
 use Softworx\RocXolid\Common\Components\ModelViewers\AttributeModelViewer;
 
 /**
- * @todo: revise
+ * @todo revise
  */
 class Controller extends AbstractCrudController
 {

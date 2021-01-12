@@ -13,7 +13,7 @@ use Softworx\RocXolid\Forms\Builders\Contracts\FormFieldFactory as FormFieldFact
 use Softworx\RocXolid\Common\Models\Attribute;
 
 /**
- * @todo: revise
+ * @todo revise
  */
 class FormFieldFactory extends RocXolidFormFieldFactory implements FormFieldFactoryContract
 {

@@ -141,7 +141,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
      */
     private function mapRouteModels(Router $router): IlluminateServiceProvider
     {
-        // @todo: group namespace
+        // @todo group namespace
         $router->model('web', \Softworx\RocXolid\Common\Models\Web::class);
         $router->model('file', \Softworx\RocXolid\Common\Models\File::class);
         $router->model('image', \Softworx\RocXolid\Common\Models\Image::class);

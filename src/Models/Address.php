@@ -20,7 +20,7 @@ use Softworx\RocXolid\UserManagement\Models\User;
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
  * @version 1.0.0
- * @todo: revise
+ * @todo revise
  */
 class Address extends AbstractCrudModel
 {
@@ -70,7 +70,7 @@ class Address extends AbstractCrudModel
         'model_type',
         'model_id',
         'model_attribute',
-        'city_name', // @todo: so far
+        'city_name', // @todo so far
         'created_at',
         'updated_at',
         'deleted_at',
@@ -199,7 +199,7 @@ class Address extends AbstractCrudModel
 
     /**
      * {@inheritDoc}
-     * @todo: ugly
+     * @todo ugly
      */
     public function onCreateBeforeSave(Collection $data): Crudable
     {

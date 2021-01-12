@@ -4,7 +4,7 @@
     @if (false)
         <div class="col-sm-5 col-xs-11">
             <h3 class="panel-title margin-top-7">
-                {{ $component->translate('model.title.singular') }}{{-- @todo: parent field name here --}}
+                {{ $component->translate('model.title.singular') }}{{-- @todo parent field name here --}}
             </h3>
         </div>
         <div class="col-sm-7 col-xs-1">

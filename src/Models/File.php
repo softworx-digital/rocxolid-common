@@ -16,7 +16,7 @@ use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\Common\Services\FileUploadService;
 
 /**
- * @todo: cleanup
+ * @todo cleanup
  */
 class File extends AbstractCrudModel implements Uploadable, Downloadable
 {
@@ -24,7 +24,7 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
 
     /**
      * Storage location subdirectory.
-     * @todo: method for this
+     * @todo method for this
      */
     const STORAGE_SUBDIR = 'files';
 
@@ -104,7 +104,7 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
 
     /**
      * {@inheritDoc}
-     * @todo: ugly
+     * @todo ugly
      */
     public function getRelativeUploadPath(): string
     {
@@ -188,7 +188,7 @@ class File extends AbstractCrudModel implements Uploadable, Downloadable
 
     /**
      * {@inheritDoc}
-     * @todo: ugly
+     * @todo ugly
      */
     public function onCreateBeforeSave(Collection $data): Crudable
     {

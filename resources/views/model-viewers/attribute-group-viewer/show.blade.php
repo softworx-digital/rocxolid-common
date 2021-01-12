@@ -20,6 +20,6 @@
     @can ('delete', $component->getModel())
         <button data-ajax-url="{{ $component->getModel()->getControllerRoute('destroyConfirm') }}" class="btn btn-danger pull-right"><i class="fa fa-trash margin-right-10"></i>{{ $component->translate('button.delete') }}</button>
     @endcan
-        {{-- @todo: any other buttons? --}}
+        {{-- @todo any other buttons? --}}
     </div>
 </div>

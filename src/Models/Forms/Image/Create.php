@@ -64,7 +64,7 @@ class Create extends RocXolidAbstractCrudForm
                 ],
             ],
         ],
-        // @todo: needs title to show translated field in validation message
+        // @todo needs title to show translated field in validation message
         'upload' => [
             'type' => UploadImage::class,
             'options' => [
@@ -95,7 +95,7 @@ class Create extends RocXolidAbstractCrudForm
         $fields['model_type']['options']['value'] = $this->getInputFieldValue('model_type');
         $fields['model_id']['options']['value'] = $this->getInputFieldValue('model_id');
 
-        // @todo: nicer
+        // @todo nicer
         $fake = $this->getModel();
         $model_attribute = $this->getInputFieldValue('model_attribute');
 

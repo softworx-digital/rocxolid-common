@@ -77,7 +77,7 @@ class ImageProcessService implements ImageProcessServiceContract
      * @param \Softworx\RocXolid\Models\Contracts\Resizable $model
      * @return \Softworx\RocXolid\Common\Services\Contracts\ImageProcessService
      * @throws \Intervention\Image\Exception\NotReadableException
-     * @todo: refactor?
+     * @todo refactor?
      */
     protected function resize(Resizable $model): ImageProcessServiceContract
     {

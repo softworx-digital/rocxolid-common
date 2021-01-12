@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations;
 use Softworx\RocXolid\Common\Models\Attribute;
 
 /**
- * @todo: documentation
+ * @todo documentation
  */
 interface Attributable
 {

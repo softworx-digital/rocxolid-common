@@ -1,7 +1,7 @@
 <?php
 
 /////////////////////////////////
-// @todo: REPLACE & DELETE THIS, get inspired by image upload, verify occurences
+// @todo REPLACE & DELETE THIS, get inspired by image upload, verify occurences
 /////////////////////////////////
 
 namespace Softworx\RocXolid\Common\Http\Traits\Controllers;

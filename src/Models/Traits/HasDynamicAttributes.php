@@ -10,7 +10,7 @@ use Softworx\RocXolid\Common\Models\Attribute;
 use Softworx\RocXolid\Common\Models\AttributeValue;
 
 /**
- * @todo: documentation (with associated contracts)
+ * @todo documentation (with associated contracts)
  */
 trait HasDynamicAttributes
 {
@@ -43,7 +43,7 @@ trait HasDynamicAttributes
         return AttributeGroup::where('model_type', static::class)->get();
     }
 
-    // @todo: ugly
+    // @todo ugly
     public function attributeValue(Attribute $attribute, $raw = false)
     {
         if ($pivot_attribute = $this->attributeValues->find(['attribute_id' => $attribute->getKey()])->first()) {

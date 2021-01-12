@@ -72,9 +72,9 @@ class Controller extends AbstractCrudController
     {
         $model_viewer_component = $this->getModelViewerComponent($model);
 
-        event(new AddressChanged($model, $this->response)); // @todo: this doesn't belong here
+        event(new AddressChanged($model, $this->response)); // @todo this doesn't belong here
 
-        // @todo: "hotfixed", extremely ugly
+        // @todo "hotfixed", extremely ugly
         if ($request->has('_section') && ($request->input('_section') === 'location')) {
             $model_viewer_component->setViewPackage('app');
         }
@@ -84,7 +84,7 @@ class Controller extends AbstractCrudController
             ->replace($model_viewer_component->getDomId('parent', $model->model_attribute), $model_viewer_component->fetch('related.show', [
                 'attribute' => $model->model_attribute,
                 'relation' => 'parent'
-            ])) // @todo: hardcoded, ugly
+            ])) // @todo hardcoded, ugly
             ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $form->getParam())))
             ->get();
     }

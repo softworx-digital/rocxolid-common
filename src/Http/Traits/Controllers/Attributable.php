@@ -23,8 +23,8 @@ use Softworx\RocXolid\Common\Models\AttributeGroup;
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
  * @version 1.0.0
- * @todo: make this to boot consecutive routes
- * @todo: subject to refactoring - use pivot instead of 'foreign' controller
+ * @todo make this to boot consecutive routes
+ * @todo subject to refactoring - use pivot instead of 'foreign' controller
  */
 trait Attributable
 {

@@ -15,12 +15,12 @@ use Softworx\RocXolid\Common\Models\AttributeGroup;
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
  * @version 1.0.0
- * @todo: make this to boot consecutive routes
+ * @todo make this to boot consecutive routes
  */
 interface Attributable
 {
     /**
-     * @todo: docblock
+     * @todo docblock
      *
      * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
      * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $model
@@ -29,7 +29,7 @@ interface Attributable
     public function modelAttributes(CrudRequest $request, AttributableModel $model, ?AttributeGroup $attribute_group = null);
 
     /**
-     * @todo: docblock
+     * @todo docblock
      *
      * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
      * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $model

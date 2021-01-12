@@ -80,7 +80,7 @@ abstract class AbstractUploadController extends AbstractCrudController
      */
     protected function onModelUpdated(CrudRequest $request, Crudable $model, AbstractCrudForm $form): CrudController
     {
-        // @todo: "hotfixed"
+        // @todo "hotfixed"
         if ($model->isParentPrimary() && !$model->isParentSingle()) {
             $model->parent->{$model->model_attribute}->except($model->getKey())->each(function ($sibling) {
                 $sibling->update([
