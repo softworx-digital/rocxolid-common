@@ -13,13 +13,6 @@
             </div>
         </div>
     </div>
-    <div class="x_footer">
-    @can ('backAny', $component->getModel())
-        <a class="btn btn-default" href="{{ $component->getController()->getRoute('index') }}"><i class="fa fa-chevron-left margin-right-10"></i>{{ $component->translate('button.back') }}</a>
-    @endcan
-    @can ('delete', $component->getModel())
-        <button data-ajax-url="{{ $component->getModel()->getControllerRoute('destroyConfirm') }}" class="btn btn-danger pull-right"><i class="fa fa-trash margin-right-10"></i>{{ $component->translate('button.delete') }}</button>
-    @endcan
-        {{-- @todo any other buttons? --}}
-    </div>
+
+    {!! $component->render('include.footer-panel') !!}
 </div>
