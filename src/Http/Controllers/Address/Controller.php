@@ -6,10 +6,10 @@ namespace Softworx\RocXolid\Common\Http\Controllers\Address;
 use Softworx\RocXolid\Http\Requests\CrudRequest;
 // rocXolid forms
 use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
-// rocXolid controllers
-use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
+// rocXolid common controllers
+use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common components
 use Softworx\RocXolid\Common\Components\ModelViewers\AddressViewer;
 // rocXolid common events

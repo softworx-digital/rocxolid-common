@@ -8,21 +8,66 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
+use Softworx\RocXolid\Models\Traits\Attributes as AttributeTraits;
 // rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\Group as UserGroup;
-//  rocXolid common model traits
-use Softworx\RocXolid\Common\Models\Traits\UserGroupAssociated;
 // rocXolid cms models
-use Softworx\RocXolid\CMS\Models\WebFrontpageSettings;
+use Softworx\RocXolid\Common\Models\WebFrontpageSettings;
 
 /**
+ * Web model.
+ * Represents a web instance runing on its own (sub)domain.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ * @todo revise
  */
 class Web extends AbstractCrudModel
 {
     use SoftDeletes;
-    use UserGroupAssociated;
+    use AttributeTraits\HasGeneralDataAttributes;
+    use AttributeTraits\HasLocalizationDataAttributes;
+    use AttributeTraits\HasLabelDataAttributes;
+    use AttributeTraits\HasDescriptionDataAttributes;
+    use Traits\UserGroupAssociated;
 
+    protected const GENERAL_DATA_ATTRIBUTES = [
+        'name', // internal
+        'title',
+        'url',
+        'domain',
+        'email',
+    ];
+
+    protected const LOCALIZATION_DATA_ATTRIBUTES = [
+        'localizations',
+        'defaultLocalization'
+    ];
+
+    protected const LABEL_DATA_ATTRIBUTES = [
+        'color',
+        'is_label_with_name',
+        'is_label_with_color',
+        'is_label_with_flag',
+    ];
+
+    protected const DESCRIPTION_DATA_ATTRIBUTES = [
+        'description',
+    ];
+
+    protected const ERROR_NOT_FOUND_DATA_ATTRIBUTES = [
+        'error_not_found_message',
+    ];
+
+    protected const ERROR_EXCEPTION_DATA_ATTRIBUTES = [
+        'is_error_exception_debug',
+        'error_exception_message',
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
     protected $fillable = [
         'name', // internal
         'title',
@@ -36,15 +81,24 @@ class Web extends AbstractCrudModel
         'is_label_with_color',
         'is_label_with_flag',
         'default_localization_id',
+        'is_error_exception_debug',
+        'error_not_found_message',
+        'error_exception_message',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $relationships = [
         'userGroup',
-        'frontpageSettings',
+        // 'frontpageSettings',
         'localizations',
         'defaultLocalization'
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     public function onCreateBeforeSave(Collection $data): Crudable
     {
         // dd(__METHOD__, '@todo');
@@ -97,5 +151,35 @@ class Web extends AbstractCrudModel
     public function defaultLocalization()
     {
         return $this->belongsTo(Localization::class);
+    }
+
+    /**
+     * Retrieve "not found" error data attributes.
+     *
+     * @param boolean $keys Flag to retrieve only attribute keys.
+     * @return Collection
+     */
+    public function getErrorNotFoundDataAttributes(bool $keys = false): Collection
+    {
+        return $keys
+            ? collect(static::ERROR_NOT_FOUND_DATA_ATTRIBUTES)
+            : collect($this->getAttributes())->only(static::ERROR_NOT_FOUND_DATA_ATTRIBUTES)->sortBy(function ($value, string $field) {
+                return array_search($field, static::ERROR_NOT_FOUND_DATA_ATTRIBUTES);
+            });
+    }
+
+    /**
+     * Retrieve "exception" error data attributes.
+     *
+     * @param boolean $keys Flag to retrieve only attribute keys.
+     * @return Collection
+     */
+    public function getErrorExceptionDataAttributes(bool $keys = false): Collection
+    {
+        return $keys
+            ? collect(static::ERROR_EXCEPTION_DATA_ATTRIBUTES)
+            : collect($this->getAttributes())->only(static::ERROR_EXCEPTION_DATA_ATTRIBUTES)->sortBy(function ($value, string $field) {
+                return array_search($field, static::ERROR_EXCEPTION_DATA_ATTRIBUTES);
+            });
     }
 }

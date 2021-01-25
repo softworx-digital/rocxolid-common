@@ -12,6 +12,12 @@ trait DetectsWeb
 {
     private $_web = null;
 
+    // @todo hotfixed
+    public function detectOnlyWeb(Request $request)
+    {
+        return Web::where('domain', 'like', sprintf('%%%s', $request->getHost()))->firstOrFail();
+    }
+
     public function detectWeb(Request $request = null)
     {
         if (is_null($this->_web)) {

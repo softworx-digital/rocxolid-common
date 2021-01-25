@@ -15,6 +15,8 @@ class CreateCommonTables extends Migration
         $this
             ->files()
             ->images()
+            // ->personalData() // @todo finish
+            // ->companyData() // @todo finish
             ->countries()
             ->regions()
             ->districts()
@@ -157,6 +159,53 @@ class CreateCommonTables extends Migration
         return $this->importDump('countries');
     }
 
+    protected function personalData()
+    {
+        Schema::create('personal_data', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->morphs('model');
+            $table->string('model_attribute');
+            $table->unsignedInteger('model_attribute_position')->default(0);
+            $table->boolean('is_model_primary')->default(0);
+
+            $table->unsignedInteger('language_id');
+            $table->unsignedInteger('nationality_id');
+
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('last_name');
+
+            $table->string('email')->nullable();
+            $table->string('phone_no')->nullable();
+
+            $table->date('birthdate')->nullable();
+            $table->enum('gender', ['m', 'f'])->nullable();
+            $table->string('bank_account_no')->nullable();
+
+            $table->string('id_card_no')->nullable();
+            $table->string('passport_no')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+
+            $table->foreign('language_id')
+                ->references('id')
+                ->on('languages')
+                ->onDelete('cascade');
+
+            $table->foreign('nationality_id')
+                ->references('id')
+                ->on('nationalities')
+                ->onDelete('cascade');
+        });
+
+        return $this;
+    }
+
     protected function regions()
     {
         Schema::create('regions', function (Blueprint $table) {
@@ -180,11 +229,9 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        $this
+        return $this
             ->importDump('sk/regions')
             ->importDump('cz/regions');
-
-        return $this;
     }
 
     protected function districts()
@@ -217,11 +264,9 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        $this
+        return $this
             ->importDump('sk/districts')
             ->importDump('cz/districts');
-
-        return $this;
     }
 
     protected function cities()
@@ -263,11 +308,9 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        $this
+        return $this
             ->importDump('sk/cities')
             ->importDump('cz/cities');
-
-        return $this;
     }
 
     protected function cadastralAreas()
@@ -293,11 +336,9 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        $this
+        return $this
             ->importDump('sk/cadastral_areas')
             ->importDump('cz/cadastral_areas');
-
-        return $this;
     }
 
     protected function addresses()

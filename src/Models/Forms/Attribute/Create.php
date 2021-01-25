@@ -68,7 +68,7 @@ class Create extends RocXolidAbstractCrudForm
             ],
         ],/*
         'is_multiple' => [
-            'type' => FieldType\Switchery::class,
+            'type' => FieldType\CheckboxToggle::class,
             'options' => [
                 'label' => [
                     'title' => 'is_multiple',

@@ -2,8 +2,8 @@
 
 namespace Softworx\RocXolid\Common\Components\ModelViewers;
 
-use Softworx\RocXolid\Common\Components\ModelViewers\CrudModelViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\AbstractCrudModelViewer;
 
-class FileViewer extends CrudModelViewer
+class FileViewer extends AbstractCrudModelViewer
 {
 }

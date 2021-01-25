@@ -3,6 +3,7 @@
 namespace Softworx\RocXolid\Common\Models\Traits;
 
 use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Relations;
 // rocXolid contracts
 use Softworx\RocXolid\Forms\Contracts\Form;
 use Softworx\RocXolid\Forms\Contracts\FormField;
@@ -10,17 +11,28 @@ use Softworx\RocXolid\Forms\Contracts\FormField;
 use Softworx\RocXolid\Common\Models\Web;
 
 /**
+ * Trait to assign model to the Web model.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
  */
 trait HasWeb
 {
+    // @todo refactor
     private $_detected_web = null;
 
-    public function web()
+    /**
+     * Web reference.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function web(): Relations\BelongsTo
     {
         return $this->belongsTo(Web::class);
     }
 
+    // @todo refactor
     public function detectWeb(Form $form)
     {
         if (is_null($this->_detected_web)) {
