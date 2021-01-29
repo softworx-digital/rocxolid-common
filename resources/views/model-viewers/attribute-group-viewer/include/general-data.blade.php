@@ -1,4 +1,4 @@
-@if ($user->can('view', $component->getModel()))
+@can ('view', $component->getModel())
 <div id="{{ $component->getDomId('general-data') }}" class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
@@ -19,4 +19,4 @@
         </dl>
     </div>
 </div>
-@endif
+@endcan

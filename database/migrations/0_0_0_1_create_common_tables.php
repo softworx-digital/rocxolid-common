@@ -13,6 +13,7 @@ class CreateCommonTables extends Migration
     public function up()
     {
         $this
+            ->commandLogs()
             ->files()
             ->images()
             // ->personalData() // @todo finish
@@ -65,7 +66,31 @@ class CreateCommonTables extends Migration
         Schema::dropIfExists('attributes');
         Schema::dropIfExists('attribute_values');
         Schema::dropIfExists('model_has_attributes');
+        Schema::dropIfExists('command_logs');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
+    }
+
+    protected function commandLogs()
+    {
+        Schema::create('command_logs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('caller')->nullable();
+            $table->string('command');
+            $table->json('arguments')->nullable();
+            $table->json('options')->nullable();
+            $table->dateTime('started_at');
+            $table->dateTime('finished_at')->nullable();
+            $table->enum('state', [ 'running', 'success', 'error' ]);
+            $table->json('message')->nullable();
+            $table->json('error')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+        });
+
+        return $this;
     }
 
     protected function files()

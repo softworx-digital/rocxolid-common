@@ -130,7 +130,7 @@ class Attribute extends AbstractCrudModel
      * Check if the Attribute is of given type.
      *
      * @param string $type
-     * @return boolean
+     * @return bool
      */
     public function isType(string $type): bool
     {
@@ -140,7 +140,7 @@ class Attribute extends AbstractCrudModel
     /**
      * Check if the Attribute can have multiple values.
      *
-     * @return boolean
+     * @return bool
      */
     public function isMultiple(): bool
     {

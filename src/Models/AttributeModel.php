@@ -3,9 +3,9 @@
 namespace Softworx\RocXolid\Common\Models;
 
 use Softworx\RocXolid\Models\AbstractCrudModel;
-// common contracts
+// rocXolid common contracts
 use Softworx\RocXolid\Common\Models\Contracts\Attributable;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\AttributeGroup;
 use Softworx\RocXolid\Common\Models\AttributeValue;
 

@@ -107,6 +107,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
                     'web-frontpage-settings' => 'web_frontpage_settings', // @todo this is needed because Laravel somehow violates standard param naming convention in this case
                 ],
             ]);
+            CrudRouterService::create('command-log', \CommandLog\Controller::class);
 
             $router->group([
                 'namespace' => 'File',
@@ -166,6 +167,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
         // @todo group namespace
         $router->model('web', \Softworx\RocXolid\Common\Models\Web::class);
         $router->model('web_frontpage_settings', \Softworx\RocXolid\Common\Models\WebFrontpageSettings::class);
+        $router->model('command_log', \Softworx\RocXolid\Common\Models\CommandLog::class);
         $router->model('file', \Softworx\RocXolid\Common\Models\File::class);
         $router->model('image', \Softworx\RocXolid\Common\Models\Image::class);
         $router->model('country', \Softworx\RocXolid\Common\Models\Country::class);

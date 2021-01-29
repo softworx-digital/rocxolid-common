@@ -3,7 +3,7 @@
 namespace Softworx\RocXolid\Common\Models\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Address;
 
 /**

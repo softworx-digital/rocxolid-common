@@ -5,7 +5,7 @@ namespace Softworx\RocXolid\Common\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 // rocxolid fundamentals
 use Softworx\RocXolid\Models\AbstractCrudModel;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\File;
 use Softworx\RocXolid\Common\Models\Image;
 use Softworx\RocXolid\Common\Models\Web;
