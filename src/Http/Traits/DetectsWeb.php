@@ -28,12 +28,12 @@ trait DetectsWeb
             try {
                 $this->_web = Web::where('domain', 'like', sprintf('%%%s', $request->getHost()))->firstOrFail();
             } catch (ModelNotFoundException $e) {
-                //dd(sprintf('--web pre domenu [%s] nie je definovany--> 404', $request->getHost()));
+                // dd(__METHOD__, sprintf('--web pre domenu [%s] nie je definovany--> 404', $request->getHost()));
                 throw new \RuntimeException(sprintf('Cannot detect web for [%s]', $request->getHost()));
             }
 
             if (!$this->_web->frontpageSettings()->exists()) {
-                //dd(sprintf('--web [%s] nema priradene frontpage settings--> 500 (exception) ?', $this->_web->getKey()));
+                // dd(__METHOD__, sprintf('--web [%s] nema priradene frontpage settings--> 500 (exception) ?', $this->_web->getKey()));
                 throw new \RuntimeException(sprintf('Web [%s] has no frontpage settings attached', $this->_web->getTitle()));
             }
         }
