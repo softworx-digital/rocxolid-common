@@ -30,6 +30,7 @@ class AttributeGroup extends AbstractCrudModel
     use SoftDeletes;
 
     protected const GENERAL_DATA_ATTRIBUTES = [
+        'is_filterable',
         'model_type',
         'name',
         'code',
@@ -54,6 +55,7 @@ class AttributeGroup extends AbstractCrudModel
      * {@inheritDoc}
      */
     protected $fillable = [
+        'is_filterable',
         'model_type',
         'name',
         'code',

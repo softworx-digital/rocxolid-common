@@ -21,11 +21,11 @@ class Index extends AbstractCrudTable
      * {@inheritDoc}
      */
     protected $filters = [
-        'full_name' => [
+        'name' => [
             'type' => FilterType\Text::class,
             'options' => [
                 'label' => [
-                    'title' => 'full_name'
+                    'title' => 'name'
                 ],
                 'attributes' => [
                     'placeholder' => 'name'
@@ -38,6 +38,14 @@ class Index extends AbstractCrudTable
      * {@inheritDoc}
      */
     protected $columns = [
+        'is_filterable' => [
+            'type' => ColumnType\Flag::class,
+            'options' => [
+                'label' => [
+                    'title' => 'is_filterable',
+                ],
+            ],
+        ],
         'name' => [
             'type' => ColumnType\Text::class,
             'options' => [

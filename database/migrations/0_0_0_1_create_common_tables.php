@@ -584,6 +584,7 @@ class CreateCommonTables extends Migration
     {
         Schema::create('attribute_groups', function (Blueprint $table) {
             $table->increments('id');
+            $table->boolean('is_filterable')->default(1);
             $table->string('model_type')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
