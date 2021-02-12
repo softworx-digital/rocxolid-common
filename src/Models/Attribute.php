@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 // rocXolid utils
 use Softworx\RocXolid\Http\Requests\CrudRequest;
+// rocXolid controller contracts
+use Softworx\RocXolid\Http\Controllers\Contracts\Crudable as CrudableController;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
 // rocXolid component contracts
@@ -18,6 +20,7 @@ use Softworx\RocXolid\Common\Models\Contracts\Attributable;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\AttributeGroup;
 use Softworx\RocXolid\Common\Models\AttributeValue;
+use Softworx\RocXolid\Common\Models\Image;
 
 /**
  * Attribute model.
@@ -30,6 +33,7 @@ use Softworx\RocXolid\Common\Models\AttributeValue;
 class Attribute extends AbstractCrudModel
 {
     use SoftDeletes;
+    use Traits\HasImage;
 
     const POSITION_COLUMN = 'attribute_group_position';
 
@@ -51,6 +55,7 @@ class Attribute extends AbstractCrudModel
         //'is_multiple',
         'name',
         'code',
+        'background_color',
         'units',
         'description',
         'note',
@@ -160,5 +165,24 @@ class Attribute extends AbstractCrudModel
             default:
                 return sprintf('value_%s', $this->type);
         }
+    }
+
+    /**
+     * Image upload handler.
+     *
+     * @param \Softworx\RocXolid\Common\Models\Image $image Uploaded image reference.
+     * @param \Softworx\RocXolid\Http\Controllers\Contracts\Crudable $controller Active controller reference.
+     * @return \Softworx\RocXolid\UserManagement\Models\User
+     */
+    public function onImageUpload(Image $image, CrudableController $controller): self
+    {
+        $group_model_viewer = $this->attributeGroup->getModelViewerComponent();
+
+        $controller->getResponse()->replace(
+            $group_model_viewer->getDomId('attributes'),
+            $group_model_viewer->fetch('include.attributes')
+        );
+
+        return $this;
     }
 }

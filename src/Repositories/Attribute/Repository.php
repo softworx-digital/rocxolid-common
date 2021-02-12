@@ -3,6 +3,7 @@
 namespace Softworx\RocXolid\Common\Repositories\Attribute;
 
 // rocXolid repositories
+use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
 use Softworx\RocXolid\Repositories\CrudRepository;
 // rocXolid user management models
 use Softworx\RocXolid\Common\Models\AttributeGroup;
@@ -37,7 +38,7 @@ class Repository extends CrudRepository
     /**
      * {@inheritDoc}
      */
-    protected function initQueryModel(): Repository
+    protected function initQueryModel(): RepositoryContract
     {
         if (filled($this->attribute_group)) {
             $this->query_model::bootAssociatedAttributeGroup($this->attribute_group);

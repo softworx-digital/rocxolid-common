@@ -2,15 +2,16 @@
 
 namespace Softworx\RocXolid\Common\Models\Tables\Web;
 
+// rocXolid tables & types
 use Softworx\RocXolid\Tables\AbstractCrudTable;
-use Softworx\RocXolid\Tables\Columns\Type\Text;
-use Softworx\RocXolid\Tables\Columns\Type\ModelRelation;
+use Softworx\RocXolid\Tables\Columns\Type as ColumnType;
+use Softworx\RocXolid\Tables\Buttons\Type as ButtonType;
 
 class Index extends AbstractCrudTable
 {
     protected $columns = [
         'name' => [
-            'type' => Text::class,
+            'type' => ColumnType\Text::class,
             'options' => [
                 'label' => [
                     'title' => 'name'
@@ -23,7 +24,7 @@ class Index extends AbstractCrudTable
             ],
         ],
         'description' => [
-            'type' => Text::class,
+            'type' => ColumnType\Text::class,
             'options' => [
                 'label' => [
                     'title' => 'description'
@@ -36,7 +37,7 @@ class Index extends AbstractCrudTable
             ],
         ],
         'localizations' => [
-            'type' => ModelRelation::class,
+            'type' => ColumnType\ModelRelation::class,
             'options' => [
                 'ajax' => true,
                 'label' => [
@@ -54,7 +55,7 @@ class Index extends AbstractCrudTable
             ],
         ],/*
         'userGroup' => [
-            'type' => ModelRelation::class,
+            'type' => ColumnType\ModelRelation::class,
             'options' => [
                 'ajax' => true,
                 'label' => [
@@ -72,7 +73,7 @@ class Index extends AbstractCrudTable
             ],
         ],*/
         'frontpageSettings' => [
-            'type' => ModelRelation::class,
+            'type' => ColumnType\ModelRelation::class,
             'options' => [
                 'ajax' => true,
                 'label' => [
@@ -87,6 +88,41 @@ class Index extends AbstractCrudTable
                         'class' => 'text-center',
                     ],
                 ],
+            ],
+        ],
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $buttons = [
+        'show' => [
+            'type' => ButtonType\ButtonAnchor::class,
+            'options' => [
+                'label' => [
+                    'icon' => 'fa fa-eye',
+                ],
+                'attributes' => [
+                    'class' => 'btn btn-info btn-sm margin-right-no',
+                    'title-key' => 'show',
+                ],
+                'policy-ability' => 'view',
+                'action' => 'show',
+            ],
+        ],
+        'delete-ajax' => [
+            'type' => ButtonType\ButtonAnchor::class,
+            'options' => [
+                'ajax' => true,
+                'label' => [
+                    'icon' => 'fa fa-trash',
+                ],
+                'attributes' => [
+                    'class' => 'btn btn-danger btn-sm margin-right-no',
+                    'title-key' => 'delete',
+                ],
+                'policy-ability' => 'delete',
+                'action' => 'destroyConfirm',
             ],
         ],
     ];

@@ -108,6 +108,14 @@ class Create extends RocXolidAbstractCrudForm
                 ],
             ],
         ],
+        'background_color' => [
+            'type' => FieldType\Colorpicker::class,
+            'options' => [
+                'label' => [
+                    'title' => 'background_color',
+                ],
+            ],
+        ],
         'units' => [
             'type' => FieldType\Input::class,
             'options' => [

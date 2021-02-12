@@ -14,12 +14,12 @@ use Softworx\RocXolid\Forms\AbstractCrudForm;
 // rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts\Crudable;
 use Softworx\RocXolid\Models\Contracts\Uploadable;
+// rocXolid components
+use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common service contracts
 use Softworx\RocXolid\Common\Services\Contracts\FileUploadService;
-// rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\CrudModelViewer;
 
 /**
  * Controller for uploadable models.

@@ -21,6 +21,24 @@ class Index extends AbstractCrudTable
      * {@inheritDoc}
      */
     protected $columns = [
+        'image' => [
+            'type' => ColumnType\ImageRelation::class,
+            'options' => [
+                'label' => [
+                    'title' => 'image'
+                ],
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+                'size' => 'thumb',
+                'relation' => [
+                    'name' => 'image',
+                ],
+                'width' => 64,
+            ],
+        ],
         'name' => [
             'type' => ColumnType\Text::class,
             'options' => [
@@ -39,6 +57,19 @@ class Index extends AbstractCrudTable
             'options' => [
                 'label' => [
                     'title' => 'code'
+                ],
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+            ],
+        ],
+        'background_color' => [
+            'type' => ColumnType\Label::class,
+            'options' => [
+                'label' => [
+                    'title' => 'background_color'
                 ],
                 'wrapper' => [
                     'attributes' => [
@@ -106,6 +137,28 @@ class Index extends AbstractCrudTable
                 ],
                 'policy-ability' => 'setValues',
                 'action' => 'setValues',
+            ],
+        ],
+        'image' => [
+            'type' => ButtonType\ButtonAnchor::class,
+            'options' => [
+                'ajax' => true,
+                'label' => [
+                    'icon' => 'fa fa-image',
+                ],
+                'attributes' => [
+                    'class' => 'btn btn-default btn-sm margin-right-no',
+                    'title-key' => 'upload-image',
+                ],
+                'policy-ability' => 'update',
+                'related-action' => [
+                    'action' => 'create',
+                    'relation' => 'image',
+                    'attribute' => 'parent',
+                ],/*
+                'route-params' => [
+                    '_section' => 'asda',
+                ],*/
             ],
         ],
         'edit' => [

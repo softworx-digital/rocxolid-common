@@ -22,4 +22,7 @@ return [
             'plural' => 'Skupiny atribútov',
         ],
     ],
+    'text' => [
+        'attributes-data' => 'Atribúty',
+    ],
 ];
