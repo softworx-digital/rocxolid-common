@@ -4,9 +4,14 @@
         'relation' => $relation,
         'attribute' => $attribute,
         'read_only' => $read_only ?? false,
-    ] + (isset($upload_button_label) ? [ 'upload_button_label' => $upload_button_label ] : [])) !!}
+    ]) !!}
     <div class="panel-body text-center text-primary padding-0">
         {!! $component->render('default', [ 'image' => $component->getModel(), 'size' => $size ?? 'mid' ]) !!}
     </div>
+    {!! $component->render('related.panel-footer', [
+        'relation' => $relation,
+        'attribute' => $attribute,
+        'read_only' => $read_only ?? false,
+    ] + (isset($upload_button_label) ? [ 'upload_button_label' => $upload_button_label ] : [])) !!}
 </div>
 @endcan

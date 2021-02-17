@@ -40,7 +40,7 @@ trait HasDynamicAttributes
 
     public function attributeGroups(): Collection
     {
-        return AttributeGroup::where('model_type', static::class)->get();
+        return AttributeGroup::whereJsonContains('model_type', static::class)->get();
     }
 
     // @todo ugly

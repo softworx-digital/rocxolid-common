@@ -4,6 +4,7 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations;
 // rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid models
@@ -30,6 +31,7 @@ class Web extends AbstractCrudModel
     use AttributeTraits\HasLocalizationDataAttributes;
     use AttributeTraits\HasLabelDataAttributes;
     use AttributeTraits\HasDescriptionDataAttributes;
+    // @todo the trait's currently inactive - see comment in trait for more
     use Traits\UserGroupAssociated;
 
     protected const GENERAL_DATA_ATTRIBUTES = [
@@ -138,17 +140,26 @@ class Web extends AbstractCrudModel
         return $this->belongsTo(UserGroup::class);
     }
 
-    public function frontpageSettings()
+    /**
+     * @Softworx\RocXolid\Annotations\AuthorizedRelation
+     */
+    public function frontpageSettings(): Relations\HasOne
     {
         return $this->hasOne(WebFrontpageSettings::class);
     }
 
-    public function localizations()
+    /**
+     * @Softworx\RocXolid\Annotations\AuthorizedRelation(policy_abilities="['assign']")
+     */
+    public function localizations(): Relations\BelongsToMany
     {
         return $this->belongsToMany(Localization::class, 'web_has_localizations');
     }
 
-    public function defaultLocalization()
+    /**
+     * @Softworx\RocXolid\Annotations\AuthorizedRelation(policy_abilities="['assign']")
+     */
+    public function defaultLocalization(): Relations\BelongsTo
     {
         return $this->belongsTo(Localization::class);
     }

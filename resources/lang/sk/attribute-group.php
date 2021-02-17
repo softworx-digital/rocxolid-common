@@ -22,6 +22,10 @@ return [
             'plural' => 'Skupiny atribútov',
         ],
     ],
+    'legend' => [
+        'base' => 'Základné údaje',
+        'assignments' => 'Priradenia',
+    ],
     'text' => [
         'attributes-data' => 'Atribúty',
     ],

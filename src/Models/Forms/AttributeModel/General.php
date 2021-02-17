@@ -37,7 +37,7 @@ class General extends RocXolidAbstractCrudForm
             });
         }
 
-        return $this->adjustFieldsDefinition($this->fields);
+        return $this->adjustFieldsDefinition($this->fields) ?: [];
     }
 
     /**

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 // rocXolid utils
 use Softworx\RocXolid\Http\Requests\CrudRequest;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
 // rocXolid component contracts
@@ -69,14 +71,53 @@ class AttributeGroup extends AbstractCrudModel
     protected $relationships = [
     ];
 
+    /**
+     * {@inheritDoc}
+     */
+    public function fillCustom(Collection $data): Crudable
+    {
+        $this
+            ->fillModelTypes($data);
+
+        return parent::fillCustom($data);
+    }
+
+    /**
+     * Fill model types.
+     *
+     * @param \Illuminate\Support\Collection $data
+     * @return \Softworx\RocXolid\Models\Contracts\Crudable
+     */
+    public function fillModelTypes(Collection $data): Crudable
+    {
+        if ($data->has('model_type')) {
+            $this->model_type = json_encode($data->get('model_type'));
+        }
+
+        return $this;
+    }
+
     public function attributes(): Relations\HasMany
     {
         return $this->hasMany(Attribute::class)->orderBy(sprintf('%s.%s', app(Attribute::class)->getTable(), Attribute::POSITION_COLUMN));
     }
 
+    /**
+     * Model type attribute getter mutator.
+     *
+     * @param mixed $value
+     * @return \Illuminate\Support\Collection
+     */
+    public function getModelTypeAttribute($value): Collection
+    {
+        return collect($value ? json_decode($value) : [])->filter();
+    }
+
     public function getModelTypeTitle(): string
     {
-        return app($this->model_type)->getClassNameTranslation();
+        return $this->model_type->transform(function (string $model_type) {
+            return app($model_type)->getClassNameTranslation();
+        })->join(', ');
     }
 
     public function makeModel($model_id): Attributable

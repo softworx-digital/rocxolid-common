@@ -1,7 +1,15 @@
 @can ('view', [ $related, $attribute ])
 <div id="{{ $component->getDomId(md5(get_class($related)), $related->getKey(), $attribute) }}" class="panel panel-default">
+    {!! $component->render('related.panel-heading', [
+        'relation' => $relation,
+        'attribute' => $attribute,
+        'read_only' => $read_only ?? false,
+    ]) !!}
+    <div class="panel-body text-center text-primary">
+        {{ Html::image(sprintf('vendor/softworx/rocXolid/images/%s.svg', $placeholder ?? $component->getModel()->{$relation}()->getRelated()->getImagePlaceholder() ?? 'placeholder'), $attribute, [ 'style' => 'max-width: 100%; padding: 3em;' ]) }}
+    </div>
     @if (!($read_only ?? false))
-    <div class="panel-heading">
+    <div class="panel-footer">
         <div class="row">
             <div class="col-xs-12">
                 <div class="btn-group btn-group-sm center-block hidden-xs" role="group">
@@ -28,8 +36,5 @@
         </div>
     </div>
     @endif
-    <div class="panel-body text-center text-primary">
-        {{ Html::image(sprintf('vendor/softworx/rocXolid/images/%s.svg', $placeholder ?? $component->getModel()->{$relation}()->getRelated()->getImagePlaceholder() ?? 'placeholder'), $attribute, [ 'style' => 'max-width: 100%; padding: 3em;' ]) }}
-    </div>
 </div>
 @endcan

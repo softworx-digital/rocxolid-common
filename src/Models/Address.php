@@ -85,6 +85,14 @@ class Address extends AbstractCrudModel
     ];
 
     /**
+     * {@inheritDoc}
+     */
+    public function getTitle(): string
+    {
+        return $this->name ?: $this->getAddressLabel(false, true, false);
+    }
+
+    /**
      * Relation to parent.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
