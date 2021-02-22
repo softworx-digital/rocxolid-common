@@ -76,6 +76,15 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 });
             });
             */
+
+            $router->group([
+                'namespace' => 'Artisan',
+                'prefix' => 'artisan',
+                'as' => 'artisan.',
+            ], function ($router) {
+                $router->get('', 'Controller@index')->name('index');
+                $router->post('/run', 'Controller@run')->name('run');
+            });
         });
 
         $router->group([

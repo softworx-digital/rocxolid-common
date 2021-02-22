@@ -50,4 +50,8 @@ return [
         'error-not-found-data' => 'Nastavenia pre "Error 404 - Stránka nenájdená"',
         'error-exception-data' => 'Nastavenia pre "Error 5xx - Chyby na strane servera"',
     ],
+    'token' => [
+        'title' => 'Názov',
+        'domain' => 'Doména',
+    ],
 ];

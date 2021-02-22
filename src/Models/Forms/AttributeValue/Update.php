@@ -2,8 +2,8 @@
 
 namespace Softworx\RocXolid\Common\Models\Forms\AttributeValue;
 
-use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
 // rocXolid forms & fields
+use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
 use Softworx\RocXolid\Forms\Fields\Type as FieldType;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Attribute;

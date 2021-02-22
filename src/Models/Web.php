@@ -6,7 +6,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations;
 // rocXolid model contracts
-use Softworx\RocXolid\Models\Contracts\Crudable;
+use Softworx\RocXolid\Models\Contracts as rxContracts;
+// rocXolid model traits
+use Softworx\RocXolid\Models\Traits as rxTraits;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\Models\Traits\Attributes as AttributeTraits;
@@ -24,9 +26,10 @@ use Softworx\RocXolid\Common\Models\WebFrontpageSettings;
  * @version 1.0.0
  * @todo revise
  */
-class Web extends AbstractCrudModel
+class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertiesMethods
 {
     use SoftDeletes;
+    use rxTraits\HasTokenablePropertiesMethods;
     use AttributeTraits\HasGeneralDataAttributes;
     use AttributeTraits\HasLocalizationDataAttributes;
     use AttributeTraits\HasLabelDataAttributes;
@@ -67,6 +70,11 @@ class Web extends AbstractCrudModel
         'error_exception_message',
     ];
 
+    protected static $tokenable_properties = [
+        'title',
+        'domain',
+    ];
+
     /**
      * {@inheritDoc}
      */
@@ -101,7 +109,7 @@ class Web extends AbstractCrudModel
     /**
      * {@inheritDoc}
      */
-    public function onCreateBeforeSave(Collection $data): Crudable
+    public function onCreateBeforeSave(Collection $data): rxContracts\Crudable
     {
         // dd(__METHOD__, '@todo');
         $this
