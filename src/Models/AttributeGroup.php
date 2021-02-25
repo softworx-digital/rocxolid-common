@@ -99,7 +99,7 @@ class AttributeGroup extends AbstractCrudModel
 
     public function attributes(): Relations\HasMany
     {
-        return $this->hasMany(Attribute::class)->orderBy(sprintf('%s.%s', app(Attribute::class)->getTable(), Attribute::POSITION_COLUMN));
+        return $this->hasMany(Attribute::class)->orderBy(app(Attribute::class)->qualifyColumn(Attribute::POSITION_COLUMN));
     }
 
     /**
