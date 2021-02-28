@@ -57,6 +57,11 @@ class CommandLog extends AbstractCrudModel
         'finished_at',
     ];
 
+    public function getTitle(): string
+    {
+        return sprintf('[%s] @ [%s]', $this->command, $this->started_at->toDateString());
+    }
+
     /**
      * Add message to message bag.
      *
