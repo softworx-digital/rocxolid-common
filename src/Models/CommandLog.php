@@ -37,8 +37,22 @@ class CommandLog extends AbstractCrudModel
     /**
      * {@inheritDoc}
      */
-    protected $fillable = [
+    protected $system = [
+        'id',
         'caller',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $fillable = [
+        // 'caller',
         'command',
         'arguments',
         'options',

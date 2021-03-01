@@ -43,6 +43,23 @@ trait HasDynamicAttributes
         return AttributeGroup::whereJsonContains('model_type', static::class)->get();
     }
 
+    public function allAttributeValues(): Collection
+    {
+        return $this->attributeGroups()->transform(function (AttributeGroup $attribute_group) {
+            return [
+                'id' => $attribute_group->getKey(),
+                'title' => $attribute_group->getTitle(),
+                'values' => $attribute_group->attributes()->get()->transform(function (Attribute $attribute) {
+                    return [
+                        'id' => $attribute->getKey(),
+                        'title' => $attribute->getTitle(),
+                        'value' => $this->attributeValue($attribute, true)
+                    ];
+                })
+            ];
+        });
+    }
+
     // @todo ugly
     public function attributeValue(Attribute $attribute, $raw = false)
     {
