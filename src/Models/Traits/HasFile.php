@@ -48,4 +48,17 @@ trait HasFile
     {
         return $this;
     }
+
+    /**
+     * Adjust upload form fields.
+     *
+     * @param array $fields
+     * @param string $model_attribute
+     * @return array
+     * @todo hotfixed
+     */
+    public function adjustUploadFormFields(array $fields, string $model_attribute): array
+    {
+        return $fields;
+    }
 }

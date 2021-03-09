@@ -119,4 +119,16 @@ class Image extends File implements Resizable
             throw new \RuntimeException(sprintf('Problems reading file [%s]. Probably does not exist.', $this->getStoragePath($size)));
         }
     }
+
+    /**
+     * Get CRUD controller route.
+     *
+     * @param string $method
+     * @param array $params
+     * @return string
+     */
+    public function getPublicControllerRoute($size): string
+    {
+        return route('image', [ 'image' => $this, 'size' => $size ]);
+    }
 }

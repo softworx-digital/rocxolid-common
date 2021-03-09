@@ -109,6 +109,9 @@ class Create extends RocXolidAbstractCrudForm
             throw new \RuntimeException(sprintf('Invalid file relation type [%s] for [%s]->[%s]', get_class($fake->parent->{$model_attribute}()), get_class($fake->parent), $model_attribute));
         }
 
+        // @todo hotfixed
+        $fields = $fake->parent->adjustUploadFormFields($fields, $model_attribute);
+
         return $fields;
     }
 
