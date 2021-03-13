@@ -1,5 +1,5 @@
 @if (!($read_only ?? false))
-<div class="panel-heading">
+<div class="panel-footer">
     <div class="row">
         <div class="col-xs-12">
             <div class="btn-group btn-group-sm center-block hidden-xs" role="group">

@@ -23,19 +23,22 @@ class WebFrontpageSettings extends AbstractCrudModel
 {
     use SoftDeletes;
     use Traits\HasWeb;
+    use Traits\HasImage;
     use Traits\UserGroupAssociatedWeb;
 
     protected $fillable = [
         'web_id',
         'name',
-        'theme',
-        //'css',
-        //'js',
+        // 'theme',
+        // 'css',
+        // 'js',
         // 'schema',
         'facebook_page_url',
+        // 'facebook_app_id',
         // 'google_plus_page_url',
         // 'youtube_page_url',
         'google_analytics_tracking_code',
+        'google_measurement_id',
         'google_tag_manager_container_id',
         // 'livechatoo_account',
         // 'livechatoo_language',
@@ -48,7 +51,7 @@ class WebFrontpageSettings extends AbstractCrudModel
     ];
 
     protected $relationships = [
-        'web',
+        // 'web',
         //'cssFiles',
         //'jsFiles',
     ];
@@ -65,6 +68,7 @@ class WebFrontpageSettings extends AbstractCrudModel
         'deleted_by',
         // temporarily put here so they won't show up in details
         'schema',
+        'facebook_app_id',
         'google_plus_page_url',
         'youtube_page_url',
         'livechatoo_account',
@@ -82,13 +86,16 @@ class WebFrontpageSettings extends AbstractCrudModel
             'thumb' => [ 'width' => 64, 'height' => 64, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
             'small' => [ 'width' => 180, 'height' => 55, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
             //'fb' => [ 'width' => 474, 'height' => 145, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
+            'mid' => [ 'width' => 512, 'height' => 512, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
             'default' => [ 'width' => 474, 'height' => 145, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
         ],
         'logoInverted' => [
             'thumb' => [ 'width' => 64, 'height' => 64, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
             'small' => [ 'width' => 300, 'height' => 74, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
+            'mid' => [ 'width' => 512, 'height' => 512, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
         ],
         'favicon' => [
+            'mid' => [ 'width' => 512, 'height' => 512, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ], ],
             // apple-touch-icon
             '57x57' => [ 'width' => 57, 'height' => 57, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ] ],
             '60x60' => [ 'width' => 60, 'height' => 60, 'method' => 'resize', 'constraints' => [ 'aspectRatio', 'upsize', ] ],
@@ -112,17 +119,17 @@ class WebFrontpageSettings extends AbstractCrudModel
 
     public function logo()
     {
-        return $this->morphOne(Image::class, 'model')->where(sprintf('%s.model_attribute', (new Image())->getTable()), 'logo')->orderBy(sprintf('%s.model_attribute_position', (new Image())->getTable()));
+        return $this->image('logo');
     }
 
     public function logoInverted()
     {
-        return $this->morphOne(Image::class, 'model')->where(sprintf('%s.model_attribute', (new Image())->getTable()), 'logoinverted')->orderBy(sprintf('%s.model_attribute_position', (new Image())->getTable()));
+        return $this->image('logoInverted');
     }
 
     public function favicon()
     {
-        return $this->morphOne(Image::class, 'model')->where(sprintf('%s.model_attribute', (new Image())->getTable()), 'favicon')->orderBy(sprintf('%s.model_attribute_position', (new Image())->getTable()));
+        return $this->image('favicon');
     }
 
     public function cssFiles()
@@ -133,5 +140,20 @@ class WebFrontpageSettings extends AbstractCrudModel
     public function jsFiles()
     {
         return $this->morphMany(File::class, 'model')->where(sprintf('%s.model_attribute', (new File())->getTable()), 'jsFiles')->orderBy(sprintf('%s.model_attribute_position', (new File())->getTable()));
+    }
+
+    /**
+     * {@inheritDoc}
+     * @todo hotfixed
+     */
+    public function getShowAttributes(array $except = [], array $with = []): array
+    {
+        $except = [ 'theme', 'web', 'web_id', 'name' ];
+
+        $attributes = $this->getAttributes();
+        $attributes = array_diff_key($attributes, array_flip(array_merge($this->getSystemAttributes(), $this->getHidden())), array_flip($except)) + $with;
+
+
+        return $attributes;
     }
 }

@@ -45,6 +45,9 @@ class Update extends RocXolidAbstractCrudForm
         $fields['jsFiles']['options']['label']['title'] = 'jsFiles';
         */
 
+        unset($fields['web_id']);
+        unset($fields['name']);
+
         return $fields;
     }
 }

@@ -74,11 +74,9 @@ trait HasImage
     /**
      * @Softworx\RocXolid\Annotations\AuthorizedRelation
      */
-    public function image(): MorphOne
+    public function image($model_attribute = 'image'): MorphOne
     {
-        $table = (new Image())->getTable();
-
-        return $this->morphOne(Image::class, 'model')->where(sprintf('%s.model_attribute', $table), 'image')->orderBy(sprintf('%s.model_attribute_position', $table));
+        return $this->morphOne(Image::class, 'model')->where(Image::make()->qualifyColumn('model_attribute'), $model_attribute);
     }
 
     /**

@@ -37,6 +37,7 @@ return [
         'google_plus_page_url' => 'Google+ page URL',
         'youtube_page_url' => 'Youtube page URL',
         'google_analytics_tracking_code' => 'Google Analytics Tracking Code',
+        'google_measurement_id' => 'Google Measurement ID',
         'google_tag_manager_container_id' => 'Google Tag Manager Container ID',
         'livechatoo_account' => 'Livechatoo účet',
         'livechatoo_language' => 'Livechatoo jazyk',
