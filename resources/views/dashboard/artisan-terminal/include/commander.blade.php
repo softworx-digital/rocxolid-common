@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-xs-12" data-toggle="buttons">
                 @foreach ($assignments->get('controller')->availableCommands() as $command)
-                    <label class="btn btn-primary margin-bottom-5">
+                    <label class="btn btn-primary margin-bottom-5" title="{{ $command->getDescription() }}">
                         <input type="radio" name="type" value="{{ get_class($command) }}"> {{ (new \ReflectionClass($command))->getShortName() }}
                     </label>
                 @endforeach
