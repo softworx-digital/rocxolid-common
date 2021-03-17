@@ -12,6 +12,14 @@
         <dl class="dl-horizontal">
             <dt>{{ $component->translate('field.title') }}</dt>
             <dd>{{ $component->getModel()->getTitle() }}</dd>
+            <dt>{{ $component->translate('field.is_filterable') }}</dt>
+            <dd>
+            @if ($component->getModel()->is_filterable)
+                <i class="fa fa-check text-success"></i>
+            @else
+                <i class="fa fa-close text-danger"></i>
+            @endif
+            </dd>
             <dt>{{ $component->translate('field.model_type') }}</dt>
             <dd>{{ $component->getModel()->getModelTypeTitle() }}</dd>
             <dt>{{ $component->translate('field.code') }}</dt>

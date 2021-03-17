@@ -24,7 +24,7 @@ class WebFrontpageSettings extends AbstractCrudModel
     use SoftDeletes;
     use Traits\HasWeb;
     use Traits\HasImage;
-    use Traits\UserGroupAssociatedWeb;
+    // use Traits\UserGroupAssociatedWeb;
 
     protected $fillable = [
         'web_id',
