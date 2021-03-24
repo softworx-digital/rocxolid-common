@@ -175,7 +175,7 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
     /**
      * Retrieve "not found" error data attributes.
      *
-     * @param boolean $keys Flag to retrieve only attribute keys.
+     * @param bool $keys Flag to retrieve only attribute keys.
      * @return Collection
      */
     public function getErrorNotFoundDataAttributes(bool $keys = false): Collection
@@ -190,7 +190,7 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
     /**
      * Retrieve "exception" error data attributes.
      *
-     * @param boolean $keys Flag to retrieve only attribute keys.
+     * @param bool $keys Flag to retrieve only attribute keys.
      * @return Collection
      */
     public function getErrorExceptionDataAttributes(bool $keys = false): Collection

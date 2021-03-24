@@ -127,7 +127,7 @@ class Image extends File implements Resizable
      * @param array $params
      * @return string
      */
-    public function getPublicControllerRoute($size): string
+    public function getPublicControllerRoute(?string $size = null): string
     {
         return route('image', [ 'image' => $this, 'size' => $size ]);
     }
