@@ -13,8 +13,11 @@ class CreateCommonTables extends Migration
     public function up()
     {
         $this
+            ->commandLogs()
             ->files()
             ->images()
+            // ->personalData() // @todo finish
+            // ->companyData() // @todo finish
             ->countries()
             ->regions()
             ->districts()
@@ -63,7 +66,31 @@ class CreateCommonTables extends Migration
         Schema::dropIfExists('attributes');
         Schema::dropIfExists('attribute_values');
         Schema::dropIfExists('model_has_attributes');
+        Schema::dropIfExists('command_logs');
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
+    }
+
+    protected function commandLogs()
+    {
+        Schema::create('command_logs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('caller')->nullable();
+            $table->string('command');
+            $table->json('arguments')->nullable();
+            $table->json('options')->nullable();
+            $table->dateTime('started_at');
+            $table->dateTime('finished_at')->nullable();
+            $table->enum('state', [ 'running', 'success', 'error' ]);
+            $table->json('message')->nullable();
+            $table->json('error')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+        });
+
+        return $this;
     }
 
     protected function files()
@@ -157,6 +184,53 @@ class CreateCommonTables extends Migration
         return $this->importDump('countries');
     }
 
+    protected function personalData()
+    {
+        Schema::create('personal_data', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->morphs('model');
+            $table->string('model_attribute');
+            $table->unsignedInteger('model_attribute_position')->default(0);
+            $table->boolean('is_model_primary')->default(0);
+
+            $table->unsignedInteger('language_id');
+            $table->unsignedInteger('nationality_id');
+
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('last_name');
+
+            $table->string('email')->nullable();
+            $table->string('phone_no')->nullable();
+
+            $table->date('birthdate')->nullable();
+            $table->enum('gender', ['m', 'f'])->nullable();
+            $table->string('bank_account_no')->nullable();
+
+            $table->string('id_card_no')->nullable();
+            $table->string('passport_no')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+
+            $table->foreign('language_id')
+                ->references('id')
+                ->on('languages')
+                ->onDelete('cascade');
+
+            $table->foreign('nationality_id')
+                ->references('id')
+                ->on('nationalities')
+                ->onDelete('cascade');
+        });
+
+        return $this;
+    }
+
     protected function regions()
     {
         Schema::create('regions', function (Blueprint $table) {
@@ -180,11 +254,9 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        $this
+        return $this
             ->importDump('sk/regions')
             ->importDump('cz/regions');
-
-        return $this;
     }
 
     protected function districts()
@@ -217,11 +289,9 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        $this
+        return $this
             ->importDump('sk/districts')
             ->importDump('cz/districts');
-
-        return $this;
     }
 
     protected function cities()
@@ -263,11 +333,9 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        $this
+        return $this
             ->importDump('sk/cities')
             ->importDump('cz/cities');
-
-        return $this;
     }
 
     protected function cadastralAreas()
@@ -293,11 +361,9 @@ class CreateCommonTables extends Migration
                 ->onUpdate('cascade');
         });
 
-        $this
+        return $this
             ->importDump('sk/cadastral_areas')
             ->importDump('cz/cadastral_areas');
-
-        return $this;
     }
 
     protected function addresses()
@@ -305,6 +371,9 @@ class CreateCommonTables extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->increments('id');
             $table->morphs('model');
+            $table->string('model_attribute');
+            $table->unsignedInteger('model_attribute_position')->default(0);
+            $table->boolean('is_model_primary')->default(0);
 
             $table->string('name')->nullable();
             $table->text('description')->nullable();
@@ -326,8 +395,6 @@ class CreateCommonTables extends Migration
             $table->string('po_box')->nullable();
             $table->string('zip')->nullable();
             $table->string('apartment_no')->nullable();
-
-            $table->boolean('is_default')->default(1);
 
             $table->timestamps();
             $table->softDeletes();
@@ -517,6 +584,7 @@ class CreateCommonTables extends Migration
     {
         Schema::create('attribute_groups', function (Blueprint $table) {
             $table->increments('id');
+            $table->boolean('is_filterable')->default(1);
             $table->string('model_type')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
@@ -535,6 +603,7 @@ class CreateCommonTables extends Migration
             $table->enum('type', ['boolean', 'integer', 'decimal', 'string', 'text', 'enum']);
             $table->boolean('is_multiple')->default(0);
             $table->string('name');
+            $table->string('units')->nullable();
             $table->text('description')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
@@ -712,7 +781,12 @@ class CreateCommonTables extends Migration
     {
         $file = realpath(sprintf('%s/../dumps/rocXolid/%s/%s.sql', __DIR__, $package, $table));
 
-        DB::unprepared(file_get_contents($file));
+        try {
+            DB::unprepared(file_get_contents($file));
+        } catch (\ErrorException $e) {
+            dump(__METHOD__, sprintf('%s/../dumps/rocXolid/%s/%s.sql', __DIR__, $package, $table));
+            dd(__METHOD__, $file, $e);
+        }
 
         return $this;
     }

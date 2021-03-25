@@ -8,6 +8,8 @@ trait UserGroupAssociated
 {
     public static function bootUserGroupAssociated()
     {
-        static::addGlobalScope(new UserGroupAssociating());
+        // @todo hotfixed, causes problems with Softworx\RocXolid\Common\Http\Traits\DetectsWeb
+        // when users are not assigned to web's group
+        // static::addGlobalScope(new UserGroupAssociating());
     }
 }

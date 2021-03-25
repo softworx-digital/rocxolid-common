@@ -10,11 +10,7 @@ use Softworx\RocXolid\Forms\Contracts\FormField;
 // rocXolid forms
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
 // rocXolid form field types
-use Softworx\RocXolid\Forms\Fields\Type\Hidden;
-use Softworx\RocXolid\Forms\Fields\Type\Input;
-use Softworx\RocXolid\Forms\Fields\Type\Select;
-use Softworx\RocXolid\Forms\Fields\Type\CollectionSelect;
-use Softworx\RocXolid\Forms\Fields\Type\CollectionSelectAutocomplete;
+use Softworx\RocXolid\Forms\Fields\Type as FieldType;
 // rocXolid common filters
 use Softworx\RocXolid\Common\Filters\CityBelongsTo;
 use Softworx\RocXolid\Common\Filters\BelongsToCity;
@@ -37,27 +33,27 @@ class CreateLocation extends RocXolidAbstractCrudForm
 
     protected $fields = [
         'relation' => [
-            'type' => Hidden::class,
+            'type' => FieldType\Hidden::class,
             'options' => [
                 'validation' => 'required',
             ],
         ],
         'model_attribute' => [
-            'type' => Hidden::class,
+            'type' => FieldType\Hidden::class,
             'options' => [
                 'validation' => 'required',
             ],
         ],
         'model_type' => [
-            'type' => Hidden::class,
+            'type' => FieldType\Hidden::class,
             'options' => [],
         ],
         'model_id' => [
-            'type' => Hidden::class,
+            'type' => FieldType\Hidden::class,
             'options' => [],
         ],
         'street_name' => [
-            'type' => Input::class,
+            'type' => FieldType\Input::class,
             'options' => [
                 'label' => [
                     'title' => 'street_name',
@@ -71,7 +67,7 @@ class CreateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'street_no' => [
-            'type' => Input::class,
+            'type' => FieldType\Input::class,
             'options' => [
                 'label' => [
                     'title' => 'street_no',
@@ -84,18 +80,12 @@ class CreateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'city_id' => [
-            'type' => CollectionSelectAutocomplete::class,
+            'type' => FieldType\ModelRelationSelectAutocomplete::class,
             'options' => [
-                'collection' => [
-                    'model' => City::class,
-                    'column' => 'name',
-                    'method' => 'getSelectOption',
-                ],
+                'relation' => 'city',
+                'change-action' => 'formReload',
                 'label' => [
                     'title' => 'city',
-                ],
-                'attributes' => [
-                    'title' => 'select',
                 ],
                 'validation' => [
                     'rules' => [
@@ -106,7 +96,7 @@ class CreateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'region_id' => [
-            'type' => CollectionSelect::class,
+            'type' => FieldType\CollectionSelect::class,
             'options' => [
                 'collection' => [
                     'model' => Region::class,
@@ -127,7 +117,7 @@ class CreateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'district_id' => [
-            'type' => CollectionSelect::class,
+            'type' => FieldType\CollectionSelect::class,
             'options' => [
                 'collection' => [
                     'model' => District::class,
@@ -148,7 +138,7 @@ class CreateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'cadastral_area_id' => [
-            'type' => CollectionSelect::class,
+            'type' => FieldType\CollectionSelect::class,
             'options' => [
                 'collection' => [
                     'model' => CadastralArea::class,
@@ -169,7 +159,7 @@ class CreateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'country_id' => [
-            'type' => CollectionSelect::class,
+            'type' => FieldType\CollectionSelect::class,
             'options' => [
                 'collection' => [
                     'model' => Country::class,
@@ -190,7 +180,7 @@ class CreateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'latitude' => [
-            'type' => Input::class,
+            'type' => FieldType\Input::class,
             'options' => [
                 'label' => [
                     'title' => 'latitude',
@@ -204,7 +194,7 @@ class CreateLocation extends RocXolidAbstractCrudForm
             ],
         ],
         'longitude' => [
-            'type' => Input::class,
+            'type' => FieldType\Input::class,
             'options' => [
                 'label' => [
                     'title' => 'longitude',
@@ -228,14 +218,12 @@ class CreateLocation extends RocXolidAbstractCrudForm
 
         // city
         $city = City::find($this->getInputFieldValue('city_id'));
-
-        $fields['city_id']['options']['attributes']['data-abs-ajax-url'] = $this->getController()->getRoute('repositoryAutocomplete', $this->getModel(), ['f' => 'city_id', 'form-param' => 'create-location']);
-        $fields['city_id']['options']['attributes']['data-change-action'] = $this->getController()->getRoute('formReload', $this->getModel());
-        $fields['city_id']['options']['collection']['method'] = 'getSelectOption';
+        /*
         $fields['city_id']['options']['collection']['filters'][] = [
             'class' => CityHasCadastralArea::class,
             'data' => null,
         ];
+        */
 
         if (is_null($city)) {
             $fields['region_id']['options']['collection'] = collect();

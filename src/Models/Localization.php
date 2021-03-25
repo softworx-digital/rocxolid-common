@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 // base models
 use Softworx\RocXolid\Models\AbstractCrudModel;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Web;
-// common traits
+// rocXolid common traits
 use Softworx\RocXolid\Common\Models\Traits\HasCountry;
 use Softworx\RocXolid\Common\Models\Traits\HasLanguage;
 use Softworx\RocXolid\Common\Models\Traits\HasLocale;

@@ -1,6 +1,15 @@
 @can ('view', [ $related, $attribute ])
-<div id="{{ $component->getDomId($attribute) }}" class="panel panel-default">
-    <div class="panel-heading">
+<div id="{{ $component->getDomId(md5(get_class($related)), $related->getKey(), $attribute) }}" class="panel panel-default">
+    {!! $component->render('related.panel-heading', [
+        'relation' => $relation,
+        'attribute' => $attribute,
+        'read_only' => $read_only ?? false,
+    ]) !!}
+    <div class="panel-body text-center text-primary">
+        {{ Html::image(sprintf('vendor/softworx/rocXolid/images/%s.svg', $placeholder ?? $component->getModel()->{$relation}()->getRelated()->getImagePlaceholder() ?? 'placeholder'), $attribute, [ 'style' => 'max-width: 100%; padding: 3em;' ]) }}
+    </div>
+    @if (!($read_only ?? false))
+    <div class="panel-footer">
         <div class="row">
             <div class="col-xs-12">
                 <div class="btn-group btn-group-sm center-block hidden-xs" role="group">
@@ -14,7 +23,7 @@
                 </div>
 
                 <div class="btn-group btn-group-sm pull-right visible-xs-block">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                     <ul class="dropdown-menu">
                     @can ('create', [ $related, $attribute ])
                         <li><a data-ajax-url="{{ $component->getModel()->getControllerRoute('create', $component->getModel()->getRouteRelationParam($attribute, $relation, $related)) }}">
@@ -26,8 +35,6 @@
             </div>
         </div>
     </div>
-    <div class="panel-body text-center text-primary">
-        {{ Html::image(sprintf('vendor/softworx/rocXolid/images/%s.svg', $placeholder ?? $component->getModel()->{$relation}()->getRelated()->getImagePlaceholder() ?? 'placeholder'), $attribute, [ 'style' => 'max-width: 100%; padding: 3em;' ]) }}
-    </div>
+    @endif
 </div>
 @endcan

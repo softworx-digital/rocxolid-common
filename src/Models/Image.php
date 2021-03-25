@@ -2,8 +2,10 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 // rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Uploadable;
 use Softworx\RocXolid\Models\Contracts\Resizable;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\File;
@@ -11,10 +13,18 @@ use Softworx\RocXolid\Common\Models\File;
 use Softworx\RocXolid\UserManagement\Models\User;
 
 /**
- *
+ * @todo refactor?
  */
 class Image extends File implements Resizable
 {
+    /**
+     * {@inheritDoc}
+     */
+    const STORAGE_SUBDIR = 'images';
+
+    /**
+     * {@inheritDoc}
+     */
     protected $fillable = [
         'is_model_primary',
         //'name',
@@ -22,34 +32,27 @@ class Image extends File implements Resizable
         'description',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $relationships = [
     ];
 
-    public function parent()
-    {
-        return $this->morphTo('model');
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public function resolvePolymorphUserModel()
     {
         return User::class;
     }
 
-    public function fillCustom($data, $action = null)
-    {
-        if (is_null($this->model_attribute)) {
-            $this->model_attribute = $data['model_attribute'];
-        }
-
-        return parent::fillCustom($data, $action);
-    }
-
-    public function getMimeType()
-    {
-        return mime_content_type($this->getStoragePath());
-    }
-
-    public function base64($size = 'icon')
+    /**
+     * Get base-64 encoded file content.
+     *
+     * @param string $size
+     * @return string
+     */
+    public function base64($size = 'icon'): string
     {
         try {
             return sprintf('data:%s;base64,%s', $this->getMimeType(), base64_encode($this->content($size)));
@@ -58,15 +61,16 @@ class Image extends File implements Resizable
         }
     }
 
-    public function getHeightWidthRatio($size): float
+    /**
+     * {@inheritDoc}
+     */
+    public function setUploadData(UploadedFile $uploaded_file): Uploadable
     {
-        try {
-            $intervention_image = \InterventionImage::make($this->getStoragePath($size));
+        $this->original_filename = $uploaded_file->getClientOriginalName();
+        $this->mime_type = $uploaded_file->getClientMimeType();
+        $this->extension = $uploaded_file->getClientOriginalExtension();
 
-            return $intervention_image->height() / $intervention_image->width();
-        } catch (\Exception $e) {
-            return 1;
-        }
+        return $this;
     }
 
     /**
@@ -85,5 +89,46 @@ class Image extends File implements Resizable
         $this->sizes = $sizes->merge($this->getDimensions())->toJson();
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getWidthHeightRatio(string $size): float
+    {
+        /*
+        this doesn't work for "fit in the box" resizement
+        will work for a new project with pre-calculations that
+        should be done in ImageProcessService::resize()
+        */
+        // return json_decode($this->sizes)->{$size}->ratio;
+
+        $physical = $this->getPhysicalImage($size);
+
+        return ($physical->width() / $physical->height());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPhysicalImage(?string $size = null)
+    {
+        if ($this->isFileValid($size)) {
+            return \InterventionImage::make($this->getStoragePath($size));
+        } else {
+            throw new \RuntimeException(sprintf('Problems reading file [%s]. Probably does not exist.', $this->getStoragePath($size)));
+        }
+    }
+
+    /**
+     * Get CRUD controller route.
+     *
+     * @param string $method
+     * @param array $params
+     * @return string
+     */
+    public function getPublicControllerRoute(?string $size = null): string
+    {
+        return route('image', [ 'image' => $this, 'size' => $size ]);
     }
 }

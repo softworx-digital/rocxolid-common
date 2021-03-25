@@ -2,32 +2,48 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\AttributeGroup;
 
-// rocXolid fundamentals
-use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
-// rocXolid components
-use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
-// common components
-use Softworx\RocXolid\Common\Components\ModelViewers\AttributeGroupViewer;
-// common controllers
+// rocXolid controller traits
+use Softworx\RocXolid\Http\Controllers\Traits;
+// rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
-// common repositories
-use Softworx\RocXolid\Common\Repositories\AttributeGroup\Repository;
-// common models
-use Softworx\RocXolid\Common\Models\AttributeGroup;
+// rocXolid common components
+use Softworx\RocXolid\Common\Components\ModelViewers\AttributeGroupViewer;
 
 /**
+ * AttributeGroup controller.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
  */
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = AttributeGroup::class;
+    // use DetachesFromContainer;
+    use Traits\Utils\HasSectionResponse;
 
-    protected static $repository_class = Repository::class;
+    /**
+     * {@inheritDoc}
+     */
+    protected static $model_viewer_type = AttributeGroupViewer::class;
 
-    public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
-    {
-        return AttributeGroupViewer::build($this, $this)
-            ->setModel($model)
-            ->setController($this);
-    }
+    /**
+     * {@inheritDoc}
+     */
+    protected $extra_services = [
+        //
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $form_mapping = [
+        'create' => 'create',
+        'store' => 'create',
+        'edit.general-data' => 'update-general',
+        'update.general-data' => 'update-general',
+        'edit.description-data' => 'update-description',
+        'update.description-data' => 'update-description',
+        'edit.note-data' => 'update-note',
+        'update.note-data' => 'update-note',
+    ];
 }

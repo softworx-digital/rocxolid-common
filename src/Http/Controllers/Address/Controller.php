@@ -2,25 +2,36 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\Address;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+// rocXolid http requests
 use Softworx\RocXolid\Http\Requests\CrudRequest;
+// rocXolid forms
 use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
+// rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
-use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
-use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
+// rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
-use Softworx\RocXolid\Common\Models\Address;
-use Softworx\RocXolid\Common\Repositories\Address\Repository;
+// rocXolid common components
 use Softworx\RocXolid\Common\Components\ModelViewers\AddressViewer;
-// events
+// rocXolid common events
 use Softworx\RocXolid\Common\Events\Address\Changed as AddressChanged;
 
+/**
+ * Address controller.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ */
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = Address::class;
+    /**
+     * {@inheritDoc}
+     */
+    protected static $model_viewer_type = AddressViewer::class;
 
-    protected static $repository_class = Repository::class;
-
+    /**
+     * {@inheritDoc}
+     */
     protected $form_mapping = [
         'create' => 'create',
         'store' => 'create',
@@ -30,26 +41,15 @@ class Controller extends AbstractCrudController
         'update.location' => 'update-location',
     ];
 
-    public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
-    {
-        return AddressViewer::build($this, $this)
-            ->setModel($model)
-            ->setController($this);
-    }
-
     /**
      * Display the dialog with map location.
      *
-     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request Incoming request.
      * @param \Softworx\RocXolid\Models\Contracts\Crudable $model
      */
     public function showMap(CrudRequest $request, CrudableModel $model)//: View
     {
-        // $this->authorize('sendTestNotification', $model);
-
-        $this->setModel($model);
-
-        $model_viewer_component = $this->getModelViewerComponent($this->getModel());
+        $model_viewer_component = $this->getModelViewerComponent($model);
 
         if ($request->ajax()) {
             return $this->response
@@ -65,28 +65,27 @@ class Controller extends AbstractCrudController
         }
     }
 
-    protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $model, string $action)
+    /**
+     * {@inheritDoc}
+     */
+    protected function successAjaxResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form): array
     {
-        if ($request->ajax()) {
-            $model_viewer_component = $model->getModelViewerComponent();
+        $model_viewer_component = $this->getModelViewerComponent($model);
 
-            event(new AddressChanged($model, $this->response));
+        event(new AddressChanged($model, $this->response)); // @todo this doesn't belong here
 
-            // @todo: "hotfixed", extremely ugly
-            if ($request->has('_section') && ($request->input('_section') === 'location')) {
-                $model_viewer_component->setViewPackage('app');
-            }
-
-            return $this->response
-                ->notifySuccess($model_viewer_component->translate('text.updated'))
-                ->replace($model_viewer_component->getDomId(), $model_viewer_component->fetch('related.show', [
-                    'attribute' => 'address',
-                    'relation' => 'parent'
-                ])) // @todo: hardcoded, ugly
-                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
-                ->get();
-        } else {
-            return parent::successResponse($request, $repository, $form, $model, $action);
+        // @todo "hotfixed", extremely ugly
+        if ($request->has('_section') && ($request->input('_section') === 'location')) {
+            $model_viewer_component->setViewPackage('app');
         }
+
+        return $this->response
+            ->notifySuccess($model_viewer_component->translate('text.updated'))
+            ->replace($model_viewer_component->getDomId('parent', $model->model_attribute), $model_viewer_component->fetch('related.show', [
+                'attribute' => $model->model_attribute,
+                'relation' => 'parent'
+            ])) // @todo hardcoded, ugly
+            ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $form->getParam())))
+            ->get();
     }
 }

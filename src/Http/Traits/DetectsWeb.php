@@ -3,7 +3,7 @@
 namespace Softworx\RocXolid\Common\Http\Traits;
 
 use Config;
-use View;
+use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Softworx\RocXolid\Common\Models\Web;
@@ -11,6 +11,12 @@ use Softworx\RocXolid\Common\Models\Web;
 trait DetectsWeb
 {
     private $_web = null;
+
+    // @todo hotfixed
+    public function detectOnlyWeb(Request $request)
+    {
+        return Web::where('domain', 'like', sprintf('%%%s', $request->getHost()))->firstOrFail();
+    }
 
     public function detectWeb(Request $request = null)
     {
@@ -22,12 +28,12 @@ trait DetectsWeb
             try {
                 $this->_web = Web::where('domain', 'like', sprintf('%%%s', $request->getHost()))->firstOrFail();
             } catch (ModelNotFoundException $e) {
-                //dd(sprintf('--web pre domenu [%s] nie je definovany--> 404', $request->getHost()));
+                // dd(__METHOD__, sprintf('--web pre domenu [%s] nie je definovany--> 404', $request->getHost()));
                 throw new \RuntimeException(sprintf('Cannot detect web for [%s]', $request->getHost()));
             }
 
             if (!$this->_web->frontpageSettings()->exists()) {
-                //dd(sprintf('--web [%s] nema priradene frontpage settings--> 500 (exception) ?', $this->_web->getKey()));
+                // dd(__METHOD__, sprintf('--web [%s] nema priradene frontpage settings--> 500 (exception) ?', $this->_web->getKey()));
                 throw new \RuntimeException(sprintf('Web [%s] has no frontpage settings attached', $this->_web->getTitle()));
             }
         }

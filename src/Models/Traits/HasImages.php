@@ -26,12 +26,28 @@ trait HasImages
      * ]
      */
     protected $default_image_sizes = [
+        'icon' => [
+            'width' => 26,
+            'height' => 26,
+            'method' => 'fit',
+            'constraints' => [
+                'upsize',
+            ],
+        ],
         'thumb' => [
             'width' => 64,
             'height' => 64,
             'method' => 'resize',
             'constraints' => [
                 'aspectRatio',
+                'upsize',
+            ],
+        ],
+        'thumb-square' => [
+            'width' => 64,
+            'height' => 64,
+            'method' => 'fit',
+            'constraints' => [
                 'upsize',
             ],
         ],
@@ -52,11 +68,12 @@ trait HasImages
                 'upsize',
             ],
         ],
-        '600x600' => [
-            'width' => 600,
-            'height' => 600,
-            'method' => 'fit',
+        'mid' => [
+            'width' => 512,
+            'height' => 512,
+            'method' => 'resize',
             'constraints' => [
+                'aspectRatio',
                 'upsize',
             ],
         ],
@@ -86,7 +103,7 @@ trait HasImages
      *
      * @param \Softworx\RocXolid\Common\Models\Image $image
      * @return \Softworx\RocXolid\Models\Contracts\Crudable
-     * @todo: events?
+     * @todo events?
      */
     public function onImageUpload(Image $image): Crudable
     {
@@ -124,5 +141,11 @@ trait HasImages
         }
 
         return collect($image_sizes);
+    }
+
+    // @todo
+    public function getImagePlaceholder()
+    {
+        return config(sprintf('rocXolid.common.placeholder.%s.%s', (new \ReflectionClass($this))->getName(), 'image'), null);
     }
 }

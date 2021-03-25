@@ -3,21 +3,27 @@
 namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+// rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
-use Softworx\RocXolid\Common\Models\Region;
-use Softworx\RocXolid\Common\Models\Traits\HasCountry;
-use Softworx\RocXolid\Common\Models\Traits\HasRegion;
-use Softworx\RocXolid\Common\Models\Traits\HasDistrict;
-use Softworx\RocXolid\Common\Models\Traits\HasCadastralAreas;
 
+/**
+ * City model.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ */
 class City extends AbstractCrudModel
 {
     use SoftDeletes;
-    use HasCountry;
-    use HasRegion;
-    use HasDistrict;
-    use HasCadastralAreas;
+    use Traits\HasCountry;
+    use Traits\HasRegion;
+    use Traits\HasDistrict;
+    use Traits\HasCadastralAreas;
 
+    /**
+     * {@inheritDoc}
+     */
     protected $fillable = [
         'type',
         'code',
@@ -26,19 +32,37 @@ class City extends AbstractCrudModel
         'description',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $relationships = [
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $enums = [
         'type',
     ];
 
-    public function getSelectOption()
+    /**
+     * {@inheritDoc}
+     */
+    protected $search_columns = [
+        'name',
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toSearchResult(?string $param = null): array
     {
-        return sprintf(
-            "%s (%s)",
-            $this->name,
-            $this->district()->exists() ? $this->district->getTitle() : '-'
-        );
+        return [
+            'value' => $this->getKey(),
+            'text' => $this->getTitle(),
+            'data' => $this->district()->exists() ? [
+                'subtext' => $this->district->getTitle(),
+            ] : null
+        ];
     }
 }

@@ -3,21 +3,32 @@
 namespace Softworx\RocXolid\Common\Models;
 
 use Softworx\RocXolid\Models\AbstractCrudModel;
-// common contracts
+// rocXolid common contracts
 use Softworx\RocXolid\Common\Models\Contracts\Attributable;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\AttributeGroup;
 use Softworx\RocXolid\Common\Models\AttributeValue;
 
 /**
+ * AttributeModel model.
+ * @todo ???
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
  */
 class AttributeModel extends AbstractCrudModel
 {
+    /**
+     * {@inheritDoc}
+     */
     protected $guarded = [
         //'id'
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $fillable = [
         'model_type',
         'model_id',
@@ -30,6 +41,9 @@ class AttributeModel extends AbstractCrudModel
         'value_text',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $relationships = [
         //'attributeGroup',
     ];

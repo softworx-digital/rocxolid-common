@@ -2,98 +2,144 @@
 
 namespace Softworx\RocXolid\Common\Http\Traits\Controllers;
 
-use App;
-// rocXolid fundamentals
+// rocXolid utils
 use Softworx\RocXolid\Http\Requests\CrudRequest;
+// rocXolid forms
 use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
-use Softworx\RocXolid\Repositories\Contracts\Repository;
-// common components
-use Softworx\RocXolid\Common\Components\Forms\Attribute\CrudForm as AttributeCrudFormComponent;
-// common contracts
+// rocXolid common components
+use Softworx\RocXolid\Common\Components\ModelViewers\AttributeModelViewer;
+// rocXolid common contracts
 use Softworx\RocXolid\Common\Models\Contracts\Attributable as AttributableModel;
-// common controllers
+// rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AttributeModel\Controller as AttributeModelController;
+// rocXolid common forms
+use Softworx\RocXolid\Common\Models\Forms\AttributeModel\General as AttributeModelForm;
+// rocXolid common models
+use Softworx\RocXolid\Common\Models\AttributeGroup;
 
 /**
+ * Trait to enable controller to handle dynamic model attributes assignment.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ * @todo make this to boot consecutive routes
+ * @todo subject to refactoring - use pivot instead of 'foreign' controller
  */
 trait Attributable
 {
-    public function modelAttributes(CrudRequest $request, $id)
+    /**
+     * {@inheritDoc}
+     */
+    public function modelAttributes(CrudRequest $request, AttributableModel $model, ?AttributeGroup $attribute_group = null)
     {
-        $repository = $this->getRepository($this->getRepositoryParam($request));
+        $attribute_model_viewer_component = $this->makeAttributeModelViewerComponent($request, $model, $attribute_group);
 
-        $this->setModel($repository->findOrFail($id));
+        return $this->response
+            ->modal($attribute_model_viewer_component->fetch('modal.attributes'))
+            ->get();
+    }
 
-        if (!$this->getModel() instanceof AttributableModel) {
-            throw new \RuntimeException(sprintf('%s is not instance of %s', get_class($this->getModel()), AttributableModel::class));
-        }
+    /**
+     * {@inheritDoc}
+     */
+    public function modelAttributesStore(CrudRequest $request, AttributableModel $model, ?AttributeGroup $attribute_group = null)
+    {
+        $attribute_model_form = $this->makeAttributeModelForm($request, $model, $attribute_group);
 
-        $attribute_model_controller = App::make(AttributeModelController::class);
-        $attribute_model_repository = $attribute_model_controller->getRepository($attribute_model_controller->getRepositoryParam($request));
-        $attribute_model_controller->setModel($this->getModel());
+        return $attribute_model_form->submit()->isValid()
+            ? $this->onUpdateAttributeModelFormValid($request, $model, $attribute_group, $attribute_model_form)
+            : $this->onUpdateAttributeModelFormInvalid($request, $model, $attribute_group, $attribute_model_form);
+    }
 
-        $form = $attribute_model_repository->getForm('model');
-        $form->setCustomOptions([
-            'route-action' => $this->getRoute('modelAttributesStore', $this->getModel()),
+    /**
+     * Obtain response to valid AttributeModelForm submission.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $model
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup $attribute_group
+     * @param \Softworx\RocXolid\Forms\AbstractCrudForm $form
+     */
+    protected function onUpdateAttributeModelFormValid(CrudRequest $request, AttributableModel $model, AttributeGroup $attribute_group, AbstractCrudForm $attribute_model_form)//: Response
+    {
+        $model = $this->makeAttributeModelController($request, $model, $attribute_group)->getRepository()->updateModel($model, $attribute_model_form->getFormFieldsValues());
+        $attribute_model_viewer_component = $this->makeAttributeModelViewerComponent($request, $model, $attribute_group);
+        $attribute_group_viewer_component = $attribute_group->getModelViewerComponent();
+
+        return $this->response
+            ->notifySuccess($attribute_model_viewer_component->translate('text.updated'))
+            ->replace($attribute_group_viewer_component->getDomId('dynamic-attribute-group', $attribute_group->getKey()), $attribute_group_viewer_component->fetch('related.panel', [
+                'attributable' => $model,
+            ]))
+            ->modalClose($attribute_model_viewer_component->getDomId(sprintf('modal-%s', $attribute_model_form->getParam())))
+            ->get();
+    }
+
+    /**
+     * Obtain response to invalid AttributeModelForm submission.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $model
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup $attribute_group
+     * @param \Softworx\RocXolid\Forms\AbstractCrudForm $attribute_model_form
+     */
+    protected function onUpdateAttributeModelFormInvalid(CrudRequest $request, AttributableModel $model, AttributeGroup $attribute_group, AbstractCrudForm $attribute_model_form)//: Response
+    {
+        $attribute_model_controller = $this->makeAttributeModelController($request, $model, $attribute_group);
+        $attribute_model_form_component = $attribute_model_controller->getFormComponent($attribute_model_form);
+
+        return $this->response
+            ->notifyError($attribute_model_form_component->translate('text.form-error'))
+            ->replace($attribute_model_form_component->getDomId('fieldset'), $attribute_model_form_component->fetch('include.fieldset'))
+            ->get();
+    }
+
+    /**
+     * Obtain AttributeModelController to set AttributeValues of given AttributeGroup to an AttributableModel.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $model
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup|null $attribute_group
+     * @return \Softworx\RocXolid\Common\Http\Controllers\AttributeModel\Controller
+     */
+    private function makeAttributeModelController(CrudRequest $request, AttributableModel $model, ?AttributeGroup $attribute_group = null): AttributeModelController
+    {
+        return app(AttributeModelController::class, [
+            'attributable_model' => $model,
+            'attribute_group' => $attribute_group,
         ]);
-
-        $form_component = (new AttributeCrudFormComponent())
-            ->setForm($form)
-            ->setRepository($repository);
-
-        $model_viewer_component = $this
-            ->getModelViewerComponent($this->getModel())
-            ->setFormComponent($form_component);
-
-        if ($request->ajax()) {
-            return $this->response
-                ->modal($model_viewer_component->fetch('modal.attributes'))
-                ->get();
-        } else {
-            return $this
-                ->getDashboard()
-                ->setModelViewerComponent($model_viewer_component)
-                ->render('model', [
-                    'model_viewer_template' => 'update'
-                ]);
-        }
     }
 
-    public function modelAttributesStore(CrudRequest $request, $id)
+    /**
+     * Obtain AttributeModel form to set AttributeValues of given AttributeGroup to an AttributableModel.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $model
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup|null $attribute_group
+     * @return \Softworx\RocXolid\Common\Models\Forms\AttributeModel\General
+     */
+    private function makeAttributeModelForm(CrudRequest $request, AttributableModel $model, ?AttributeGroup $attribute_group = null): AttributeModelForm
     {
-        $repository = $this->getRepository($this->getRepositoryParam($request));
-
-        $this->setModel($repository->findOrFail($id));
-
-        if (!$this->getModel() instanceof AttributableModel) {
-            throw new \RuntimeException(sprintf('%s is not instance of %s', get_class($this->getModel()), AttributableModel::class));
-        }
-
-        $attribute_model_controller = App::make(AttributeModelController::class);
-        $attribute_model_repository = $attribute_model_controller->getRepository($attribute_model_controller->getRepositoryParam($request));
-        $attribute_model_controller->setModel($this->getModel());
-
-        $form = $attribute_model_repository->getForm('model');
-        $form
-            //->adjustCreate($request)
-            ->adjustCreateBeforeSubmit($request)
-            ->submit();
-
-        if ($form->isValid()) {
-            return $this->successAttributes($request, $repository, $form, 'attributes');
-        } else {
-            return $this->errorResponse($request, $repository, $form, 'attributes');
-        }
+        return $this->makeAttributeModelController($request, $model, $attribute_group)
+            ->getForm($request, $model)
+            ->setCustomOptions([
+                'route-action' => $this->getRoute('modelAttributesStore', $model),
+            ]);
     }
 
-    protected function successAttributes(CrudRequest $request, Repository $repository, AbstractCrudForm $form, string $action)
+    /**
+     * Obtain AttributeValueViewer form to set AttributeValues of given AttributeGroup to an AttributableModel.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $model
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup|null $attribute_group
+     * @return \Softworx\RocXolid\Common\Components\ModelViewers\AttributeModelViewer
+     */
+    private function makeAttributeModelViewerComponent(CrudRequest $request, AttributableModel $model, ?AttributeGroup $attribute_group = null): AttributeModelViewer
     {
-        $attribute_model_controller = App::make(AttributeModelController::class);
-        $attribute_model_repository = $attribute_model_controller->getRepository($attribute_model_controller->getRepositoryParam($request));
+        $attribute_model_controller = $this->makeAttributeModelController($request, $model, $attribute_group);
+        $attribute_model_form = $this->makeAttributeModelForm($request, $model, $attribute_group);
 
-        $model = $attribute_model_repository->updateModel($form->getFormFieldsValues()->toArray(), $this->getModel(), $action);
-
-        return $this->successResponse($request, $repository, $form, $model, $action);
+        return $attribute_model_controller->getModelViewerComponent($model, $attribute_model_controller->getFormComponent($attribute_model_form));
     }
 }

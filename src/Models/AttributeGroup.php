@@ -2,62 +2,183 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
+// rocXolid utils
+use Softworx\RocXolid\Http\Requests\CrudRequest;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
+// rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
+// rocXolid component contracts
+use Softworx\RocXolid\Components\Contracts\Tableable;
+// rocXolid common controllers
+use Softworx\RocXolid\Common\Http\Controllers\Attribute\Controller as AttributeController;
+// rocXolid common models
+use Softworx\RocXolid\Common\Models\Contracts\Attributable;
 use Softworx\RocXolid\Common\Models\Attribute;
-use Softworx\RocXolid\Commerce\Models\Product;
 
+/**
+ * AttributeGroup model.
+ * Represents group of attributes that can be dynamically added to a model.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ */
 class AttributeGroup extends AbstractCrudModel
 {
     use SoftDeletes;
 
-    protected $attributable = [
-        Product::class,
-    ];
-
-    protected $fillable = [
+    protected const GENERAL_DATA_ATTRIBUTES = [
+        'is_filterable',
         'model_type',
         'name',
+        'code',
+    ];
+
+    protected const DESCRIPTION_DATA_ATTRIBUTES = [
+        'description',
+    ];
+
+    protected const NOTE_DATA_ATTRIBUTES = [
+        'note',
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $attributable = [
+        // Product::class,
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $fillable = [
+        'is_filterable',
+        'model_type',
+        'name',
+        'code',
         'description',
         'note',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $relationships = [
     ];
 
-    public function attributes()
+    /**
+     * {@inheritDoc}
+     */
+    public function fillCustom(Collection $data): Crudable
     {
-        return $this->hasMany(Attribute::class)->orderBy(sprintf('%s.%s', (new Attribute())->getTable(), Attribute::POSITION_COLUMN));
+        $this
+            ->fillModelTypes($data);
+
+        return parent::fillCustom($data);
     }
 
-    public function getModelType()
+    /**
+     * Fill model types.
+     *
+     * @param \Illuminate\Support\Collection $data
+     * @return \Softworx\RocXolid\Models\Contracts\Crudable
+     */
+    public function fillModelTypes(Collection $data): Crudable
     {
-        if (($class = $this->model_type) && class_exists($class)) {
-            return $class::make()->getModelViewerComponent()->translate('model.title.singular');
+        if ($data->has('model_type')) {
+            $this->model_type = json_encode($data->get('model_type'));
         }
 
-        return null;
+        return $this;
     }
 
-    public function makeModel($model_id)
+    public function attributes(): Relations\HasMany
     {
-        $class = $this->model_type;
-
-        return $class::find($model_id);
+        return $this->hasMany(Attribute::class)->orderBy(app(Attribute::class)->qualifyColumn(Attribute::POSITION_COLUMN));
     }
 
-    public function getAttributableModels()
+    /**
+     * Model type attribute getter mutator.
+     *
+     * @param mixed $value
+     * @return \Illuminate\Support\Collection
+     */
+    public function getModelTypeAttribute($value): Collection
     {
-        $models = new Collection();
+        return collect($value ? json_decode($value) : [])->filter();
+    }
 
-        foreach ($this->attributable as $class) {
-            //$models->put(Str::kebab((new \ReflectionClass($class))->getShortName()), $class);
-            //$short_name = (new \ReflectionClass($class))->getShortName();
-            $models->put($class, $class::make()->getModelViewerComponent()->translate('model.title.singular'));
-        }
+    public function getModelTypeTitle(): string
+    {
+        return $this->model_type->transform(function (string $model_type) {
+            return app($model_type)->getClassNameTranslation();
+        })->join(', ');
+    }
 
-        return $models;
+    public function makeModel($model_id): Attributable
+    {
+        return $this->model_type::find($model_id);
+    }
+
+    /**
+     * Obtain available attributable models.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAvailableAttributables(): Collection
+    {
+        return $this->getAvailableAttributableTypes()->transform(function (string $type) {
+            return app($type);
+        });
+    }
+
+    /**
+     * Obtain table component to view Attributes table.
+     *
+     * @return \Softworx\RocXolid\Components\Contracts\Tableable
+     */
+    public function getAttributesTableComponent(): Tableable
+    {
+        $attributes_controller = app(AttributeController::class, [
+            'attribute_group' => $this,
+        ]);
+
+        return $attributes_controller->getTableComponent($attributes_controller->getTable(app(CrudRequest::class), 'index'));
+    }
+
+    public function getGeneralDataAttributes(bool $keys = false): Collection
+    {
+        return $keys
+            ? collect(static::GENERAL_DATA_ATTRIBUTES)
+            : collect($this->getAttributes())->only(static::GENERAL_DATA_ATTRIBUTES);
+    }
+
+    public function getDescriptionDataAttributes(bool $keys = false): Collection
+    {
+        return $keys
+            ? collect(static::DESCRIPTION_DATA_ATTRIBUTES)
+            : collect($this->getAttributes())->only(static::DESCRIPTION_DATA_ATTRIBUTES);
+    }
+
+    public function getNoteDataAttributes(bool $keys = false): Collection
+    {
+        return $keys
+            ? collect(static::NOTE_DATA_ATTRIBUTES)
+            : collect($this->getAttributes())->only(static::NOTE_DATA_ATTRIBUTES);
+    }
+
+    /**
+     * Obtain model types that can have dynamic attributes.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    protected static function getAvailableAttributableTypes(): Collection
+    {
+        return collect(config('rocXolid.common.attributes.attributables', []));
     }
 }

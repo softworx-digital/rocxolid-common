@@ -10,7 +10,7 @@ use Softworx\RocXolid\Common\Models\Address;
  * Trait to add addresses relation to the model.
  *
  * @author softworx <hello@softworx.digital>
- * @package Softworx\RocXolid\Admin
+ * @package Softworx\RocXolid\Common
  * @version 1.0.0
  */
 trait HasAddresses

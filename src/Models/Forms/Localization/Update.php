@@ -5,7 +5,7 @@ namespace Softworx\RocXolid\Common\Models\Forms\Localization;
 use Illuminate\Validation\Rule;
 // base form
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
-// fields
+// rocXolid form fields
 use Softworx\RocXolid\Forms\Fields\Type\CollectionSelectAutocomplete;
 
 /**

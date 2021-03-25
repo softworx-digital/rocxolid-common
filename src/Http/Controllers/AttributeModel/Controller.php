@@ -2,121 +2,103 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\AttributeModel;
 
-use App;
-use Symfony\Component\HttpFoundation\Response;
-// rocXolid fundamentals
-use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
-use Softworx\RocXolid\Http\Requests\CrudRequest;
-use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
-use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
-// rocXolid components
-use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer as CrudModelViewerComponent;
-use Softworx\RocXolid\Components\Forms\CrudForm as CrudFormComponent;
-// common controllers
+// rocXolid utils
+use Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse;
+// rocXolid common repositories
+use Softworx\RocXolid\Common\Repositories\AttributeModel\Repository as AttributeModelRepository;
+// rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
-use Softworx\RocXolid\Common\Http\Controllers\Attribute\Controller as AttributeController;
-// common repositories
-use Softworx\RocXolid\Common\Repositories\AttributeModel\Repository;
-// common models
-use Softworx\RocXolid\Common\Models\AttributeModel;
+// rocXolid common models
+use Softworx\RocXolid\Common\Models\Contracts\Attributable;
 use Softworx\RocXolid\Common\Models\AttributeGroup;
-use Softworx\RocXolid\Common\Models\Attribute;
-use Softworx\RocXolid\Common\Models\AttributeValue;
+// rocXolid common components
+use Softworx\RocXolid\Common\Components\ModelViewers\AttributeModelViewer;
 
 /**
- *
+ * @todo revise
  */
 class Controller extends AbstractCrudController
 {
-    protected static $model_class = AttributeModel::class;
-
-    protected static $repository_class = Repository::class;
+    protected static $model_viewer_type = AttributeModelViewer::class;
 
     protected $form_mapping = [
-
+        'general' => 'general',
     ];
 
-    /*
-    public function getModelViewerComponent(CrudableModel $model): CrudModelViewerComponent
+    /**
+     * @var \Softworx\RocXolid\Common\Models\Contracts\Attributable Reference to requested Attributable model.
+     */
+    private $attributable_model;
+
+    /**
+     * @var \Softworx\RocXolid\Common\Models\AttributeGroup Reference to requested AttributeGroup.
+     */
+    private $attribute_group;
+
+    /**
+     * Constructor.
+     *
+     * @param \Softworx\RocXolid\Http\Responses\Contracts\AjaxResponse $response
+     * @param \Softworx\RocXolid\Common\Repositories\AttributeModel\Repository $repository
+     * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $attributable_model
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup $attribute_group
+     */
+    public function __construct(AjaxResponse $response, AttributeModelRepository $repository, Attributable $attributable_model, AttributeGroup $attribute_group)
     {
-        return AttributeValueViewer::build($this, $this)
-            ->setModel($model)
-            ->setController($this);
+        $this
+            ->setAttributableModel($attributable_model)
+            ->setAttributeGroup($attribute_group);
+
+        $repository->setAttributeGroup($attribute_group);
+
+        parent::__construct($response, $repository);
     }
 
-    public function getAttributeViewerComponent(Attribute $attribute): CrudModelViewerComponent
+    /**
+     * Set reference to requested Attributable model.
+     *
+     * @param \Softworx\RocXolid\Common\Models\Contracts\Attributable $attributable_model Reference to requested Attributable model.
+     *
+     * @return self
+     */
+    public function setAttributableModel(Attributable $attributable_model): self
     {
-        return AttributeViewer::build($this, $this)
-            ->setModel($attribute)
-            ->setController($this);
+        $this->attributable_model = $attributable_model;
+
+        return $this;
     }
 
-    public function getAttributeGroupViewerComponent(AttributeGroup $attribute_group): CrudModelViewerComponent
+    /**
+     * Get reference to requested Attributable model.
+     *
+     * @return \Softworx\RocXolid\Common\Models\Contracts\Attributable
+     */
+    public function getAttributableModel()
     {
-        return AttributeGroupViewer::build($this, $this)
-            ->setModel($attribute_group)
-            ->setController($this);
+        return $this->attributable_model;
     }
 
-    protected function successResponse(CrudRequest $request, RepositoryContract $repository, AbstractCrudForm $form, CrudableModel $attribute_value, string $action)
+    /**
+     * Set reference to requested AttributeGroup.
+     *
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup $attribute_group Reference to requested AttributeGroup.
+     *
+     * @return self
+     */
+    public function setAttributeGroup(AttributeGroup $attribute_group): self
     {
-        if ($request->ajax() && $request->has('_section'))
-        {
-            $assignments = [];
+        $this->attribute_group = $attribute_group;
 
-            $form_component = (new CrudFormComponent())
-                ->setForm($form)
-                ->setRepository($this->getRepository());
-
-            $model_viewer_component = $this->getModelViewerComponent($attribute_value);
-
-            $attribute_group_model_viewer_component = $this->getAttributeGroupViewerComponent($attribute_value->attribute->attributeGroup);
-            $attribute_model_viewer_component = $this->getAttributeViewerComponent($attribute_value->attribute);
-            $template_name = sprintf('include.%s', $request->_section);
-
-            switch ($action)
-            {
-                case 'create':
-                    $this->response->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments));
-                    break;
-            }
-
-            return $this->response
-                ->append($form_component->getDomId('output'), (new Message())->fetch('crud.success', $assignments))
-                ->replace($attribute_model_viewer_component->getDomId($request->_section), $attribute_model_viewer_component->fetch($template_name, $assignments))
-                ->modalClose($model_viewer_component->getDomId(sprintf('modal-%s', $action)))
-                ->get();
-        }
-        else
-        {
-            return parent::successResponse($request, $repository, $form, $attribute_value, $action);
-        }
+        return $this;
     }
 
-    protected function destroyResponse(CrudRequest $request, CrudableModel $attribute_value)
+    /**
+     * Get reference to requested AttributeGroup.
+     *
+     * @return  \Softworx\RocXolid\Common\Models\AttributeGroup
+     */
+    public function getAttributeGroup()
     {
-        if ($request->ajax())
-        {
-            $assignments = [];
-
-            $model_viewer_component = $this->getModelViewerComponent($attribute_value);
-
-            $attribute_group_model_viewer_component = $this->getAttributeGroupViewerComponent($attribute_value->attribute->attributeGroup);
-            $attribute_controller = App::make(AttributeController::class);
-            $attribute_model_viewer_component = $this->getAttributeViewerComponent($attribute_value->attribute);
-
-            return $this->response
-                ->replace($attribute_group_model_viewer_component->getDomId('attributes'), $attribute_group_model_viewer_component->fetch('include.attributes', $assignments))
-                ->replace($attribute_model_viewer_component->getDomId('attribute-values'), $attribute_model_viewer_component->fetch('include.attribute-values', $assignments))
-                ->modalClose($model_viewer_component->getDomId('modal-destroy-confirm', $attribute_value->getKey()))
-                ->get();
-        }
-        else
-        {
-            $attribute_controller = App::make(AttributeController::class);
-
-            return redirect($attribute_controller->getRoute('show', $attribute_value->attribute));
-        }
+        return $this->attribute_group;
     }
-    */
 }

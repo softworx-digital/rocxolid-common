@@ -2,31 +2,38 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+// rocXolid model contracts
+use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
-// rocXolid common model traits
-use Softworx\RocXolid\Common\Models\Traits\HasCountry;
-use Softworx\RocXolid\Common\Models\Traits\HasCadastralArea;
-use Softworx\RocXolid\Common\Models\Traits\HasRegion;
-use Softworx\RocXolid\Common\Models\Traits\HasDistrict;
-use Softworx\RocXolid\Common\Models\Traits\HasCity;
 // rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\User;
 
+/**
+ * Address model.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ * @todo revise
+ */
 class Address extends AbstractCrudModel
 {
     use SoftDeletes;
-    use HasCountry;
-    use HasCadastralArea;
-    use HasRegion;
-    use HasDistrict;
-    use HasCity;
+    use Traits\HasCountry;
+    use Traits\HasCadastralArea;
+    use Traits\HasRegion;
+    use Traits\HasDistrict;
+    use Traits\HasCity;
 
-    protected static $can_be_deleted = false;
-
+    /**
+     * {@inheritDoc}
+     */
     protected $fillable = [
         'name',
         'description',
@@ -44,6 +51,9 @@ class Address extends AbstractCrudModel
         'longitude',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $relationships = [
         'city',
         'country',
@@ -52,10 +62,15 @@ class Address extends AbstractCrudModel
         'cadastralArea',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     protected $system = [
         'id',
         'model_type',
-        'city_name', // @todo: so far
+        'model_id',
+        'model_attribute',
+        'city_name', // @todo so far
         'created_at',
         'updated_at',
         'deleted_at',
@@ -65,37 +80,111 @@ class Address extends AbstractCrudModel
     ];
 
     protected $decimals = [
-        // 'latitude',
-        // 'longitude',
+        // 'latitude', // not truly decimal formattable
+        // 'longitude', // not truly decimal formattable
     ];
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getTitle(): string
+    {
+        return $this->name ?: $this->getAddressLabel(false, true, false);
+    }
+
+    /**
+     * Relation to parent.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function parent(): MorphTo
     {
         return $this->morphTo('model');
     }
 
-    public function resolvePolymorphUserModel()
+    /**
+     * {@inheritDoc}
+     */
+    public function resolvePolymorphUserModel(): string
     {
         return User::class;
     }
 
-    public function getAddressLabel($html = true, $with_name = false)
+    /**
+     * Format to a address label.
+     *
+     * @param bool $html
+     * @param bool $with_name
+     * @return string
+     */
+    public function getAddressLabel(bool $html = true, bool $inline = false, bool $full = true): string
     {
-        $label = sprintf(
-            "%s %s\n%s %s\n%s%s%s",
-            $this->street_name,
-            $this->street_no,
-            $this->zip,
-            $this->city()->exists() ? $this->city->getTitle() : null,
-            $this->region()->exists() ? $this->region->getTitle() . "\n" : null,
-            $this->district()->exists() ? $this->district->getTitle() . "\n" : null,
-            $this->country()->exists() ? $this->country->getTitle() : null
-        );
+        $separator = $inline ? ', ' : "\n";
+
+        if (filled($this->street_name) && filled($this->street_no)) {
+            $identification = sprintf('%s %s', $this->street_name, $this->street_no);
+        } elseif ($this->city()->exists() && method_exists($this->parent, 'getAddressCityIdentifier')) {
+            $identification = sprintf('%s %s', $this->city->getTitle(), $this->parent->getAddressCityIdentifier());
+        } elseif (method_exists($this->parent, 'getAddressIdentifier')) {
+            $identification = $this->parent->getAddressIdentifier();
+        } else {
+            $identification = null;
+        }
+
+        if (method_exists($this->parent, 'getAddressQualifier')) {
+            $qualification = $this->parent->getAddressQualifier();
+        } else {
+            $qualification = null;
+        }
+
+        if ($full) {
+            $label = sprintf(
+                "%s%s%s %s{$separator}%s%s%s",
+                $identification ? $identification . $separator : null,
+                $qualification ? $qualification . $separator : null,
+                $this->zip,
+                $this->city()->exists() ? $this->city->getTitle() : null,
+                $this->region()->exists() ? $this->region->getTitle() . $separator : null,
+                $this->district()->exists() ? $this->district->getTitle() . $separator : null,
+                $this->country()->exists() ? $this->country->getTitle() : null
+            );
+        } else {
+            $label = sprintf(
+                "%s%s%s %s",
+                $identification ? $identification . $separator : null,
+                $qualification ? $qualification . $separator : null,
+                $this->zip,
+                $this->city()->exists() ? $this->city->getTitle() : null
+            );
+        }
 
         return $html ? nl2br($label) : $label;
     }
 
-    public function fillCustom($data, $action = null)
+    /**
+     * Format to a inline address label.
+     *
+     * @return string
+     */
+    public function getInlineAddressLabel(): string
+    {
+        return $this->getAddressLabel(false, true);
+    }
+
+    /**
+     * Format to a brief inline address label.
+     *
+     * @return string
+     */
+    public function getBriefInlineAddressLabel(): string
+    {
+        return $this->getAddressLabel(false, true, false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fillCustom(Collection $data): Crudable
     {
         if (!is_null($this->latitude)) {
             $this->latitude = str_replace(',', '.', $this->latitude);
@@ -105,6 +194,25 @@ class Address extends AbstractCrudModel
             $this->longitude = str_replace(',', '.', $this->longitude);
         }
 
-        return parent::fillCustom($data, $action);
+        return parent::fillCustom($data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function canBeDeleted(Request $request): bool
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @todo ugly
+     */
+    public function onCreateBeforeSave(Collection $data): Crudable
+    {
+        $this->model_attribute = $data->get('model_attribute');
+
+        return parent::onCreateBeforeSave($data);
     }
 }

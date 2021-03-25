@@ -2,9 +2,8 @@
 
 namespace Softworx\RocXolid\Common\Components\ModelViewers;
 
-use Softworx\RocXolid\Components\ModelViewers\CrudModelViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\AbstractCrudModelViewer;
 
-class AttributeViewer extends CrudModelViewer
+class AttributeViewer extends AbstractCrudModelViewer
 {
-    protected $view_package = 'rocXolid:common';
 }

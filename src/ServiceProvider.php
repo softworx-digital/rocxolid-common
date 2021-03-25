@@ -2,11 +2,17 @@
 
 namespace Softworx\RocXolid\Common;
 
-use View;
-use Illuminate\Routing\Router;
 use Illuminate\Foundation\AliasLoader;
+// rocXolid service providers
 use Softworx\RocXolid\AbstractServiceProvider as RocXolidAbstractServiceProvider;
 
+/**
+ * rocXolid Common package primary service provider.
+ *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
+ */
 class ServiceProvider extends RocXolidAbstractServiceProvider
 {
     /**
@@ -16,10 +22,12 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
      */
     public function register()
     {
+        $this->app->register(Providers\AuthServiceProvider::class);
         $this->app->register(Providers\ConfigurationServiceProvider::class);
         $this->app->register(Providers\ViewServiceProvider::class);
         $this->app->register(Providers\RouteServiceProvider::class);
         $this->app->register(Providers\TranslationServiceProvider::class);
+        $this->app->register(Providers\FactoryServiceProvider::class);
 
         $this
             ->bindContracts()
@@ -27,10 +35,10 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
     }
 
     /**
-    * Bootstrap the application services.
-    *
-    * @return void
-    */
+     * Bootstrap the application services.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this
@@ -54,7 +62,7 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
         // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="lang" (--force to overwrite)
         $this->publishes([
             //__DIR__ . '/../resources/lang' => resource_path('lang/vendor/softworx/rocXolid/common'),
-            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/rocXolid:common'),
+            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/rocXolid:common'), // used by laravel's FileLoaded::loadNamespaceOverrides()
         ], 'lang');
 
         // views files
@@ -89,9 +97,24 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
     private function bindContracts(): RocXolidAbstractServiceProvider
     {
         $this->app->singleton(
-            Services\Contracts\ImageUploadService::class,
-            Services\ImageUploadService::class
+            Services\Contracts\FileUploadService::class,
+            Services\FileUploadService::class
         );
+
+        $this->app->singleton(
+            Services\Contracts\ImageProcessService::class,
+            Services\ImageProcessService::class
+        );
+
+        // @todo doesn't work since this is appliable to constructor dependency resolution
+        // need to refactor forms in general at first
+        /*
+        $this->app->when(Models\Forms\AttributeModel\General::class)
+            ->needs(\Softworx\RocXolid\Forms\Builders\Contracts\FormFieldFactory::class)
+            ->give(function () {
+                return app(Models\Forms\Attribute\Support\FormFieldFactory);
+            });
+        */
 
         return $this;
     }
@@ -106,7 +129,6 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
      */
     private function bindAliases(AliasLoader $loader): RocXolidAbstractServiceProvider
     {
-        // ...
         return $this;
     }
 }

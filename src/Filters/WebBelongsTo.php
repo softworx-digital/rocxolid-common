@@ -5,7 +5,7 @@ namespace Softworx\RocXolid\Common\Filters;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Web;
 
 /**

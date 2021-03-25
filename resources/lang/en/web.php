@@ -18,7 +18,6 @@ return [
         'is_label_with_color' => 'Use label with color',
         'is_label_with_flag' => 'Use label with flag',
         'color' => 'Label color',
-        'system_name' => 'System name',
         // relations
         'userGroup' => 'User group',
         'frontpageSettings' => 'Frontpage settings',

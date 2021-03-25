@@ -2,7 +2,7 @@
 
 namespace Softworx\RocXolid\Common\Providers;
 
-use View;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 /**

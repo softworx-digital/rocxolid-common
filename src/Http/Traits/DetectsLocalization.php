@@ -4,7 +4,7 @@ namespace Softworx\RocXolid\Common\Http\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Web;
 use Softworx\RocXolid\Common\Models\Localization;
 

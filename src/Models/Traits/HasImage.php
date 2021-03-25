@@ -74,11 +74,9 @@ trait HasImage
     /**
      * @Softworx\RocXolid\Annotations\AuthorizedRelation
      */
-    public function image(): MorphOne
+    public function image($model_attribute = 'image'): MorphOne
     {
-        $table = (new Image())->getTable();
-
-        return $this->morphOne(Image::class, 'model')->where(sprintf('%s.model_attribute', $table), 'image')->orderBy(sprintf('%s.model_attribute_position', $table));
+        return $this->morphOne(Image::class, 'model')->where(Image::make()->qualifyColumn('model_attribute'), $model_attribute);
     }
 
     /**
@@ -86,7 +84,7 @@ trait HasImage
      *
      * @param \Softworx\RocXolid\Common\Models\Image $image
      * @return \Softworx\RocXolid\Models\Contracts\Crudable
-     * @todo: events?
+     * @todo events?
      */
     public function onImageUpload(Image $image): Crudable
     {
@@ -126,6 +124,7 @@ trait HasImage
         return collect($image_sizes);
     }
 
+    // @todo
     public function getImagePlaceholder()
     {
         return config(sprintf('rocXolid.common.placeholder.%s.%s', (new \ReflectionClass($this))->getName(), 'image'), null);

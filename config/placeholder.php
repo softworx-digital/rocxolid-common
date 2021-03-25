@@ -2,7 +2,7 @@
 
 /**
  *--------------------------------------------------------------------------
- * Cinfiguration of image placeholders for specific classes and attributes
+ * Configuration of image placeholders for specific classes and attributes
  *--------------------------------------------------------------------------
  */
 return [

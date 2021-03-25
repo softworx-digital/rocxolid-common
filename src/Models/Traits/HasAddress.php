@@ -2,10 +2,8 @@
 
 namespace Softworx\RocXolid\Common\Models\Traits;
 
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-// common models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\Address;
 
 /**
@@ -18,6 +16,8 @@ trait HasAddress
      */
     public function address(): MorphOne
     {
-        return $this->morphOne(Address::class, 'model')->where('is_default', 1);
+        $table = (new Address())->getTable();
+
+        return $this->morphOne(Address::class, 'model')->where(sprintf('%s.model_attribute', $table), 'address');
     }
 }

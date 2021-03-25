@@ -2,116 +2,48 @@
 
 namespace Softworx\RocXolid\Common\Repositories\Attribute;
 
-use Softworx\RocXolid\Repositories\AbstractCrudRepository;
-// filters
-use Softworx\RocXolid\Repositories\Filters\Type\Text as TextFilter;
-use Softworx\RocXolid\Repositories\Filters\Type\Select as SelectFilter;
-use Softworx\RocXolid\Repositories\Filters\Type\ModelRelation as ModelRelationFilter;
-use Softworx\RocXolid\Repositories\Columns\Type\Text;
-use Softworx\RocXolid\Repositories\Columns\Type\Image;
-use Softworx\RocXolid\Repositories\Columns\Type\ModelRelation;
+// rocXolid repositories
+use Softworx\RocXolid\Repositories\Contracts\Repository as RepositoryContract;
+use Softworx\RocXolid\Repositories\CrudRepository;
+// rocXolid user management models
+use Softworx\RocXolid\Common\Models\AttributeGroup;
 
 /**
+ * Attribute repository.
  *
+ * @author softworx <hello@softworx.digital>
+ * @package Softworx\RocXolid\Common
+ * @version 1.0.0
  */
-class Repository extends AbstractCrudRepository
+class Repository extends CrudRepository
 {
-    protected $filters = [
-        'full_name' => [
-            'type' => TextFilter::class,
-            'options' => [
-                'label' => [
-                    'title' => 'full_name'
-                ],
-                'attributes' => [
-                    'placeholder' => 'name'
-                ],
-            ],
-        ],
-    ];
+    /**
+     * @var \Softworx\RocXolid\Common\Models\AttributeGroup
+     */
+    protected $attribute_group;
 
-    protected $columns = [
-        'flag' => [
-            'type' => Image::class,
-            'options' => [
-                'label' => [
-                    'title' => 'flag',
-                ],
-                'path' => '/images/flags',
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
-                ],
-            ],
-        ],
-        'full_name' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'name'
-                ],
-            ],
-        ],
-        'iso_3166_2' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'code'
-                ],
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
-                ],
-            ],
-        ],
-        'capital' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'capital'
-                ],
-            ],
-        ],
-        'currency_code' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'currency_code'
-                ],
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
-                ],
-            ],
-        ],
-        'currency_symbol' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'currency_symbol'
-                ],
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
-                ],
-            ],
-        ],
-        'currency_iso_4217' => [
-            'type' => Text::class,
-            'options' => [
-                'label' => [
-                    'title' => 'currency_iso_4217'
-                ],
-                'wrapper' => [
-                    'attributes' => [
-                        'class' => 'text-center',
-                    ],
-                ],
-            ],
-        ],
-    ];
+    /**
+     * AttributeGroup reference setter.
+     *
+     * @param \Softworx\RocXolid\Common\Models\AttributeGroup $attribute_group
+     * @return self
+     */
+    public function setAttributeGroup(AttributeGroup $attribute_group): self
+    {
+        $this->attribute_group = $attribute_group;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function initQueryModel(): RepositoryContract
+    {
+        if (filled($this->attribute_group)) {
+            $this->query_model::bootAssociatedAttributeGroup($this->attribute_group);
+        }
+
+        return $this;
+    }
 }

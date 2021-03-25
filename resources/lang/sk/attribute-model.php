@@ -25,8 +25,11 @@ return [
     ],
     'model' => [
         'title' => [
-            'singular' => 'Model atribútu',
-            'plural' => 'Model atribútu',
+            'singular' => 'Atribúty',
+            'plural' => 'Atribúty',
         ],
+    ],
+    'action' => [
+        'modelAttributes' => '',
     ],
 ];

@@ -18,15 +18,17 @@ class ConfigurationServiceProvider extends IlluminateServiceProvider
      */
     protected $config_files = [
         'rocXolid.common.general' => '/../../config/general.php',
+        'rocXolid.common.artisan' => '/../../config/artisan.php',
         'rocXolid.common.placeholder' => '/../../config/placeholder.php',
+        'rocXolid.common.attributes' => '/../../config/attributes.php',
     ];
 
     /**
-     * Extend the default request validator.
+     * Register configuration provider for rocXolid Common package.
      *
      * @return \Illuminate\Support\ServiceProvider
      */
-    public function boot()
+    public function register(): IlluminateServiceProvider
     {
         $this
             ->configure();

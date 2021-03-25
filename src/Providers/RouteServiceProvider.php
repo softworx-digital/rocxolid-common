@@ -4,6 +4,7 @@ namespace Softworx\RocXolid\Common\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+// rocXolid services
 use Softworx\RocXolid\Services\CrudRouterService;
 
 /**
@@ -32,7 +33,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
     /**
      * Define the routes for the package.
      *
-     * @param  \Illuminate\Routing\Router $router Router to be used for routing.
+     * @param \Illuminate\Routing\Router $router Router to be used for routing.
      * @return \Illuminate\Support\ServiceProvider
      */
     private function load(Router $router): IlluminateServiceProvider
@@ -75,6 +76,15 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 });
             });
             */
+
+            $router->group([
+                'namespace' => 'Artisan',
+                'prefix' => 'artisan',
+                'as' => 'artisan.',
+            ], function ($router) {
+                $router->get('', 'Controller@index')->name('index');
+                $router->post('/run', 'Controller@run')->name('run');
+            });
         });
 
         $router->group([
@@ -101,6 +111,12 @@ class RouteServiceProvider extends IlluminateServiceProvider
             CrudRouterService::create('attribute-group', \AttributeGroup\Controller::class);
             CrudRouterService::create('attribute', \Attribute\Controller::class);
             CrudRouterService::create('attribute-value', \AttributeValue\Controller::class);
+            CrudRouterService::create('web-frontpage-settings', \WebFrontpageSettings\Controller::class, [
+                'parameters' => [
+                    'web-frontpage-settings' => 'web_frontpage_settings', // @todo this is needed because Laravel somehow violates standard param naming convention in this case
+                ],
+            ]);
+            CrudRouterService::create('command-log', \CommandLog\Controller::class);
 
             $router->group([
                 'namespace' => 'File',
@@ -108,6 +124,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
                 'as' => 'file.',
             ], function ($router) {
                 $router->get('/get/{file}', 'Controller@get')->name('get');
+                $router->get('/download/{file}', 'Controller@download')->name('download');
                 $router->post('/upload-complete', 'Controller@onUploadComplete')->name('upload-complete');
             });
 
@@ -123,8 +140,25 @@ class RouteServiceProvider extends IlluminateServiceProvider
             $router->group([
                 'namespace' => 'Address',
                 'prefix' => 'address',
+                'as' => 'address.',
             ], function ($router) {
                 $router->get('/show-map/{address}', 'Controller@showMap')->name('show-map');
+            });
+
+            $router->group([
+                'namespace' => 'Web',
+                'prefix' => 'web',
+                'as' => 'web.'
+            ], function (Router $router) {
+                $router->get('/{web}/{tab?}', 'Controller@show')->name('show');
+            });
+
+            $router->group([
+                'namespace' => 'WebFrontpageSettings',
+                'prefix' => 'web-frontpage-settings',
+            ], function ($router) {
+                // $router->get('/{web_frontpage_settings}/clone-structure', 'Controller@cloneStructure');
+                // $router->match(['PUT', 'PATCH'], '/{web_frontpage_settings}/clone-structure-submit', 'Controller@cloneStructureSubmit');
             });
         });
 
@@ -134,12 +168,15 @@ class RouteServiceProvider extends IlluminateServiceProvider
     /**
      * Define the route bindings for URL params.
      *
-     * @param  \Illuminate\Routing\Router $router Router to be used for routing.
+     * @param \Illuminate\Routing\Router $router Router to be used for routing.
      * @return \Illuminate\Support\ServiceProvider
      */
     private function mapRouteModels(Router $router): IlluminateServiceProvider
     {
+        // @todo group namespace
         $router->model('web', \Softworx\RocXolid\Common\Models\Web::class);
+        $router->model('web_frontpage_settings', \Softworx\RocXolid\Common\Models\WebFrontpageSettings::class);
+        $router->model('command_log', \Softworx\RocXolid\Common\Models\CommandLog::class);
         $router->model('file', \Softworx\RocXolid\Common\Models\File::class);
         $router->model('image', \Softworx\RocXolid\Common\Models\Image::class);
         $router->model('country', \Softworx\RocXolid\Common\Models\Country::class);
