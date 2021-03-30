@@ -16,6 +16,9 @@ return [
         'values' => 'Možné hodnoty',
         //
         'attributeGroup' => 'Skupina atribútov',
+        'name_sk' => 'Názov SK',
+        'name_en' => 'Názov EN',
+        'name_de' => 'Názov DE',
     ],
     'table-button' => [
         'set-values' => 'Nastaviť definované hodnoty',

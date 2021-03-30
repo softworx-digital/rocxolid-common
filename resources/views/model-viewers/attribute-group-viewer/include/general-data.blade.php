@@ -12,6 +12,18 @@
         <dl class="dl-horizontal">
             <dt>{{ $component->translate('field.title') }}</dt>
             <dd>{{ $component->getModel()->getTitle() }}</dd>
+
+
+
+            <dt>{{ $component->translate('field.name_sk') }}</dt>
+            <dd>{{ $component->getModel()->getAttributeViewValue('name_sk') }}</dd>
+            <dt>{{ $component->translate('field.name_en') }}</dt>
+            <dd>{{ $component->getModel()->getAttributeViewValue('name_en') }}</dd>
+            <dt>{{ $component->translate('field.name_de') }}</dt>
+            <dd>{{ $component->getModel()->getAttributeViewValue('name_de') }}</dd>
+
+
+
             <dt>{{ $component->translate('field.is_filterable') }}</dt>
             <dd>
             @if ($component->getModel()->is_filterable)

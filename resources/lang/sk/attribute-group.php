@@ -12,6 +12,9 @@ return [
     'field' => [
         'model_type' => 'Model',
         'name' => 'Názov',
+        'name_sk' => 'Názov SK',
+        'name_en' => 'Názov EN',
+        'name_de' => 'Názov DE',
     ],
     'table-button' => [
         'attributes' => 'Atribúty',

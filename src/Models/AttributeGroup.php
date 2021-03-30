@@ -35,6 +35,9 @@ class AttributeGroup extends AbstractCrudModel
         'is_filterable',
         'model_type',
         'name',
+        'name_sk',
+        'name_en',
+        'name_de',
         'code',
     ];
 
@@ -60,6 +63,9 @@ class AttributeGroup extends AbstractCrudModel
         'is_filterable',
         'model_type',
         'name',
+        'name_sk',
+        'name_en',
+        'name_de',
         'code',
         'description',
         'note',
