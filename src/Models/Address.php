@@ -4,7 +4,6 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 // rocXolid model contracts
