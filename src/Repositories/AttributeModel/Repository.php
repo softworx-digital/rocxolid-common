@@ -49,7 +49,10 @@ class Repository extends CrudRepository
             $attribute = Attribute::findOrFail($attribute_id);
 
             // $model->attributeGroupValues($this->getAttributeGroup())->save($attribute, [ $attribute->getModelValueColumnName() => $value ]);
-            $model->attributeValues()->save($attribute, [ $attribute->getModelValueColumnName() => $value ]);
+            $model->attributeValues()->save($attribute, [
+                'negative_comparison' => $attribute->attributeGroup->is_negative_comparison,
+                $attribute->getModelValueColumnName() => $value
+            ]);
         });
 
         return $model->load('attributeValues');

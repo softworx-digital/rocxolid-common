@@ -3,6 +3,7 @@
 namespace Softworx\RocXolid\Common\Models\Traits;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\AttributeGroup;
@@ -17,6 +18,7 @@ trait HasDynamicAttributes
     protected $_attributes = null;
 
     protected static $pivot_extra = [
+        'negative_comparison',
         'attribute_id',
         'attribute_value_id',
         'value_boolean',
@@ -53,11 +55,25 @@ trait HasDynamicAttributes
                     return [
                         'id' => $attribute->getKey(),
                         'title' => $attribute->getTitle(),
+                        'type' => $attribute->type,
                         'value' => $this->attributeValue($attribute, true)
                     ];
                 })
             ];
         });
+    }
+
+    // @todo hotfixed for performance optimization
+    public function booleanAttributeValues(): Collection
+    {
+        $type = (new \ReflectionClass($this))->getName();
+
+        return DB::table('model_has_attributes')
+            ->select(DB::raw('attribute_id, negative_comparison, value_boolean AS value'))
+            ->where('model_type', $type)
+            ->where('model_id', $this->getKey())
+            ->whereNotNull('value_boolean')
+            ->get();
     }
 
     // @todo ugly

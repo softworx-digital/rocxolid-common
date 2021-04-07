@@ -30,6 +30,7 @@ class AttributeModel extends AbstractCrudModel
      * {@inheritDoc}
      */
     protected $fillable = [
+        'negative_comparison',
         'model_type',
         'model_id',
         'attribute_id',

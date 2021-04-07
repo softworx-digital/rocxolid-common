@@ -31,5 +31,6 @@ return [
     ],
     'text' => [
         'attributes-data' => 'Atribúty',
+        'negative_comparison' => 'Táto skupina atribútov používa pre zobraznie nastavenú, pre porovnanie však znegovanú hodnotu!',
     ],
 ];
