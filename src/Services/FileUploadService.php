@@ -4,6 +4,7 @@ namespace Softworx\RocXolid\Common\Services;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 // relations
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -42,6 +43,25 @@ class FileUploadService implements FileUploadServiceContract
                 $this->handleUploadedFile($uploaded_file, $model, $callback);
             });
         });
+
+        return $model;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleBase64FileUploadRequest(CrudRequest $request, Uploadable $model, string $base64_data, ?\Closure $callback = null): Uploadable
+    {
+        $file_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_data));
+
+        $tmp = sprintf('%s/%s', sys_get_temp_dir(), Str::uuid()->toString());
+        file_put_contents($tmp, $file_data);
+
+        $tmp_file = new File($tmp);
+
+        $uploaded_file = new UploadedFile($tmp_file->getPathname(), $tmp_file->getFilename(), $tmp_file->getMimeType(), 0, true);
+
+        $this->handleUploadedFile($uploaded_file, $model, $callback);
 
         return $model;
     }

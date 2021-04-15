@@ -27,4 +27,14 @@ interface FileUploadService extends ConsumerService
      * @return \Softworx\RocXolid\Models\Contracts\Uploadable
      */
     public function handleFileUploadRequest(CrudRequest $request, Uploadable $model): Uploadable;
+
+    /**
+     * Process upload request with base64 encoded data.
+     *
+     * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
+     * @param string $base64_data
+     * @param \Closure|null $callback
+     * @return \Softworx\RocXolid\Models\Contracts\Uploadable
+     */
+    public function handleBase64FileUploadRequest(CrudRequest $request, Uploadable $model, string $base64_data, ?\Closure $callback = null): Uploadable;
 }
