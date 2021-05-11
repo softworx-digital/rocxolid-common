@@ -52,10 +52,12 @@ class FileUploadService implements FileUploadServiceContract
      */
     public function handleBase64FileUploadRequest(CrudRequest $request, Uploadable $model, string $base64_data, ?\Closure $callback = null): Uploadable
     {
-        $file_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_data));
+        if (Str::startsWith($base64_data, 'data:')) {
+            $base64_data = preg_replace('#^data:image/\w+;base64,#i', '', $base64_data);
+        }
 
         $tmp = sprintf('%s/%s', sys_get_temp_dir(), Str::uuid()->toString());
-        file_put_contents($tmp, $file_data);
+        file_put_contents($tmp, base64_decode($base64_data));
 
         $tmp_file = new File($tmp);
 

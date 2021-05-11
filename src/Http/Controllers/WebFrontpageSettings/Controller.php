@@ -8,8 +8,6 @@ use Softworx\RocXolid\Http\Requests\CrudRequest;
 use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 // rocXolid forms
 use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
-// rocXolid controller traits
-use Softworx\RocXolid\Http\Controllers\Traits;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common components
@@ -32,22 +30,10 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected $form_mapping = [
-        'create' => 'create',
-        'store' => 'create',
-        'edit' => 'update',
-        'update' => 'update',
-    ];
-
-    /**
-     * {@inheritDoc}
-     */
     protected function successAjaxResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form): array
     {
         $model_viewer_component = $model->getModelViewerComponent();
         $web_model_viewer_component = $model->web->getModelViewerComponent();
-
-        // event(new \App\Events\Estate\Changed($model->estate));
 
         return $this->response
             ->notifySuccess($web_model_viewer_component->translate('text.updated'))
@@ -59,8 +45,8 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected function successNonAjaxResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form): Response
+    protected function successNonAjaxResponse(CrudRequest $request, CrudableModel $model, AbstractCrudForm $form)
     {
-        return redirect($model->estate->getControllerRoute('show', [ 'tab' => 'gaugers' ]));
+        return redirect($model->web->getControllerRoute('show', [ 'tab' => 'frontpage-settings' ]));
     }
 }
