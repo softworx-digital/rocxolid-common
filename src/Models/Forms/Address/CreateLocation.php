@@ -74,7 +74,7 @@ class CreateLocation extends RocXolidAbstractCrudForm
                 ],
                 'validation' => [
                     'rules' => [
-                        'nullable',
+                        'required',
                     ],
                 ],
             ],

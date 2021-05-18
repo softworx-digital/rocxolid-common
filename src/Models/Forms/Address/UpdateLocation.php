@@ -64,7 +64,7 @@ class UpdateLocation extends RocXolidAbstractCrudForm
                 ],
                 'validation' => [
                     'rules' => [
-                        'nullable',
+                        'required',
                     ],
                 ],
             ],

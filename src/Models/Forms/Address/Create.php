@@ -56,7 +56,7 @@ class Create extends RocXolidAbstractCrudForm
                 ],
                 'validation' => [
                     'rules' => [
-                        'required',
+                        'nullable',
                         'max:255',
                     ],
                 ],

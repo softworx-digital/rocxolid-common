@@ -15,7 +15,7 @@ trait DetectsWeb
     // @todo hotfixed
     public function detectOnlyWeb(Request $request)
     {
-        return Web::where('domain', 'like', sprintf('%%%s', $request->getHost()))->firstOrFail();
+        return Web::where('domain', 'like', sprintf('%%%s', $request->getHost()))->first();
     }
 
     public function detectWeb(Request $request = null)

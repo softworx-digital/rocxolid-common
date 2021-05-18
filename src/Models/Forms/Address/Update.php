@@ -49,7 +49,7 @@ class Update extends RocXolidAbstractCrudForm
                 ],
                 'validation' => [
                     'rules' => [
-                        'required',
+                        'nullable',
                         'max:255',
                     ],
                 ],

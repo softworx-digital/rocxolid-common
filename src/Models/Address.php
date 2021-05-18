@@ -121,7 +121,9 @@ class Address extends AbstractCrudModel
         $separator = $inline ? ', ' : "\n";
 
         if (filled($this->street_name) && filled($this->street_no)) {
-            $identification = sprintf('%s %s', $this->street_name, $this->street_no);
+            $identification = sprintf('%s %s%s', $this->street_name, $this->street_no, $separator);
+        } elseif (filled($this->street_no)) {
+            $identification = $full ? $this->street_no : sprintf('%s ', $this->street_no);
         } elseif ($this->city()->exists() && method_exists($this->parent, 'getAddressCityIdentifier')) {
             $identification = sprintf('%s %s', $this->city->getTitle(), $this->parent->getAddressCityIdentifier());
         } elseif (method_exists($this->parent, 'getAddressIdentifier')) {
@@ -139,7 +141,7 @@ class Address extends AbstractCrudModel
         if ($full) {
             $label = sprintf(
                 "%s%s%s %s{$separator}%s%s%s",
-                $identification ? $identification . $separator : null,
+                $identification ? $identification : null,
                 $qualification ? $qualification . $separator : null,
                 $this->zip,
                 $this->city()->exists() ? $this->city->getTitle() : null,
@@ -149,11 +151,11 @@ class Address extends AbstractCrudModel
             );
         } else {
             $label = sprintf(
-                "%s%s%s %s",
-                $identification ? $identification . $separator : null,
+                "%s%s %s %s",
+                $identification ? $identification : null,
                 $qualification ? $qualification . $separator : null,
-                $this->zip,
-                $this->city()->exists() ? $this->city->getTitle() : null
+                $this->city()->exists() ? $this->city->getTitle() : null,
+                $this->zip
             );
         }
 
