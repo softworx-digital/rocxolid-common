@@ -16,8 +16,6 @@ trait HasAddress
      */
     public function address(): MorphOne
     {
-        $table = (new Address())->getTable();
-
-        return $this->morphOne(Address::class, 'model')->where(sprintf('%s.model_attribute', $table), 'address');
+        return $this->morphOne(Address::class, 'model')->where(Address::make()->qualifyColumn('model_attribute'), 'address');
     }
 }

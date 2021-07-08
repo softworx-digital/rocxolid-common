@@ -2,7 +2,9 @@
     <div class="panel-heading">
         <h3 class="panel-title">
             {{ $component->getModel()->getTitle() }}
+        @if (!($read_only ?? false) && $user->can('update', $component->getModel()))
             <a data-ajax-url="{{ $attributable->getControllerRoute('modelAttributes', [ 'attribute_group' => $component->getModel() ]) }}" class="pull-right margin-left-5"><i class="fa fa-pencil"></i></a>
+        @endcan
         </h3>
     </div>
     <div class="panel-body">

@@ -39,7 +39,7 @@ return [
     ],
     'text' => [
         'copy' => 'Skopírovať adresu',
-        'location' => 'Lokácia',
+        'location' => 'Lokalita',
         'map-location' => 'Poloha na mape',
         'show-map' => 'Ukázať na mape',
     ],

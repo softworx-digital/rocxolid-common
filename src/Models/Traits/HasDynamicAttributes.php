@@ -99,6 +99,10 @@ trait HasDynamicAttributes
 
                         return filled($attribute->units) ? sprintf('%s %s', $nf->format($value), $attribute->units) : $nf->format($value);
                     }
+                case 'boolean':
+                    $column = sprintf('value_%s', $pivot_attribute->type);
+
+                    return (bool)$pivot_attribute->pivot->$column;
                 default:
                     $column = sprintf('value_%s', $pivot_attribute->type);
                     $value = $pivot_attribute->pivot->$column;
