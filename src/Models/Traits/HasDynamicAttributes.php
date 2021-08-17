@@ -76,6 +76,19 @@ trait HasDynamicAttributes
             ->get();
     }
 
+    // @todo hotfixed for performance optimization
+    public function trueBooleanAttributeValues(): Collection
+    {
+        $type = (new \ReflectionClass($this))->getName();
+
+        return DB::table('model_has_attributes')
+            ->select(DB::raw('attribute_id, negative_comparison, value_boolean AS value'))
+            ->where('model_type', $type)
+            ->where('model_id', $this->getKey())
+            ->where('value_boolean', true)
+            ->get();
+    }
+
     // @todo ugly
     public function attributeValue(Attribute $attribute, $raw = false)
     {
