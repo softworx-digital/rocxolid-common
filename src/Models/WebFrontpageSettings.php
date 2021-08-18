@@ -69,7 +69,6 @@ class WebFrontpageSettings extends AbstractCrudModel
         // temporarily put here so they won't show up in details
         'schema',
         'facebook_app_id',
-        'google_plus_page_url',
         'youtube_page_url',
         'livechatoo_account',
         'livechatoo_language',

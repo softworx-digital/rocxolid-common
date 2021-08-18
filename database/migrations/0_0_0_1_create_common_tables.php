@@ -34,6 +34,7 @@ class CreateCommonTables extends Migration
             ->containerContainee()
             ->attributes()
             ->webs()
+            ->webFrontpageSettings()
             ->webLocalizations();
     }
     /**
@@ -45,6 +46,7 @@ class CreateCommonTables extends Migration
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         Schema::dropIfExists('webs');
+        Schema::dropIfExists('web_frontpage_settings');
         Schema::dropIfExists('web_has_localizations');
         Schema::dropIfExists('files');
         Schema::dropIfExists('images');
@@ -464,6 +466,48 @@ class CreateCommonTables extends Migration
         return $this->importDump('locales');
     }
 
+    protected function localizations()
+    {
+        Schema::create('localizations', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->string('name');
+            $table->string('seo_url_slug')->unique()->index();
+
+            $table->unsignedInteger('country_id');
+            $table->unsignedInteger('language_id');
+            $table->unsignedInteger('locale_id');
+
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+
+            $table->foreign('country_id')
+                ->references('id')
+                ->on('countries')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
+
+            $table->foreign('language_id')
+                ->references('id')
+                ->on('languages')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
+
+            $table->foreign('locale_id')
+                ->references('id')
+                ->on('locales')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
+
+            $table->unique([ 'country_id', 'language_id', 'locale_id' ]);
+        });
+
+        return $this;
+    }
+
     protected function nationalities()
     {
         Schema::create('nationalities', function (Blueprint $table) {
@@ -711,17 +755,38 @@ class CreateCommonTables extends Migration
         return $this;
     }
 
-    protected function localizations()
+    protected function webFrontpageSettings()
     {
-        Schema::create('localizations', function (Blueprint $table) {
+        Schema::create('web_frontpage_settings', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('name');
-            $table->string('seo_url_slug')->unique()->index();
+            $table->unsignedInteger('web_id');
 
-            $table->unsignedInteger('country_id');
-            $table->unsignedInteger('language_id');
-            $table->unsignedInteger('locale_id');
+            $table->string('name');
+            $table->string('theme')->nullable();
+            $table->text('css')->nullable();
+            $table->text('js')->nullable();
+            $table->text('schema')->nullable();
+
+            $table->string('facebook_page_url')->nullable();
+            $table->string('facebook_app_id')->nullable();
+
+            $table->string('youtube_page_url')->nullable();
+
+            $table->string('google_analytics_tracking_code')->nullable();
+            $table->string('google_measurement_id')->nullable();
+            $table->string('google_tag_manager_container_id')->nullable();
+
+            $table->string('livechatoo_account')->nullable();
+            $table->string('livechatoo_language')->nullable();
+            $table->string('livechatoo_side')->nullable()->default('right');
+
+            $table->string('dognet_account_id')->nullable();
+            $table->string('dognet_campaign_id')->nullable();
+
+            $table->string('twitter_card')->nullable();
+            $table->string('twitter_site')->nullable();
+            $table->string('twitter_creator')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -729,25 +794,11 @@ class CreateCommonTables extends Migration
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
 
-            $table->foreign('country_id')
+            $table->foreign('web_id')
                 ->references('id')
-                ->on('countries')
-                ->onDelete('restrict')
+                ->on('webs')
+                ->onDelete('cascade')
                 ->onUpdate('cascade');
-
-            $table->foreign('language_id')
-                ->references('id')
-                ->on('languages')
-                ->onDelete('restrict')
-                ->onUpdate('cascade');
-
-            $table->foreign('locale_id')
-                ->references('id')
-                ->on('locales')
-                ->onDelete('restrict')
-                ->onUpdate('cascade');
-
-            $table->unique([ 'country_id', 'language_id', 'locale_id' ]);
         });
 
         return $this;
