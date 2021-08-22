@@ -4,6 +4,8 @@ namespace Softworx\RocXolid\Common\Providers;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+// rocXolid common package provider
+use Softworx\RocXolid\Common\ServiceProvider as PackageServiceProvider;
 
 /**
  * rocXolid views & composers service provider.
@@ -36,9 +38,9 @@ class ViewServiceProvider extends IlluminateServiceProvider
     private function load(): IlluminateServiceProvider
     {
         // customized views preference
-        $this->loadViewsFrom(resource_path('views/vendor/rocXolid/common'), 'rocXolid:common');
+        $this->loadViewsFrom(PackageServiceProvider::viewsPublishPath(), 'rocXolid:common');
         // pre-defined views fallback
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'rocXolid:common');
+        $this->loadViewsFrom(PackageServiceProvider::viewsSourcePath(dirname(dirname(__DIR__))), 'rocXolid:common');
 
         return $this;
     }

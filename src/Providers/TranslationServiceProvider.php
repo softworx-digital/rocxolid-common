@@ -3,6 +3,8 @@
 namespace Softworx\RocXolid\Common\Providers;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+// rocXolid common package provider
+use Softworx\RocXolid\Common\ServiceProvider as PackageServiceProvider;
 
 /**
  * rocXolid translation service provider.
@@ -33,7 +35,7 @@ class TranslationServiceProvider extends IlluminateServiceProvider
      */
     private function load()
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'rocXolid:common');
+        $this->loadTranslationsFrom(PackageServiceProvider::translationsSourcePath(dirname(dirname(__DIR__))), 'rocXolid-common');
 
         return $this;
     }

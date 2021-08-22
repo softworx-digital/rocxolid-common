@@ -18,5 +18,5 @@ abstract class AbstractCrudController extends RocXolidAbstractCrudController
 {
     protected static $dashboard_type = CrudDashboard::class;
 
-    protected $translation_package = 'rocXolid:common';
+    protected $translation_package = 'rocXolid-common';
 }

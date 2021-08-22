@@ -46,47 +46,6 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
     }
 
     /**
-     * Expose config files and resources to be published.
-     *
-     * @return \Softworx\RocXolid\AbstractServiceProvider
-     */
-    private function publish(): RocXolidAbstractServiceProvider
-    {
-        // config files
-        // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="config" (--force to overwrite)
-        $this->publishes([
-            __DIR__ . '/../config/general.php' => config_path('rocXolid/common/general.php'),
-        ], 'config');
-
-        // lang files
-        // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="lang" (--force to overwrite)
-        $this->publishes([
-            //__DIR__ . '/../resources/lang' => resource_path('lang/vendor/softworx/rocXolid/common'),
-            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/rocXolid:common'), // used by laravel's FileLoaded::loadNamespaceOverrides()
-        ], 'lang');
-
-        // views files
-        // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="views" (--force to overwrite)
-        $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/softworx/rocXolid/common'),
-        ], 'views');
-
-        // migrations
-        // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="migrations" (--force to overwrite)
-        $this->publishes([
-            __DIR__.'/../database/migrations/' => database_path('migrations')
-        ], 'migrations');
-
-        // db dumps
-        // php artisan vendor:publish --provider="Softworx\RocXolid\Common\ServiceProvider" --tag="dumps" (--force to overwrite)
-        $this->publishes([
-            __DIR__.'/../database/dumps/' => database_path('dumps/rocXolid/common')
-        ], 'dumps');
-
-        return $this;
-    }
-
-    /**
      * Bind contracts / facades, so they don't have to be added to config/app.php.
      *
      * Usage:

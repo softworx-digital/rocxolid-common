@@ -7,7 +7,7 @@ use Softworx\RocXolid\Common\Components\AbstractActiveComponent;
 
 class ArtisanTerminal extends AbstractActiveComponent
 {
-    protected $translation_package = 'rocXolid:common';
+    protected $translation_package = 'rocXolid-common';
 
     protected $translation_param = 'artisan';
 }
