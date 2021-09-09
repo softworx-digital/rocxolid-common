@@ -23,8 +23,8 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-default active">
-                            <input type="checkbox" name="verbose" checked="checked" value="1"> Verbose
+                        <label class="btn btn-default {{-- active --}}">
+                            <input type="checkbox" name="verbose" {{-- checked="checked" --}} value="1"> Verbose
                         </label>
                         <label class="btn btn-default">
                             <input type="checkbox" name="dry-run" value="1"> Dry run

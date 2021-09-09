@@ -121,6 +121,17 @@ trait HasImages
     }
 
     /**
+     * Obtain assignments to the template returned after image upload.
+     *
+     * @param \Softworx\RocXolid\Common\Models\Image $image
+     * @return array
+     */
+    public function getImageUploadTemplateAssignments(Image $image): array
+    {
+        return [];
+    }
+
+    /**
      * Get image dimensions for given attrribute.
      *
      * @param string $attribute

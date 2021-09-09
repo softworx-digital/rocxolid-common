@@ -64,6 +64,14 @@ class Controller extends AbstractUploadController
     /**
      * {@inheritDoc}
      */
+    protected function getParentTemplateRelationAssignment(Crudable $model): array
+    {
+        return $model->parent->getImageUploadTemplateAssignments($model);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function onUploadableStored(FileUploadService $file_upload_service, UploadedFile $uploaded_file, Uploadable $model): CrudController
     {
         $model = $this->imageProcessService()->handleResize($model);

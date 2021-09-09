@@ -2,9 +2,11 @@
 
 namespace Softworx\RocXolid\Common\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 // rocXolid model contracts
 use Softworx\RocXolid\Models\Contracts as rxContracts;
 // rocXolid model traits
@@ -14,8 +16,10 @@ use Softworx\RocXolid\Models\AbstractCrudModel;
 use Softworx\RocXolid\Models\Traits\Attributes as AttributeTraits;
 // rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\Group as UserGroup;
-// rocXolid cms models
+// rocXolid common models
 use Softworx\RocXolid\Common\Models\WebFrontpageSettings;
+use Softworx\RocXolid\Common\Models\Localization;
+
 
 /**
  * Web model.
@@ -47,7 +51,8 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
 
     protected const LOCALIZATION_DATA_ATTRIBUTES = [
         'localizations',
-        'defaultLocalization'
+        'defaultLocalization',
+        'is_use_default_localization_url_path',
     ];
 
     protected const LABEL_DATA_ATTRIBUTES = [
@@ -66,7 +71,7 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
     ];
 
     protected const ERROR_EXCEPTION_DATA_ATTRIBUTES = [
-        'is_error_exception_debug',
+        'is_error_exception_debug_mode',
         'error_exception_message',
     ];
 
@@ -79,6 +84,7 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
      * {@inheritDoc}
      */
     protected $fillable = [
+        'is_enabled',
         'name', // internal
         'title',
         'url',
@@ -91,7 +97,8 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
         'is_label_with_color',
         'is_label_with_flag',
         'default_localization_id',
-        'is_error_exception_debug',
+        'is_use_default_localization_url_path',
+        'is_error_exception_debug_mode',
         'error_not_found_message',
         'error_exception_message',
     ];
@@ -111,20 +118,35 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
      */
     public function onCreateBeforeSave(Collection $data): rxContracts\Crudable
     {
-        // dd(__METHOD__, '@todo');
         $this
             ->createIfNeededUserGroup()
-            ->createIfNeededFrontpageSettings();
+            ->createIfNeededFrontpageSettings()
+            ->stripTrailingSlash();
 
         return $this;
     }
 
-    protected function createIfNeededUserGroup()
+    /**
+     * {@inheritDoc}
+     */
+    public function onUpdateBeforeSave(Collection $data): rxContracts\Crudable
+    {
+        $this->stripTrailingSlash();
+
+        return $this;
+    }
+
+    /**
+     * Create UserGroup if no assigned during creation process.
+     *
+     * @return \Softworx\RocXolid\Common\Models\Web
+     */
+    protected function createIfNeededUserGroup(): self
     {
         if (!$this->userGroup()->exists()) {
             $group = $this->userGroup()->getRelated()->create([
                 'name' => $this->getTitle(),
-            ]);//->associate($this); //->save()
+            ]);
 
             $this->userGroup()->associate($group);
         }
@@ -132,7 +154,12 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
         return $this;
     }
 
-    protected function createIfNeededFrontpageSettings()
+    /**
+     * Create WebFrontpageSettings if no assigned during creation process.
+     *
+     * @return \Softworx\RocXolid\Common\Models\Web
+     */
+    protected function createIfNeededFrontpageSettings(): self
     {
         if (!$this->frontpageSettings()->exists()) {
             $this->frontpageSettings()->create([
@@ -143,7 +170,10 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
         return $this;
     }
 
-    public function userGroup()
+    /**
+     * @Softworx\RocXolid\Annotations\AuthorizedRelation(policy_abilities="['assign']")
+     */
+    public function userGroup(): Relations\BelongsTo
     {
         return $this->belongsTo(UserGroup::class);
     }
@@ -173,10 +203,34 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
     }
 
     /**
+     * Obtain localized Web root URL.
+     *
+     * @param Softworx\RocXolid\Common\Models\Localization $localization
+     * @return string
+     */
+    public function localizeUrl(Localization $localization): string
+    {
+        return (bool)$this->is_use_default_localization_url_path || !$localization->is($this->defaultLocalization)
+            ? sprintf('%s/%s', $this->url, $localization->seo_url_slug)
+            : $this->url;
+    }
+
+    public function pageUrl(Localization $localization, string $page_token): string
+    {
+        try {
+            $page_id = config(sprintf('sitemap.%s.%s', $localization->language->iso_639_1, $page_token));
+
+            return route(sprintf('frontpage.%s.page-%s', $this->domain, $page_id));
+        } catch (RouteNotFoundException $e) {
+            return '#';
+        }
+    }
+
+    /**
      * Retrieve "not found" error data attributes.
      *
      * @param bool $keys Flag to retrieve only attribute keys.
-     * @return Collection
+     * @return Illuminate\Support\Collection
      */
     public function getErrorNotFoundDataAttributes(bool $keys = false): Collection
     {
@@ -191,7 +245,7 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
      * Retrieve "exception" error data attributes.
      *
      * @param bool $keys Flag to retrieve only attribute keys.
-     * @return Collection
+     * @return Illuminate\Support\Collection
      */
     public function getErrorExceptionDataAttributes(bool $keys = false): Collection
     {
@@ -200,5 +254,19 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
             : collect($this->getAttributes())->only(static::ERROR_EXCEPTION_DATA_ATTRIBUTES)->sortBy(function ($value, string $field) {
                 return array_search($field, static::ERROR_EXCEPTION_DATA_ATTRIBUTES);
             });
+    }
+
+    /**
+     * Remove trailing slash from the URL.
+     *
+     * @return \Softworx\RocXolid\Common\Models\Web
+     */
+    protected function stripTrailingSlash(): self
+    {
+        if (Str::endsWith($this->url, '/')) {
+            $this->url = Str::beforeLast($this->url, '/');
+        }
+
+        return $this;
     }
 }

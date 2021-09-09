@@ -2,7 +2,6 @@
 
 namespace Softworx\RocXolid\Common\Http\Traits;
 
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 // rocXolid common models
 use Softworx\RocXolid\Common\Models\Web;
@@ -15,14 +14,16 @@ trait DetectsLocalization
 {
     private $_localization = null;
 
-    public function detectLocalization(Web $web, &$slug)
+    public function detectLocalization(Web $web, &$path)
     {
         if (is_null($this->_localization)) {
-            list($localization_slug, $slug) = array_pad(explode('/', $slug, 2), 2, '/');
+            list($localization_slug, $path) = array_pad(explode('/', $path, 2), 2, '/');
 
             try {
-                $this->_localization = Localization::whereHas('webs', function ($query) use ($localization_slug) {
-                    $query->where('seo_url_slug', '=', $localization_slug);
+                $this->_localization = Localization::whereHas('webs', function ($query) use ($web, $localization_slug) {
+                    $query
+                        ->where('web_id', $web->getKey())
+                        ->where('seo_url_slug', '=', $localization_slug);
                 })->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 throw new \RuntimeException(sprintf('Cannot detect localization for [%s] and web [%s]', $localization_slug, $web->getTitle()));

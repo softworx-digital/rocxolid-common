@@ -11,6 +11,14 @@ use Softworx\RocXolid\Tables\Buttons\Type as ButtonType;
 class Index extends AbstractCrudTable
 {
     protected $columns = [
+        'is_enabled' => [
+            'type' => ColumnType\SwitchFlag::class,
+            'options' => [
+                'label' => [
+                    'title' => 'is_enabled'
+                ],
+            ],
+        ],
         'name' => [
             'type' => ColumnType\Text::class,
             'options' => [
@@ -24,11 +32,37 @@ class Index extends AbstractCrudTable
                 ],
             ],
         ],
-        'description' => [
+        'title' => [
             'type' => ColumnType\Text::class,
             'options' => [
                 'label' => [
-                    'title' => 'description'
+                    'title' => 'title'
+                ],
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+            ],
+        ],
+        'url' => [
+            'type' => ColumnType\Text::class,
+            'options' => [
+                'label' => [
+                    'title' => 'url'
+                ],
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+            ],
+        ],
+        'domain' => [
+            'type' => ColumnType\Text::class,
+            'options' => [
+                'label' => [
+                    'title' => 'domain'
                 ],
                 'wrapper' => [
                     'attributes' => [
@@ -54,6 +88,40 @@ class Index extends AbstractCrudTable
                     ],
                 ],
             ],
+        ],
+        'default_localization_id' => [
+            'type' => ColumnType\ModelRelation::class,
+            'options' => [
+                'ajax' => true,
+                'label' => [
+                    'title' => 'default_localization_id'
+                ],
+                'relation' => [
+                    'name' => 'defaultLocalization',
+                    'column' => 'title',
+                ],
+                'wrapper' => [
+                    'attributes' => [
+                        'class' => 'text-center',
+                    ],
+                ],
+            ],
+        ],
+        'is_use_default_localization_url_path' => [
+            'type' => ColumnType\Flag::class,
+            'options' => [
+                'label' => [
+                    'title' => 'is_use_default_localization_url_path'
+                ],
+            ],
+        ],
+        'is_error_exception_debug_mode' => [
+            'type' => ColumnType\Flag::class,
+            'options' => [
+                'label' => [
+                    'title' => 'is_error_exception_debug_mode'
+                ],
+            ],
         ],/*
         'userGroup' => [
             'type' => ColumnType\ModelRelation::class,
@@ -72,17 +140,12 @@ class Index extends AbstractCrudTable
                     ],
                 ],
             ],
-        ],*/
-        'frontpageSettings' => [
-            'type' => ColumnType\ModelRelation::class,
+        ],
+        'description' => [
+            'type' => ColumnType\Text::class,
             'options' => [
-                'ajax' => true,
                 'label' => [
-                    'title' => 'frontpage-settings'
-                ],
-                'relation' => [
-                    'name' => 'frontpageSettings',
-                    'column' => 'name',
+                    'title' => 'description'
                 ],
                 'wrapper' => [
                     'attributes' => [
@@ -90,7 +153,7 @@ class Index extends AbstractCrudTable
                     ],
                 ],
             ],
-        ],
+        ],*/
     ];
 
     /**

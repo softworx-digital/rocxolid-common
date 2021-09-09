@@ -50,6 +50,17 @@ trait HasFile
     }
 
     /**
+     * Obtain assignments to the template returned after file upload.
+     *
+     * @param \Softworx\RocXolid\Common\Models\File $file
+     * @return array
+     */
+    public function getFileUploadTemplateAssignments(File $file): array
+    {
+        return [];
+    }
+
+    /**
      * Adjust upload form fields.
      *
      * @param array $fields

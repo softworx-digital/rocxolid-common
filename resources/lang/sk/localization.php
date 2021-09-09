@@ -7,6 +7,9 @@ return [
         'country_id' => 'Krajina',
         'language_id' => 'Jazyk',
         'locale_id' => 'Lokalizácia',
+        'webs' => 'Weby',
+        'country' => 'Krajina',
+        'locale' => 'Lokalizácia',
     ],
     'field' => [
         'name' => 'Názov',
@@ -14,6 +17,9 @@ return [
         'country_id' => 'Krajina',
         'language_id' => 'Jazyk',
         'locale_id' => 'Lokalizácia',
+        'webs' => 'Weby',
+        'country' => 'Krajina',
+        'locale' => 'Lokalizácia',
     ],
     'filter' => [
         'name' => 'Názov',

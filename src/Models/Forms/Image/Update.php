@@ -49,7 +49,7 @@ class Update extends RocXolidAbstractCrudForm
 
         if ($this->getModel()->parent->$attribute() instanceof MorphOne) {
             unset($fields['is_model_primary']);
-            unset($fields['description']);
+            // unset($fields['description']);
         }
 
         return $fields;

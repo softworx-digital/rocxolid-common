@@ -716,10 +716,12 @@ class CreateCommonTables extends Migration
         Schema::create('webs', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->boolean('is_enabled')->default(1);
+
             $table->string('name');
             $table->string('title');
-            $table->string('url');
-            $table->string('domain');
+            $table->string('url')->unique();
+            $table->string('domain')->unique();
             $table->string('email');
             $table->text('description')->nullable();
 
@@ -730,6 +732,11 @@ class CreateCommonTables extends Migration
 
             $table->unsignedInteger('user_group_id');
             $table->unsignedInteger('default_localization_id');
+            $table->boolean('is_use_default_localization_url_path')->default(0);
+
+            $table->text('error_not_found_message')->nullable();
+            $table->text('error_exception_message')->nullable();
+            $table->boolean('is_error_exception_debug_mode')->default(1);
 
             $table->timestamps();
             $table->softDeletes();

@@ -263,11 +263,19 @@ abstract class AbstractUploadController extends AbstractCrudController
      */
     protected function getTemplateRelationAssignment(Crudable $model): array
     {
-        return [
+        return $this->getParentTemplateRelationAssignment($model) + [
             'attribute' => $model->model_attribute,
             'relation' => 'parent',
         ];
     }
+
+    /**
+     * Obtain parent model relation template assignment.
+     *
+     * @param \Softworx\RocXolid\Models\Contracts\Crudable $model
+     * @return array
+     */
+    abstract protected function getParentTemplateRelationAssignment(Crudable $model): array;
 
     /**
      * Action to take after uploaded file is stored.

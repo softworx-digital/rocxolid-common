@@ -65,6 +65,11 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
             Services\ImageProcessService::class
         );
 
+        $this->app->bind(
+            \Softworx\RocXolid\Common\Models\Contracts\Attributable::class,
+            \Softworx\RocXolid\Common\Models\AttributableDummy::class
+        );
+
         // @todo doesn't work since this is appliable to constructor dependency resolution
         // need to refactor forms in general at first
         /*

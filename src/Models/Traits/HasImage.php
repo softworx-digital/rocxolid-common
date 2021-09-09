@@ -69,6 +69,14 @@ trait HasImage
                 'upsize',
             ],
         ],
+        'mid-square' => [
+            'width' => 512,
+            'height' => 512,
+            'method' => 'fit',
+            'constraints' => [
+                'upsize',
+            ],
+        ],
     ];
 
     /**
@@ -99,6 +107,17 @@ trait HasImage
     public function deleteImageRedirectPath(): string
     {
         return $this->getControllerRoute('show');
+    }
+
+    /**
+     * Obtain assignments to the template returned after image upload.
+     *
+     * @param \Softworx\RocXolid\Common\Models\Image $image
+     * @return array
+     */
+    public function getImageUploadTemplateAssignments(Image $image): array
+    {
+        return [];
     }
 
     /**

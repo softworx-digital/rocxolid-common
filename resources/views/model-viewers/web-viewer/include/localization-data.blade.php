@@ -11,7 +11,7 @@
     <div class="panel-body">
         <dl class="dl-horizontal">
         @foreach ($component->getModel()->getLocalizationDataAttributes(true) as $attribute)
-            @can ('assign', [ $component->getModel(), $attribute ])
+            @if (method_exists($component->getModel(), $attribute) && $user->can('assign', [ $component->getModel(), $attribute ]))
                 <dt>{{ $component->translate(sprintf('field.%s', $attribute)) }}</dt>
                 <dd>
                 @foreach ($component->getModel()->$attribute()->get() as $item)
@@ -22,7 +22,14 @@
                     @endcan
                 @endforeach
                 </dd>
-            @endcan
+            @else
+                <dt>{{ $component->translate(sprintf('field.%s', $attribute)) }}</dt>
+                <dd>
+                @if ($component->getModel()->isBooleanAttribute($attribute))
+                    <i class="fa {{ $component->getModel()->$attribute ? 'fa-check text-success' : 'fa-close text-danger' }}"></i>
+                @endif
+                </dd>
+            @endif
         @endforeach
         </dl>
     </div>
