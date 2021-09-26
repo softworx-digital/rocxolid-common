@@ -835,14 +835,13 @@ class CreateCommonTables extends Migration
         return $this;
     }
 
-    private function importDump($table, $package = 'common')
+    private function importDump($table)
     {
-        $file = realpath(sprintf('%s/../dumps/rocXolid/%s/%s.sql', __DIR__, $package, $table));
+        $file = sprintf('%s/%s.sql', \Softworx\RocXolid\Common\ServiceProvider::dumpsPublishPath(), $table);
 
         try {
             DB::unprepared(file_get_contents($file));
         } catch (\ErrorException $e) {
-            dump(__METHOD__, sprintf('%s/../dumps/rocXolid/%s/%s.sql', __DIR__, $package, $table));
             dd(__METHOD__, $file, $e);
         }
 

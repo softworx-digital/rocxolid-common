@@ -65,6 +65,8 @@ class ServiceProvider extends RocXolidAbstractServiceProvider
             Services\ImageProcessService::class
         );
 
+        // @todo hack
+        // the sole purpose of this binding is not to break down other fcionality such as permission assignment
         $this->app->bind(
             \Softworx\RocXolid\Common\Models\Contracts\Attributable::class,
             \Softworx\RocXolid\Common\Models\AttributableDummy::class
