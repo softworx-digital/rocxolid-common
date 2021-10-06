@@ -1,6 +1,6 @@
 @can ('view', [ $related, $attribute ])
 <div id="{{ $component->getDomId(md5(get_class($related)), $related->getKey(), $attribute) }}" class="panel panel-default">
-    {!! $component->render('related.panel-heading', [
+    {!! $component->render('related.include.panel-heading', [
         'relation' => $relation,
         'attribute' => $attribute,
         'read_only' => $read_only ?? false,

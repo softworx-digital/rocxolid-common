@@ -2,7 +2,7 @@
 
 namespace Softworx\RocXolid\Common\Policies;
 
-use Debugbar;
+// use Debugbar;
 use Illuminate\Auth\Access\HandlesAuthorization;
 // rocXolid utils
 use Softworx\RocXolid\Http\Requests\CrudRequest;
@@ -11,6 +11,7 @@ use Softworx\RocXolid\Models\Contracts\Crudable;
 // rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\User;
 
+// @todo revise
 class AddressPolicy
 {
     use HandlesAuthorization;
@@ -19,8 +20,8 @@ class AddressPolicy
 
     public function __construct(CrudRequest $request)
     {
-        Debugbar::debug(__METHOD__, $request);
-        Debugbar::debug(__METHOD__, $request->route());
+        // Debugbar::debug(__METHOD__, $request);
+        // Debugbar::debug(__METHOD__, $request->route());
         $this->request = $request;
     }
 
@@ -32,7 +33,7 @@ class AddressPolicy
      */
     public function viewAny(User $user): bool
     {
-        Debugbar::debug(__METHOD__, $user);
+        // Debugbar::debug(__METHOD__, $user);
         return true;
     }
 
@@ -45,7 +46,7 @@ class AddressPolicy
      */
     public function view(User $user, Crudable $model): bool
     {
-        Debugbar::debug(__METHOD__, $user, $model);
+        // Debugbar::debug(__METHOD__, $user, $model);
         return true;
     }
 
@@ -57,8 +58,8 @@ class AddressPolicy
      */
     public function create(User $user): bool
     {
-        Debugbar::debug(__METHOD__, $user);
-        Debugbar::debug(__METHOD__, $this->request->route());
+        // Debugbar::debug(__METHOD__, $user);
+        // Debugbar::debug(__METHOD__, $this->request->route());
         return true;
     }
 
@@ -71,7 +72,7 @@ class AddressPolicy
      */
     public function update(User $user, Crudable $model): bool
     {
-        Debugbar::debug(__METHOD__, $user, $model);
+        // Debugbar::debug(__METHOD__, $user, $model);
         return true;
     }
 
@@ -84,7 +85,7 @@ class AddressPolicy
      */
     public function delete(User $user, Crudable $model): bool
     {
-        Debugbar::debug(__METHOD__, $user, $model);
+        // Debugbar::debug(__METHOD__, $user, $model);
         return true;
     }
 }

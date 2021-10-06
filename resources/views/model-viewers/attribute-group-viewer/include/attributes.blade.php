@@ -6,10 +6,11 @@
                     <h3 class="panel-title margin-top-7">{{ $component->translate('text.attributes-data') }}</h3>
                 </div>
                 <div class="col-sm-4 col-xs-1">
-                    {!! $component->getModel()->attributes()->make()->getModelViewerComponent()->render('related.add-panel-heading', [
+                    {!! $component->getModel()->attributes()->make()->getModelViewerComponent()->render('related.snippet.create-button', [
                         'attribute' => 'attributes',
                         'relation' => 'attributeGroup',
                         'related' => $component->getModel(),
+                        'size' => 'sm',
                     ]) !!}
                 </div>
             </div>

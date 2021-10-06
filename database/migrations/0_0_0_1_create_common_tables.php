@@ -305,7 +305,7 @@ class CreateCommonTables extends Migration
             $table->unsignedInteger('district_id')->nullable();
 
             $table->enum('type', ['city', 'territory'])->default('territory');
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('name');
             $table->string('zip')->nullable();
             $table->text('description')->nullable();
@@ -392,6 +392,9 @@ class CreateCommonTables extends Migration
             $table->unsignedInteger('city_id')->nullable();
             $table->string('city_name')->nullable();
 
+            $table->unsignedInteger('cadastral_area_id')->nullable();
+            $table->string('cadastral_area_name')->nullable();
+
             $table->string('street_name')->nullable();
             $table->string('street_no')->nullable();
             $table->string('po_box')->nullable();
@@ -425,6 +428,12 @@ class CreateCommonTables extends Migration
             $table->foreign('city_id')
                 ->references('id')
                 ->on('cities')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+
+            $table->foreign('cadastral_area_id')
+                ->references('id')
+                ->on('cadastral_areas')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
         });

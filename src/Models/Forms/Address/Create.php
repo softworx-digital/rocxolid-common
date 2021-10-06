@@ -2,22 +2,13 @@
 
 namespace Softworx\RocXolid\Common\Models\Forms\Address;
 
-use Illuminate\Support\Collection;
-// rocXolid model scopes
-use Softworx\RocXolid\Models\Scopes\Owned as OwnedScope;
-// rocXolid form contracts
-use Softworx\RocXolid\Forms\Contracts\FormField;
-// rocXolid forms
+// rocXolid forms & related
 use Softworx\RocXolid\Forms\AbstractCrudForm as RocXolidAbstractCrudForm;
-// rocXolid form field types
 use Softworx\RocXolid\Forms\Fields\Type as FieldType;
 // rocXolid common filters
-use Softworx\RocXolid\Common\Filters\CityBelongsTo;
+use Softworx\RocXolid\Common\Filters;
 // rocXolid common models
-use Softworx\RocXolid\Common\Models\Country;
-use Softworx\RocXolid\Common\Models\Region;
-use Softworx\RocXolid\Common\Models\District;
-use Softworx\RocXolid\Common\Models\City;
+use Softworx\RocXolid\Common\Models;
 
 class Create extends RocXolidAbstractCrudForm
 {
@@ -89,67 +80,11 @@ class Create extends RocXolidAbstractCrudForm
                 ],
             ],
         ],
-        'city_id' => [
-            'type' => FieldType\ModelRelationSelectAutocomplete::class,
-            'options' => [
-                'relation' => 'city',
-                'change-action' => 'formReload',
-                'label' => [
-                    'title' => 'city',
-                ],
-                'validation' => [
-                    'rules' => [
-                        'required',
-                        'exists:cities,id',
-                    ],
-                ],
-            ],
-        ],
-        'region_id' => [
-            'type' => FieldType\CollectionSelect::class,
-            'options' => [
-                'collection' => [
-                    'model' => Region::class,
-                    'column' => 'name',
-                ],
-                'label' => [
-                    'title' => 'region',
-                ],
-                'attributes' => [
-                    'title' => 'select',
-                ],
-                'validation' => [
-                    'rules' => [
-                        'required',
-                    ],
-                ],
-            ],
-        ],
-        'district_id' => [
-            'type' => FieldType\CollectionSelect::class,
-            'options' => [
-                'collection' => [
-                    'model' => District::class,
-                    'column' => 'name',
-                ],
-                'label' => [
-                    'title' => 'district',
-                ],
-                'attributes' => [
-                    'title' => 'select',
-                ],
-                'validation' => [
-                    'rules' => [
-                        'required',
-                    ],
-                ],
-            ],
-        ],
         'country_id' => [
             'type' => FieldType\CollectionSelect::class,
             'options' => [
                 'collection' => [
-                    'model' => Country::class,
+                    'model' => Models\Country::class,
                     'column' => 'name',
                 ],
                 'label' => [
@@ -161,6 +96,79 @@ class Create extends RocXolidAbstractCrudForm
                 'validation' => [
                     'rules' => [
                         'required',
+                        'exists:countries,id',
+                    ],
+                ],
+            ],
+        ],
+        'city_id' => [
+            'type' => FieldType\ModelRelationSelectAutocomplete::class,
+            'options' => [
+                'relation' => 'city',
+                'change-action' => 'formReload',
+                'label' => [
+                    'title' => 'city',
+                ],
+                'validation' => [
+                    'rules' => [
+                        'required_without:_data.city_name',
+                        'exists:cities,id',
+                    ],
+                ],
+            ],
+        ],
+        'city_name' => [
+            'type' => FieldType\Input::class,
+            'options' => [
+                'label' => [
+                    'title' => 'city',
+                ],
+                'validation' => [
+                    'rules' => [
+                        'required_without:_data.city_id',
+                        'max:255',
+                    ],
+                ],
+            ],
+        ],
+        'region_id' => [
+            'type' => FieldType\CollectionSelect::class,
+            'options' => [
+                'collection' => [
+                    'model' => Models\Region::class,
+                    'column' => 'name',
+                ],
+                'label' => [
+                    'title' => 'region',
+                ],
+                'attributes' => [
+                    'title' => 'select',
+                ],
+                'validation' => [
+                    'rules' => [
+                        'required',
+                        'exists:regions,id',
+                    ],
+                ],
+            ],
+        ],
+        'district_id' => [
+            'type' => FieldType\CollectionSelect::class,
+            'options' => [
+                'collection' => [
+                    'model' => Models\District::class,
+                    'column' => 'name',
+                ],
+                'label' => [
+                    'title' => 'district',
+                ],
+                'attributes' => [
+                    'title' => 'select',
+                ],
+                'validation' => [
+                    'rules' => [
+                        'required',
+                        'exists:districts,id',
                     ],
                 ],
             ],
@@ -174,37 +182,101 @@ class Create extends RocXolidAbstractCrudForm
         $fields['model_type']['options']['value'] = $this->getInputFieldValue('model_type');
         $fields['model_id']['options']['value'] = $this->getInputFieldValue('model_id');
 
-        // city
-        $city = City::find($this->getInputFieldValue('city_id'));
+        // country
+        $country = Models\Country::find($this->getInputFieldValue('country_id')) ?? $this->getModel()->country;
+        $country_input = Models\Country::find($this->getInputFieldValue('country_id'));
+        $country_changed = $this->getModel()->country && $country_input && !$this->getModel()->country->is($country_input);
+        //
+        $fields['city_id']['options']['relation-filters'][] = [ 'type' => Filters\BelongsToCountry::class, 'data' => $country ];
 
-        if (is_null($city)) {
-            $fields['region_id']['options']['collection'] = collect();
-            $fields['district_id']['options']['collection'] = collect();
-            $fields['country_id']['options']['collection'] = collect();
-        } else {
-            // region
-            $fields['region_id']['options']['attributes']['title'] = null;
-            $fields['region_id']['options']['collection'] = [
-                'model' => Region::class,
-                'column' => 'name',
-                'filters' => [['class' => CityBelongsTo::class, 'data' => $city]]
-            ];
-            // district
-            $fields['district_id']['options']['attributes']['title'] = null;
-            $fields['district_id']['options']['collection'] = [
-                'model' => District::class,
-                'column' => 'name',
-                'filters' => [['class' => CityBelongsTo::class, 'data' => $city]]
-            ];
-            // country
-            $fields['country_id']['options']['attributes']['title'] = null;
-            $fields['country_id']['options']['collection'] = [
-                'model' => Country::class,
-                'column' => 'name',
-                'filters' => [['class' => CityBelongsTo::class, 'data' => $city]]
-            ];
+        // @todo hotfixed
+        if (request()->route()->getActionMethod() === 'formFieldAutocomplete') {
+            return $fields;
         }
 
+        $default_countries = collect(config('rocXolid.main.countries.default'));
+        $other_countries = collect(config('rocXolid.main.countries.others'));
+
+        $countries = Models\Country::whereIn('id', $default_countries->merge($other_countries))->orderBy('name')->get();
+
+        $fields['country_id']['options']['collection'] = $countries->mapWithKeys(function (Models\Country $country) {
+            return [ $country->getKey() => $country->getTitle() ];
+        });
+        $fields['country_id']['options']['attributes']['data-change-action'] = $this->getController()->getRoute('formReload', $this->getModel());
+        //
+        $city_countries = collect(config('rocXolid.main.countries.has_city_id'));
+        $city_enabled = isset($country) && $city_countries->contains($country->getKey());
+
+        $city = $city_enabled ? (Models\City::find($this->getInputFieldValue('city_id')) ?? $this->getModel()->city) : null;
+
+        if (is_null($city) || !$city->country->is($country)) {
+            $city = null;
+        }
+
+        $this
+            ->adjustCityField($fields, $country, $city, $country_changed)
+            ->adjustRegionField($fields, $country, $city, $country_changed)
+            ->adjustDistrictField($fields, $country, $city, $country_changed);
+
         return $fields;
+    }
+
+    private function adjustCityField(&$fields, ?Models\Country $country, ?Models\City $city, bool $country_changed)
+    {
+        $countries = collect(config('rocXolid.main.countries.has_city_id'));
+        $enabled = !is_null($country) && $countries->contains($country->getKey());
+
+        if (!$enabled) {
+            unset($fields['city_id']);
+        } elseif (is_null($city)) {
+            $fields['city_id']['options']['force-value'] = null;
+        }
+
+        $countries = collect(config('rocXolid.main.countries.has_not_city_name'));
+        $enabled = isset($country) && !$countries->contains($country->getKey());
+
+        if (!$enabled) {
+            unset($fields['city_name']);
+        }
+
+        return $this;
+    }
+
+    private function adjustRegionField(&$fields, ?Models\Country $country, ?Models\City $city, bool $country_changed)
+    {
+        $countries = collect(config('rocXolid.main.countries.has_region_id'));
+        $enabled = isset($country) && $countries->contains($country->getKey());
+
+        if (!$enabled) {
+            unset($fields['region_id']);
+        } elseif ($city) {
+            $fields['region_id']['options']['attributes']['title'] = null;
+            $fields['region_id']['options']['collection']['filters'] = [[ 'class' => Filters\CityBelongsTo::class, 'data' => $city ]];
+        } elseif ($country) {
+            $fields['region_id']['options']['collection']['filters'] = [[ 'class' => Filters\BelongsToCountry::class, 'data' => $country ]];
+        } else {
+            throw new \RuntimeException('Undefined city or country');
+        }
+
+        return $this;
+    }
+
+    private function adjustDistrictField(&$fields, ?Models\Country $country, ?Models\City $city, bool $country_changed)
+    {
+        $countries = collect(config('rocXolid.main.countries.has_district_id'));
+        $enabled = isset($country) && $countries->contains($country->getKey());
+
+        if (!$enabled) {
+            unset($fields['district_id']);
+        } elseif ($city) {
+            $fields['district_id']['options']['attributes']['title'] = null;
+            $fields['district_id']['options']['collection']['filters'] = [[ 'class' => Filters\CityBelongsTo::class, 'data' => $city ]];
+        } elseif ($country) {
+            $fields['district_id']['options']['collection']['filters'] = [[ 'class' => Filters\BelongsToCountry::class, 'data' => $country ]];
+        } else {
+            throw new \RuntimeException('Undefined city or country');
+        }
+
+        return $this;
     }
 }

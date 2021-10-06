@@ -5,6 +5,7 @@
     <div style="padding-bottom: {{ 100 / $image->getWidthHeightRatio($size) }}%;"></div>
 </div>
 @else
+<div class="alert alert-danger">Missing image file for size [{{ $size }}]!</div>
 @endif
 @else
 <div class="alert alert-danger">[{{ $view_name }}] specify image &amp; image size!</div>

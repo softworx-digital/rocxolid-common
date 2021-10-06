@@ -69,7 +69,6 @@ class Address extends AbstractCrudModel
         'model_type',
         'model_id',
         'model_attribute',
-        'city_name', // @todo so far
         'created_at',
         'updated_at',
         'deleted_at',
@@ -144,18 +143,19 @@ class Address extends AbstractCrudModel
                 $identification ? $identification : null,
                 $qualification ? $qualification . $separator : null,
                 $this->zip,
-                ($this->city()->exists() ? $this->city->getTitle() : null) . (blank($this->street_name) && filled($this->street_no) ? sprintf(' %s', $this->street_no) : ''),
+                ($this->city()->exists() ? $this->city->getTitle() : (filled($this->city_name) ? $this->city_name : null)) . (blank($this->street_name) && filled($this->street_no) ? sprintf(' %s', $this->street_no) : ''),
                 $this->region()->exists() ? $this->region->getTitle() . $separator : null,
                 $this->district()->exists() ? $this->district->getTitle() . $separator : null,
                 $this->country()->exists() ? $this->country->getTitle() : null
             );
         } else {
             $label = sprintf(
-                "%s%s %s %s",
+                "%s%s %s %s, %s",
                 $identification ? $identification : null,
                 $qualification ? $qualification . $separator : null,
-                $this->city()->exists() ? $this->city->getTitle() : null,
-                $this->zip
+                $this->city()->exists() ? $this->city->getTitle() : (filled($this->city_name) ? $this->city_name : null),
+                $this->zip,
+                $this->country()->exists() ? $this->country->getTitle() : null
             );
         }
 
@@ -193,6 +193,26 @@ class Address extends AbstractCrudModel
 
         if (!is_null($this->longitude)) {
             $this->longitude = str_replace(',', '.', $this->longitude);
+        }
+
+        if (!$data->has('city_id')) {
+            $this->city_id = null;
+        }
+
+        if (!$data->has('city_name')) {
+            $this->city_name = null;
+        }
+
+        if (!$data->has('region_id')) {
+            $this->region_id = null;
+        }
+
+        if (!$data->has('district_id')) {
+            $this->district_id = null;
+        }
+
+        if (!$data->has('cadastral_area_id')) {
+            $this->cadastral_area_id = null;
         }
 
         return parent::fillCustom($data);

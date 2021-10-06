@@ -2,7 +2,6 @@
 
 namespace Softworx\RocXolid\Common\Policies;
 
-use Illuminate\Contracts\Auth\Access\Authorizable;
 // rocXolid user management contracts
 use Softworx\RocXolid\UserManagement\Models\Contracts\HasAuthorization;
 // rocXolid user management policies
@@ -22,7 +21,7 @@ class AttributePolicy extends CrudPolicy
     /**
      * {@inheritDoc}
      */
-    public function checkAllowRootAccess(Authorizable $user, string $ability): ?bool
+    public function checkAllowRootAccess(HasAuthorization $user, string $ability): ?bool
     {
         if (collect([ 'setValues' ])->contains($ability)) {
             return null;

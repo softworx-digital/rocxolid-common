@@ -140,19 +140,4 @@ class WebFrontpageSettings extends AbstractCrudModel
     {
         return $this->morphMany(File::class, 'model')->where(sprintf('%s.model_attribute', (new File())->getTable()), 'jsFiles')->orderBy(sprintf('%s.model_attribute_position', (new File())->getTable()));
     }
-
-    /**
-     * {@inheritDoc}
-     * @todo hotfixed
-     */
-    public function getShowAttributes(array $except = [], array $with = []): array
-    {
-        $except = [ 'theme', 'web', 'web_id', 'name' ];
-
-        $attributes = $this->getAttributes();
-        $attributes = array_diff_key($attributes, array_flip(array_merge($this->getSystemAttributes(), $this->getHidden())), array_flip($except)) + $with;
-
-
-        return $attributes;
-    }
 }
