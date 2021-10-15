@@ -7,10 +7,10 @@ use Softworx\RocXolid\Http\Controllers\Traits;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\AttributeGroupViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\AttributeGroup as AttributeGroupModelViewer;
 
 /**
- * AttributeGroup controller.
+ * AttributeGroup model CRUD controller.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
@@ -24,7 +24,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected static $model_viewer_type = AttributeGroupViewer::class;
+    protected static $model_viewer_type = AttributeGroupModelViewer::class;
 
     /**
      * {@inheritDoc}

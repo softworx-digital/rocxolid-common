@@ -99,7 +99,7 @@ class Create extends RocXolidAbstractCrudForm
     /**
      * {@inheritDoc}
      */
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         $fields['relation']['options']['value'] = $this->getInputFieldValue('relation');
         $fields['model_attribute']['options']['value'] = $this->getInputFieldValue('model_attribute');

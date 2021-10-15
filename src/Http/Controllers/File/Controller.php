@@ -17,12 +17,12 @@ use Softworx\RocXolid\Models\Contracts\Uploadable;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractUploadController;
 // rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\FileViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\File as FileModelViewer;
 // rocXolid common service contracts
 use Softworx\RocXolid\Common\Services\Contracts\FileUploadService;
 
 /**
- * File controller.
+ * File model CRUD controller.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
@@ -38,7 +38,7 @@ class Controller extends AbstractUploadController
     /**
      * {@inheritDoc}
      */
-    protected static $model_viewer_type = FileViewer::class;
+    protected static $model_viewer_type = FileModelViewer::class;
 
     /**
      * Return the file content making the file accessible per route.

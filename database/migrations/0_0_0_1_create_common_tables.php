@@ -28,7 +28,6 @@ class CreateCommonTables extends Migration
             ->locales()
             ->localizations()
             ->nationalities()
-            ->nameDays()
             ->countryLanguages()
             ->countryLocales()
             ->containerContainee()
@@ -60,7 +59,6 @@ class CreateCommonTables extends Migration
         Schema::dropIfExists('locales');
         Schema::dropIfExists('localizations');
         Schema::dropIfExists('nationalities');
-        Schema::dropIfExists('name_days');
         Schema::dropIfExists('country_has_languages');
         Schema::dropIfExists('country_has_locales');
         Schema::dropIfExists('container_has_containee');
@@ -531,31 +529,6 @@ class CreateCommonTables extends Migration
         });
 
         return $this->importDump('nationalities');
-    }
-
-    protected function nameDays()
-    {
-        Schema::create('name_days', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('country_id');
-            $table->unsignedTinyInteger('day')->index();
-            $table->unsignedTinyInteger('month')->index();
-            $table->unsignedTinyInteger('day_month');
-            $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
-            $table->unsignedInteger('created_by')->nullable();
-            $table->unsignedInteger('updated_by')->nullable();
-            $table->unsignedInteger('deleted_by')->nullable();
-
-            $table->foreign('country_id')
-                ->references('id')
-                ->on('countries')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-        });
-
-        return $this->importDump('name_days');
     }
 
     protected function countryLanguages()

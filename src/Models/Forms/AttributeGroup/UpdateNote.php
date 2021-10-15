@@ -28,7 +28,7 @@ class UpdateNote extends RocXolidAbstractCrudForm
     /**
      * {@inheritDoc}
      */
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         return collect($fields)->only($this->getModel()->getNoteDataAttributes(true))->toArray();
     }

@@ -2,11 +2,8 @@
 
 namespace Softworx\RocXolid\Common\Http\Controllers\Translation;
 
-use Auth;
 use Illuminate\Http\Request;
-use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Traits\Routable as RoutableTrait;
-use Softworx\RocXolid\Common\Models\NameDay;
 use Softworx\RocXolid\Common\Components\Dashboard\Main as MainDashboard;
 
 class Controller extends \Barryvdh\TranslationManager\Controller

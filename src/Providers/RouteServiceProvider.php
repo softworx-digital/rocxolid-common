@@ -107,7 +107,6 @@ class RouteServiceProvider extends IlluminateServiceProvider
             CrudRouterService::create('locale', \Locale\Controller::class);
             CrudRouterService::create('localization', \Localization\Controller::class);
             CrudRouterService::create('nationality', \Nationality\Controller::class);
-            CrudRouterService::create('name-day', \NameDay\Controller::class);
             CrudRouterService::create('attribute-group', \AttributeGroup\Controller::class);
             CrudRouterService::create('attribute', \Attribute\Controller::class);
             CrudRouterService::create('attribute-value', \AttributeValue\Controller::class);
@@ -189,7 +188,6 @@ class RouteServiceProvider extends IlluminateServiceProvider
         $router->model('locale', \Softworx\RocXolid\Common\Models\Locale::class);
         $router->model('localization', \Softworx\RocXolid\Common\Models\Localization::class);
         $router->model('nationality', \Softworx\RocXolid\Common\Models\Nationality::class);
-        $router->model('name_day', \Softworx\RocXolid\Common\Models\NameDay::class);
         $router->model('attribute_group', \Softworx\RocXolid\Common\Models\AttributeGroup::class);
         $router->model('attribute', \Softworx\RocXolid\Common\Models\Attribute::class);
         $router->model('attribute_value', \Softworx\RocXolid\Common\Models\AttributeValue::class);

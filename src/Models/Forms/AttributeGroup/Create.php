@@ -55,7 +55,7 @@ class Create extends RocXolidAbstractCrudForm
     /**
      * {@inheritDoc}
      */
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         $fields = collect($fields)->transform(function (array $definition) {
             $definition['options']['group'] = 'base';

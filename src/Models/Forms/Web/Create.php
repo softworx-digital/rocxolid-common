@@ -147,7 +147,7 @@ class Create extends RocXolidAbstractCrudForm
     /**
      * {@inheritDoc}
      */
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         $localizations = Localization::findMany($this->getInputFieldValue('localizations'));
 

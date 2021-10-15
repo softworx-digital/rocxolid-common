@@ -13,7 +13,6 @@ use Softworx\RocXolid\Models\Contracts as rxContracts;
 use Softworx\RocXolid\Models\Traits as rxTraits;
 // rocXolid models
 use Softworx\RocXolid\Models\AbstractCrudModel;
-use Softworx\RocXolid\Models\Traits\Attributes as AttributeTraits;
 // rocXolid user management models
 use Softworx\RocXolid\UserManagement\Models\Group as UserGroup;
 // rocXolid common models
@@ -34,51 +33,8 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
 {
     use SoftDeletes;
     use rxTraits\HasTokenablePropertiesMethods;
-    use AttributeTraits\HasGeneralDataAttributes;
-    use AttributeTraits\HasLocalizationDataAttributes;
-    use AttributeTraits\HasLabelDataAttributes;
-    use AttributeTraits\HasDescriptionDataAttributes;
     // @todo the trait's currently inactive - see comment in trait for more
     use Traits\UserGroupAssociated;
-
-    protected const GENERAL_DATA_ATTRIBUTES = [
-        'name', // internal
-        'title',
-        'url',
-        'domain',
-        'email',
-    ];
-
-    protected const LOCALIZATION_DATA_ATTRIBUTES = [
-        'localizations',
-        'defaultLocalization',
-        'is_use_default_localization_url_path',
-    ];
-
-    protected const LABEL_DATA_ATTRIBUTES = [
-        'color',
-        'is_label_with_name',
-        'is_label_with_color',
-        'is_label_with_flag',
-    ];
-
-    protected const DESCRIPTION_DATA_ATTRIBUTES = [
-        'description',
-    ];
-
-    protected const ERROR_NOT_FOUND_DATA_ATTRIBUTES = [
-        'error_not_found_message',
-    ];
-
-    protected const ERROR_EXCEPTION_DATA_ATTRIBUTES = [
-        'is_error_exception_debug_mode',
-        'error_exception_message',
-    ];
-
-    protected static $tokenable_properties = [
-        'title',
-        'domain',
-    ];
 
     /**
      * {@inheritDoc}
@@ -116,22 +72,19 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
     /**
      * {@inheritDoc}
      */
-    public function onCreateBeforeSave(Collection $data): rxContracts\Crudable
-    {
-        $this
-            ->createIfNeededUserGroup()
-            ->createIfNeededFrontpageSettings()
-            ->stripTrailingSlash();
-
-        return $this;
-    }
+    protected static $tokenable_properties = [
+        'title',
+        'domain',
+    ];
 
     /**
      * {@inheritDoc}
      */
-    public function onUpdateBeforeSave(Collection $data): rxContracts\Crudable
+    public function onCreateBeforeSave(Collection $data): rxContracts\Crudable
     {
-        $this->stripTrailingSlash();
+        $this
+            ->createIfNeededUserGroup()
+            ->createIfNeededFrontpageSettings();
 
         return $this;
     }
@@ -168,6 +121,17 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
         }
 
         return $this;
+    }
+
+    /**
+     * Adjust the URL attribute by removing the trailing slash.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setUrlAttribute($value)
+    {
+        $this->attributes['url'] = Str::endsWith($value, '/') ? Str::beforeLast($value, '/') : $value;
     }
 
     /**
@@ -224,49 +188,5 @@ class Web extends AbstractCrudModel implements rxContracts\HasTokenablePropertie
         } catch (RouteNotFoundException $e) {
             return '#';
         }
-    }
-
-    /**
-     * Retrieve "not found" error data attributes.
-     *
-     * @param bool $keys Flag to retrieve only attribute keys.
-     * @return Illuminate\Support\Collection
-     */
-    public function getErrorNotFoundDataAttributes(bool $keys = false): Collection
-    {
-        return $keys
-            ? collect(static::ERROR_NOT_FOUND_DATA_ATTRIBUTES)
-            : collect($this->getAttributes())->only(static::ERROR_NOT_FOUND_DATA_ATTRIBUTES)->sortBy(function ($value, string $field) {
-                return array_search($field, static::ERROR_NOT_FOUND_DATA_ATTRIBUTES);
-            });
-    }
-
-    /**
-     * Retrieve "exception" error data attributes.
-     *
-     * @param bool $keys Flag to retrieve only attribute keys.
-     * @return Illuminate\Support\Collection
-     */
-    public function getErrorExceptionDataAttributes(bool $keys = false): Collection
-    {
-        return $keys
-            ? collect(static::ERROR_EXCEPTION_DATA_ATTRIBUTES)
-            : collect($this->getAttributes())->only(static::ERROR_EXCEPTION_DATA_ATTRIBUTES)->sortBy(function ($value, string $field) {
-                return array_search($field, static::ERROR_EXCEPTION_DATA_ATTRIBUTES);
-            });
-    }
-
-    /**
-     * Remove trailing slash from the URL.
-     *
-     * @return \Softworx\RocXolid\Common\Models\Web
-     */
-    protected function stripTrailingSlash(): self
-    {
-        if (Str::endsWith($this->url, '/')) {
-            $this->url = Str::beforeLast($this->url, '/');
-        }
-
-        return $this;
     }
 }

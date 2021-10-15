@@ -12,14 +12,14 @@ use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 use Softworx\RocXolid\Common\Models\Contracts\Attributable;
 use Softworx\RocXolid\Common\Models\AttributeGroup;
 // rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\AttributeModelViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\AttributeModel as AttributeModelModelViewer;
 
 /**
  * @todo revise
  */
 class Controller extends AbstractCrudController
 {
-    protected static $model_viewer_type = AttributeModelViewer::class;
+    protected static $model_viewer_type = AttributeModelModelViewer::class;
 
     protected $form_mapping = [
         'general' => 'general',

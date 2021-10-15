@@ -11,7 +11,7 @@ use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 // rocXolid form contracts
 use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
 // rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\AttributeViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\Attribute as AttributeModelViewer;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common repositories
@@ -21,7 +21,7 @@ use Softworx\RocXolid\Common\Models\Attribute;
 use Softworx\RocXolid\Common\Models\AttributeGroup;
 
 /**
- * Attribute controller.
+ * Attribute model CRUD controller.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
@@ -32,7 +32,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected static $model_viewer_type = AttributeViewer::class;
+    protected static $model_viewer_type = AttributeModelViewer::class;
 
     /**
      * Constructor.

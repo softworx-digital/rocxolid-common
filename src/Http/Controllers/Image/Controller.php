@@ -17,13 +17,13 @@ use Softworx\RocXolid\Models\Contracts\Uploadable;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractUploadController;
 // rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\ImageViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\Image as ImageModelViewer;
 // rocXolid common service contracts
 use Softworx\RocXolid\Common\Services\Contracts\FileUploadService;
 use Softworx\RocXolid\Common\Services\Contracts\ImageProcessService;
 
 /**
- * Image controller.
+ * Image model CRUD controller.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
@@ -34,7 +34,7 @@ class Controller extends AbstractUploadController
     /**
      * {@inheritDoc}
      */
-    protected static $model_viewer_type = ImageViewer::class;
+    protected static $model_viewer_type = ImageModelViewer::class;
 
     /**
      * {@inheritDoc}

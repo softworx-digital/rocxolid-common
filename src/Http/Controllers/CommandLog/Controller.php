@@ -5,7 +5,7 @@ namespace Softworx\RocXolid\Common\Http\Controllers\CommandLog;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\CommandLogViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\CommandLog as CommandLogModelViewer;
 
 /**
  * CommandLog model CRUD controller.
@@ -19,5 +19,5 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected static $model_viewer_type = CommandLogViewer::class;
+    protected static $model_viewer_type = CommandLogModelViewer::class;
 }

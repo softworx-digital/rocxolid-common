@@ -11,12 +11,12 @@ use Softworx\RocXolid\Models\Contracts\Crudable as CrudableModel;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\AddressViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\Address as AddressModelViewer;
 // rocXolid common events
 use Softworx\RocXolid\Common\Events\Address\Changed as AddressChanged;
 
 /**
- * Address controller.
+ * Address model CRUD controller.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common
@@ -27,7 +27,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected static $model_viewer_type = AddressViewer::class;
+    protected static $model_viewer_type = AddressModelViewer::class;
 
     /**
      * {@inheritDoc}

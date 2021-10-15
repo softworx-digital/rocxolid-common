@@ -17,7 +17,7 @@ class Update extends RocXolidAbstractCrudForm
         'class' => 'form-horizontal form-label-left',
     ];
 
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         // $fields['theme']['type'] = FieldType\Select::class;
         // $fields['theme']['options']['choices'] = ThemeManager::getThemes();

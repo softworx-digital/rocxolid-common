@@ -1,5 +1,0 @@
-<ul class="nav nav-tabs nav-justified">
-    <li role="presentation" @if (!isset($tab) || ($tab === 'default'))class="active"@endif><a href="{{ $component->getController()->getRoute('show', $component->getModel()) }}">{!! $component->translate('tab.home') !!}</a></li>
-    <li role="frontpage-settings" @if (isset($tab) && ($tab === 'frontpage-settings'))class="active"@endif><a href="{{ $component->getController()->getRoute('show', $component->getModel(), [ 'tab' => 'frontpage-settings' ]) }}">{!! $component->translate('tab.frontpage-settings') !!}</a></li>
-    <li role="error-settings" @if (isset($tab) && ($tab === 'error-settings'))class="active"@endif><a href="{{ $component->getController()->getRoute('show', $component->getModel(), [ 'tab' => 'error-settings' ]) }}">{!! $component->translate('tab.error-settings') !!}</a></li>
-</ul>

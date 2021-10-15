@@ -18,7 +18,7 @@ use Softworx\RocXolid\Common\Repositories\AttributeValue\Repository as Attribute
 use Softworx\RocXolid\Common\Models\Attribute;
 
 /**
- * AttributeValue controller.
+ * AttributeValue model CRUD controller.
  *
  * @author softworx <hello@softworx.digital>
  * @package Softworx\RocXolid\Common

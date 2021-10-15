@@ -137,7 +137,7 @@ abstract class AbstractUploadController extends AbstractCrudController
     }
 
     /**
-     * Generic AJAX response on successful upload or destruction.
+     * Generic XHR response on successful upload or destruction.
      *
      * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
      * @param \Softworx\RocXolid\Models\Contracts\Crudable $model
@@ -159,7 +159,7 @@ abstract class AbstractUploadController extends AbstractCrudController
     }
 
     /**
-     * AJAX response to replace single image with a placeholder.
+     * XHR response to replace single image with a placeholder.
      *
      * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
      * @param \Softworx\RocXolid\Models\Contracts\Crudable $model
@@ -181,7 +181,7 @@ abstract class AbstractUploadController extends AbstractCrudController
     }
 
     /**
-     * AJAX response to replace single image with new content.
+     * XHR response to replace single image with new content.
      *
      * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
      * @param \Softworx\RocXolid\Models\Contracts\Crudable $model
@@ -201,7 +201,7 @@ abstract class AbstractUploadController extends AbstractCrudController
     }
 
     /**
-     * AJAX response to replace the image gallery with new content.
+     * XHR response to replace the image gallery with new content.
      *
      * @param \Softworx\RocXolid\Http\Requests\CrudRequest $request
      * @param \Softworx\RocXolid\Models\Contracts\Crudable $model

@@ -63,7 +63,7 @@ class UpdateGeneral extends RocXolidAbstractCrudForm
     /**
      * {@inheritDoc}
      */
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         $fields = collect($fields)->only($this->getModel()->getGeneralDataAttributes(true))->toArray();
         $fields = collect($fields)->transform(function (array $definition) {

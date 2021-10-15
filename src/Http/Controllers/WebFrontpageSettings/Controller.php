@@ -11,7 +11,7 @@ use Softworx\RocXolid\Forms\AbstractCrudForm as AbstractCrudForm;
 // rocXolid common controllers
 use Softworx\RocXolid\Common\Http\Controllers\AbstractCrudController;
 // rocXolid common components
-use Softworx\RocXolid\Common\Components\ModelViewers\WebFrontpageSettingsViewer;
+use Softworx\RocXolid\Common\Components\ModelViewers\WebFrontpageSettings as WebFrontpageSettingsModelViewer;
 
 /**
  * WebFrontpageSettings model CRUD controller.
@@ -25,7 +25,7 @@ class Controller extends AbstractCrudController
     /**
      * {@inheritDoc}
      */
-    protected static $model_viewer_type = WebFrontpageSettingsViewer::class;
+    protected static $model_viewer_type = WebFrontpageSettingsModelViewer::class;
 
     /**
      * {@inheritDoc}

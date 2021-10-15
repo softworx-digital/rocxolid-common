@@ -28,7 +28,7 @@ class UpdateDescription extends RocXolidAbstractCrudForm
     /**
      * {@inheritDoc}
      */
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         $fields = collect($fields)->only($this->getModel()->getDescriptionDataAttributes(true))->toArray();
 

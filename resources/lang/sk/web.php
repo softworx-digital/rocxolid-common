@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'model' => [
+        'title' => [
+            'singular' => 'Web',
+            'plural' => 'Weby',
+        ],
+    ],
     'column' => [
         'name' => 'Systémový názov',
         'title' => 'Názov',
@@ -30,24 +36,22 @@ return [
         'frontpageSettings' => 'Nastavenia frontpage',
         'defaultLocalization' => 'Základná lokalizácia',
     ],
-    'model' => [
-        'title' => [
-            'singular' => 'Web',
-            'plural' => 'Weby',
-        ],
+    'token' => [
+        'title' => 'Názov',
+        'domain' => 'Doména',
     ],
     'tab' => [
         'frontpage-settings' => 'Frontpage nastavenia',
         'error-settings' => 'Nastavenie chybových hlášok',
     ],
-    'text' => [
-        'localization-data' => 'Nastavenie lokalizácie',
-        'label-data' => 'Nastavenie štítku',
-        'error-not-found-data' => 'Nastavenia pre "Error 404 - Stránka nenájdená"',
-        'error-exception-data' => 'Nastavenia pre "Error 5xx - Chyby na strane servera"',
-    ],
-    'token' => [
-        'title' => 'Názov',
-        'domain' => 'Doména',
+    'panel' => [
+        'data' => [
+            'error-not-found' => [
+                'heading' => 'Nastavenia pre "Error 404 - Stránka nenájdená"',
+            ],
+            'error-exception' => [
+                'heading' => 'Nastavenia pre "Error 5xx - Chyby na strane servera"',
+            ],
+        ],
     ],
 ];

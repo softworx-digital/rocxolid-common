@@ -19,7 +19,7 @@ class Create extends RocXolidAbstractCrudForm
         'class' => 'form-horizontal form-label-left',
     ];
 
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         $fields['seo_url_slug']['options']['validation']['rules'][] = Rule::unique($this->getModel()->getTable(), 'seo_url_slug');
         //

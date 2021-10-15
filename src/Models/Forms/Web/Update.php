@@ -26,7 +26,7 @@ class Update extends RocXolidAbstractCrudForm
         'default_localization_id',
     ];
 
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         //
         //$fields['invoice_country_id']['type'] = CollectionSelectAutocomplete::class;

@@ -37,7 +37,7 @@ class Update extends RocXolidAbstractCrudForm
         ],
     ];
 
-    protected function adjustFieldsDefinition($fields)
+    protected function adjustFieldsDefinition(array $fields): array
     {
         $fields = $this->system_fields + $fields;
 
