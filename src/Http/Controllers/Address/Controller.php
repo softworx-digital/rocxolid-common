@@ -35,6 +35,8 @@ class Controller extends AbstractCrudController
     protected $form_mapping = [
         'create' => 'create',
         'store' => 'create',
+        'create.location' => 'create-location',
+        'store.location' => 'create-location',
         'edit' => 'update',
         'update' => 'update',
         'edit.location' => 'update-location',
@@ -81,7 +83,7 @@ class Controller extends AbstractCrudController
 
         return $this->response
             ->notifySuccess($model_viewer_component->translate('text.updated'))
-            ->replace($model_viewer_component->getDomId('parent', $model->model_attribute), $model_viewer_component->fetch('related.show', [
+            ->replace($model_viewer_component->getDomId($model->getKey(), 'parent', $model->model_attribute), $model_viewer_component->fetch('related.show', [
                 'attribute' => $model->model_attribute,
                 'relation' => 'parent'
             ])) // @todo hardcoded, ugly

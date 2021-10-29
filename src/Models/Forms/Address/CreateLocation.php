@@ -152,7 +152,8 @@ class CreateLocation extends RocXolidAbstractCrudForm
                 ],
                 'validation' => [
                     'rules' => [
-                        'required',
+                        // 'required',
+                        'nullable',
                         'exists:cadastral_areas,id',
                     ],
                 ],
