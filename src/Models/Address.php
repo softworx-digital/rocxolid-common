@@ -4,6 +4,7 @@ namespace Softworx\RocXolid\Common\Models;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 // rocXolid model contracts
@@ -98,6 +99,23 @@ class Address extends AbstractCrudModel
     public function parent(): MorphTo
     {
         return $this->morphTo('model');
+    }
+
+    public function scopeIsWithinRadius(Builder $query, float $lat, float $lon, float $radius)
+    {
+        $haversine = sprintf('(6371000 * acos(cos(radians(?)) * cos(radians(%s)) * cos(radians(%s) - radians(?)) + sin(radians(?)) * sin(radians(%s))))', [
+            $this->qualifyColumn('latitude'),
+            $this->qualifyColumn('longitude'),
+            $this->qualifyColumn('latitude'),
+        ]);
+
+        return $query
+           ->selectRaw("{$haversine} AS distance", [
+                $lat,
+                $lon,
+                $lat,
+           ])
+           ->having('distance', '<', $radius);
     }
 
     /**

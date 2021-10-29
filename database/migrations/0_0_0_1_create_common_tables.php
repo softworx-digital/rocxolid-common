@@ -399,6 +399,9 @@ class CreateCommonTables extends Migration
             $table->string('zip')->nullable();
             $table->string('apartment_no')->nullable();
 
+            $table->decimal('latitude', 11, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedInteger('created_by')->nullable();
